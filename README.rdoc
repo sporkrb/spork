@@ -55,3 +55,4 @@ Not sure why this happens, but if you simply add a line to re-establish your dat
 
 * Ben Mabey - help with documentation, testing, suggestions.
 * David Chelimsky - for the fine RSpec testing framework, and the original rspec-rails spec_server implementation, which Spork has built upon.
+* Lead Media Partners - just for being an awesome place to work.
