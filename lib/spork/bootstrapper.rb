@@ -39,6 +39,7 @@ BOOTSTRAP
     f.puts(contents)
     end
     
+    puts "Done. Edit #{SPEC_HELPER_FILE} now with your favorite text editor and follow the instructions."
     true
   end
 end

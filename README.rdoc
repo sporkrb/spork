@@ -10,16 +10,6 @@ Because Spork uses Kernel.fork, it only works on POSIX systems.  This means Wind
 
 Spork is still experimental, but is performing solid for us.
 
-== Some potential issues and ways to overcome them:
-
-=== ActiveRecord reports "connection has gone away" for the first few specs
-
-Not sure why this happens, but if you simply add a line to re-establish your database connection on each line as follows, the problem goes away:
-
-  Spork.each_run do
-    ActiveRecord::Base.establish_connection # make sure that the db connection is ready.
-  end
-
 == INSTALL:
 
   [sudo] gem install timcharper-spork --source http://gems.github.com/
@@ -31,3 +21,37 @@ alternatively:
   gem build spork.gemspec
   sudo gem install spork.gemspec
 
+== Usage
+
+From a terminal, change to your project directory.
+
+Then, bootstrap your spec/spec_helper.rb file.
+
+  spork --bootstrap
+
+Next, edit spec/spec_helper.rb and follow the instructions that were put at the top.
+
+Finally, run spork.  A spec DRb server will be running!
+
+  spork
+
+To get the TextMate RSpec bundle to use spork, go to config->advanced->shell variables, and add TM_RSPEC_OPTS=--drb.
+
+To run from the command line, use spec --drb spec/lib/my_spec.rb
+
+Or, you could add --drb to your spec.opts file.
+
+== Some potential issues and ways to overcome them:
+
+=== ActiveRecord reports "connection has gone away" for the first few specs
+
+Not sure why this happens, but if you simply add a line to re-establish your database connection on each line as follows, the problem goes away:
+
+  Spork.each_run do
+    ActiveRecord::Base.establish_connection # make sure that the db connection is ready.
+  end
+
+== Kudos to
+
+* Ben Mabey - help with documentation, testing, suggestions.
+* David Chelimsky - for the fine RSpec testing framework, and the original rspec-rails spec_server implementation, which Spork has built upon.
