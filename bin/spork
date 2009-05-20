@@ -5,18 +5,6 @@ require 'rubygems'
 require 'spork'
 require 'optparse'
 
-unless File.exist?(Spork::SPEC_HELPER_FILE)
-  puts <<-USEFUL_ERROR
-Bummer!
-
-I can't find the file spec/spec_helper.rb, which I need in order to run.
-
-Are you running me from a project directory that has rspec set up?
-USEFUL_ERROR
-  exit 1
-end
-
-
 ENV["DRB"] = 'true'
 ENV["RAILS_ENV"] ||= 'test' if Spork.using_rails?
 
@@ -27,6 +15,16 @@ parser.on("-b", "--bootstrap")  {|ignore| options[:bootstrap] = true }
 parser.on("-p", "--pid PIDFILE"){|pid|    options[:pid]    = pid  }
 parser.parse!(ARGV)
 
+unless File.exist?(Spork::SPEC_HELPER_FILE)
+  puts <<-USEFUL_ERROR
+Bummer!
+
+I can't find the file spec/spec_helper.rb, which I need in order to run.
+
+Are you running me from a project directory that has rspec set up?
+USEFUL_ERROR
+  exit 1
+end
 
 if options[:bootstrap]
   if Spork.bootstrap
