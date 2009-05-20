@@ -1,0 +1,33 @@
+= Spork
+
+* http://github.com/timcharper/spork
+
+== SYNOPSIS:
+
+Spork is a Drb spec server (similar to the script/spec_server provided by rspec-rails), except rather than using the Rails constant unloading to reload your files, it forks a copy of the server each time you run your specs.  The result?  Spork runs more solid: it doesn't get corrupted over time, and it properly handles modules and any voo-doo meta programming you may have put in your app.
+
+Because Spork uses Kernel.fork, it only works on POSIX systems.  This means Windows users are not invited to this party.  Sorry :(
+
+Spork is still experimental, but is performing solid for us.
+
+== Some potential issues and ways to overcome them:
+
+=== ActiveRecord reports "connection has gone away" for the first few specs
+
+Not sure why this happens, but if you simply add a line to re-establish your database connection on each line as follows, the problem goes away:
+
+  Spork.each_run do
+    ActiveRecord::Base.establish_connection # make sure that the db connection is ready.
+  end
+
+== INSTALL:
+
+  [sudo] gem install timcharper-spork --source http://gems.github.com/
+
+alternatively:
+
+  git clone git://github.com/timcharper/spork.git
+  cd spork
+  gem build spork.gemspec
+  sudo gem install spork.gemspec
+
