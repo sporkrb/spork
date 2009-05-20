@@ -30,7 +30,7 @@ class Spork::SpecServer
     File.open(pid_file,"w"){|f| f.puts pid } if pid_file
     exit! 0
   end
-
+  
   def self.run
     trap("USR2") { ::Spork::SpecServer.restart_test_server } if Signal.list.has_key?("USR2")
     DRb.start_service("druby://127.0.0.1:#{DRB_PORT}", ::Spork::SpecServer.new)
@@ -43,7 +43,7 @@ class Spork::SpecServer
     $stderr = stderr
     child_pid = Kernel.fork do
       Spork.running!
-      load SPEC_HELPER_FILE
+      load ::Spork::SPEC_HELPER_FILE
     
       ::Spec::Runner::CommandLine.run(
         ::Spec::Runner::OptionParser.parse(

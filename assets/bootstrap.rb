@@ -1,9 +1,3 @@
-class Spork::Bootstrapper
-  def self.run
-    puts "Bootstrapping #{SPEC_HELPER_FILE}"
-    contents = File.read(SPEC_HELPER_FILE)
-    File.open(SPEC_HELPER_FILE, "wb") do |f|
-      f.puts <<-BOOTSTRAP
 require 'rubygems'
 require 'spork'
 
@@ -33,13 +27,3 @@ end
 
 
 
-
-BOOTSTRAP
-    
-    f.puts(contents)
-    end
-    
-    puts "Done. Edit #{SPEC_HELPER_FILE} now with your favorite text editor and follow the instructions."
-    true
-  end
-end

@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{spork}
-  s.version = "0.1"
+  s.version = "0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tim Harper"]
@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email = ["timcharper+spork@gmail.com"]
   s.executables = ["spork"]
   s.extra_rdoc_files = ["README.rdoc"]
-  s.files = ["README.rdoc"] +  Dir["lib/**/*"]
+  s.files = ["README.rdoc"] + Dir["lib/**/*"] + Dir["assets/**/*"]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/timcharper/spork}
   s.rdoc_options = ["--main", "README.rdoc"]

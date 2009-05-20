@@ -1,10 +1,11 @@
 #!/usr/bin/env ruby
 gem 'test-unit', '1.2.3' if RUBY_VERSION.to_f >= 1.9
 
-SPEC_HELPER_FILE = File.join(Dir.pwd, "spec/spec_helper.rb")
 require 'rubygems'
+require 'spork'
+require 'optparse'
 
-unless File.exist?(SPEC_HELPER_FILE)
+unless File.exist?(Spork::SPEC_HELPER_FILE)
   puts <<-USEFUL_ERROR
 Bummer!
 
@@ -12,33 +13,12 @@ I can't find the file spec/spec_helper.rb, which I need in order to run.
 
 Are you running me from a project directory that has rspec set up?
 USEFUL_ERROR
+  exit 1
 end
+
 
 ENV["DRB"] = 'true'
-ENV["RAILS_ENV"] ||= 'test' if File.exist?("config/environment.rb")
-
-require 'rubygems'
-require 'spork'
-
-if File.read(SPEC_HELPER_FILE).include?("Spork.prefork")
-  puts "Loading Spork.prefork block..."
-  Spork.preforking!
-  load SPEC_HELPER_FILE
-else
-    puts <<-NO_SPORK_BLOCK
-spec_helper.rb is has not been sporked.  Run spork --bootstrap to do so.
-NO_SPORK_BLOCK
-  # are we in a rails app?
-  if File.exist?("config/environment.rb")
-    puts "Preloading Rails environment"
-    require "config/environment.rb"
-  else
-    puts "There's nothing I can really do for you.  Bailing."
-  end
- 
-end
-
-require 'optparse'
+ENV["RAILS_ENV"] ||= 'test' if Spork.using_rails?
 
 options = {}
 parser = OptionParser.new
@@ -47,18 +27,21 @@ parser.on("-b", "--bootstrap")  {|ignore| options[:bootstrap] = true }
 parser.on("-p", "--pid PIDFILE"){|pid|    options[:pid]    = pid  }
 parser.parse!(ARGV)
 
-case
-when options[:bootstrap]
-  require 'spork/bootstrapper'
-  if Spork::Bootstrapper.run
+
+if options[:bootstrap]
+  if Spork.bootstrap
     exit 0
   else
     exit 1
   end
-when options[:daemon]
-  require 'spork/spec_server'
+end
+
+require 'spork/spec_server'
+Spork.preload || exit(1)
+
+if options[:daemon]
   ::Spork::SpecServer.daemonize(options[:pid])
 else
-  require 'spork/spec_server'
   ::Spork::SpecServer.run
 end
+
