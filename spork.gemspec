@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email = ["timcharper+spork@gmail.com"]
   s.executables = ["spork"]
   s.extra_rdoc_files = ["README.rdoc"]
-  s.files = ["README.rdoc"] + Dir["lib/**/*"] + Dir["assets/**/*"]
+  s.files = ["README.rdoc", "lib/spork", "lib/spork/spec_server.rb", "lib/spork.rb", "assets/bootstrap.rb"] 
   s.has_rdoc = true
   s.homepage = %q{http://github.com/timcharper/spork}
   s.rdoc_options = ["--main", "README.rdoc"]
