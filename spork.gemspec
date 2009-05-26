@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
     "README.rdoc",
      "assets/bootstrap.rb",
      "lib/spork.rb",
+     "lib/spork/runner.rb",
      "lib/spork/spec_server.rb"
   ]
   s.homepage = %q{http://github.com/timcharper/spork}

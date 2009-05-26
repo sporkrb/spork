@@ -1,45 +1,19 @@
 #!/usr/bin/env ruby
-gem 'test-unit', '1.2.3' if RUBY_VERSION.to_f >= 1.9
-
 require 'rubygems'
+gem 'test-unit', '1.2.3' if RUBY_VERSION.to_f >= 1.9 # Why do we need this?
+
+$LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib') unless $LOAD_PATH.include?(File.dirname(__FILE__) + '/../lib')
+
 require 'spork'
-require 'optparse'
+require 'spork/runner'
 
-ENV["DRB"] = 'true'
-ENV["RAILS_ENV"] ||= 'test' if Spork.using_rails?
-
-options = {}
-parser = OptionParser.new
-parser.on("-d", "--daemon")     {|ignore| options[:daemon] = true }
-parser.on("-b", "--bootstrap")  {|ignore| options[:bootstrap] = true }
-parser.on("-p", "--pid PIDFILE"){|pid|    options[:pid]    = pid  }
-parser.parse!(ARGV)
-
-unless File.exist?(Spork::SPEC_HELPER_FILE)
-  puts <<-USEFUL_ERROR
-Bummer!
-
-I can't find the file spec/spec_helper.rb, which I need in order to run.
-
-Are you running me from a project directory that has rspec set up?
-USEFUL_ERROR
-  exit 1
+begin
+  failure = Spork::Runner.run(ARGV, STDOUT, STDERR)
+  Kernel.exit(failure ? 1 : 0)
+rescue Exception => e
+  STDERR.puts("#{e.message} (#{e.class})")
+  STDERR.puts(e.backtrace.join("\n"))
+  Kernel.exit 1
 end
 
-if options[:bootstrap]
-  if Spork.bootstrap
-    exit 0
-  else
-    exit 1
-  end
-end
-
-require 'spork/spec_server'
-Spork.preload || exit(1)
-
-if options[:daemon]
-  ::Spork::SpecServer.daemonize(options[:pid])
-else
-  ::Spork::SpecServer.run
-end
 

@@ -13,7 +13,7 @@ begin
     s.email = ["timcharper+spork@gmail.com"]
     s.executables = ["spork"]
     s.extra_rdoc_files = ["README.rdoc"]
-    s.files = ["README.rdoc", "lib/spork", "lib/spork/spec_server.rb", "lib/spork.rb", "assets/bootstrap.rb"] 
+    s.files = ["README.rdoc", "lib/spork", "lib/spork/runner.rb", "lib/spork/spec_server.rb", "lib/spork.rb", "assets/bootstrap.rb"] 
     s.has_rdoc = true
     s.homepage = %q{http://github.com/timcharper/spork}
     s.rdoc_options = ["--main", "README.rdoc"]

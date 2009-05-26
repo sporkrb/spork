@@ -1,3 +1,4 @@
+$LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__))) unless $LOAD_PATH.include?(File.expand_path(File.dirname(__FILE__)))
 module Spork
   SPEC_HELPER_FILE = File.join(Dir.pwd, "spec/spec_helper.rb")
   
