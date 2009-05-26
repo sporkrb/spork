@@ -45,7 +45,7 @@ module Spork
       else
         ::Spork::SpecServer.run
       end
-
+      return true
     end
 
     private
