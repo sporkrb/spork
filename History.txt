@@ -1,0 +1,10 @@
+== 0.3.x (Git)
+ === New Features
+
+ === Bugfixes
+
+== 0.3.1 2009-05-25
+  * Extracted bin logic into Runner file, improved requiring and load path setup, and cleaned up file organization. (Ben Mabey)
+
+== 0.3.0 2009-05
+  * Initial release with SpecServer, Bootstraper, and basic option parsing. (Tim Harper)
