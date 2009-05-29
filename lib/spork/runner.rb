@@ -1,50 +1,67 @@
 require 'optparse'
+require 'spork/server'
 
 module Spork
   class Runner
-
+    attr_reader :server
+    
     def self.run(args, output, error)
       self.new(args, output, error).run
     end
-
+    
     def initialize(args, output, error)
+      raise ArgumentError, "expected array of args" unless args.is_a?(Array)
       @output = output
       @error = error
       @options = {}
-      parser = OptionParser.new
-      parser.on("-d", "--daemon")     {|ignore| @options[:daemon] = true }
-      parser.on("-b", "--bootstrap")  {|ignore| @options[:bootstrap] = true }
-      parser.on("-p", "--pid PIDFILE"){|pid|    @options[:pid]    = pid  }
-      parser.parse!(args)
+      opt = OptionParser.new
+      opt.banner = "Usage: spork [test framework name] [options]"
+      opt.on("-b", "--bootstrap")  {|ignore| @options[:bootstrap] = true }
+      non_option_args = args.select { |arg| ! args[0].match(/^-/) }
+      @options[:server_matcher] = non_option_args[0]
+      opt.parse!(args)
     end
+    
+    def find_server
+      if options[:server_matcher]
+        @server = Spork::Server.defined_servers(options[:server_matcher]).first
+        unless @server
+          @output.puts <<-ERROR
+#{options[:server_matcher].inspect} didn't match a supported test framework.
 
-
-    def run
-      ENV["DRB"] = 'true'
-      ENV["RAILS_ENV"] ||= 'test' if Spork.using_rails?
-
-      unless File.exist?(Spork::SPEC_HELPER_FILE)
-        @output.puts  <<-USEFUL_ERROR
-        Bummer!
-
-        I can't find the file spec/spec_helper.rb, which I need in order to run.
-
-        Are you running me from a project directory that has rspec set up?
-        USEFUL_ERROR
-        return false
-      end
-
-
-      return Spork.bootstrap if options[:bootstrap]
-
-      require 'spork/spec_server'
-      return(false) unless Spork.preload
-
-      if options[:daemon]
-        ::Spork::SpecServer.daemonize(options[:pid])
+I support the following test frameworks:
+#{Spork::Server.defined_servers.map { |s| ' - ' + s.server_name.downcase } * "\n"}
+          ERROR
+          return
+        end
+        
+        unless @server.available?
+          @output.puts  <<-USEFUL_ERROR
+I can't find the helper file #{@server.helper_file} for the #{@server.server_name} testing framework.
+Are you running me from the project directory?
+          USEFUL_ERROR
+          return
+        end
       else
-        ::Spork::SpecServer.run
+        @server = Spork::Server.available_servers.first
+        if @server.nil?
+          @output.puts  <<-USEFUL_ERROR
+I can't find any testing frameworks to use.
+Are you running me from a project directory?
+          USEFUL_ERROR
+          return
+        end
       end
+      @server
+    end
+    
+    def run
+      return false unless find_server
+      ENV["DRB"] = 'true'
+      ENV["RAILS_ENV"] ||= 'test' if server.using_rails?
+      return server.bootstrap if options[:bootstrap]
+      return(false) unless server.preload
+      server.run
       return true
     end
 
