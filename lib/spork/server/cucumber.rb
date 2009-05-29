@@ -10,8 +10,15 @@ class Spork::Server::Cucumber < Spork::Server
     CUCUMBER_HELPER_FILE
   end
   
+  def self.step_mother=(value)
+    @step_mother = value
+  end
+  
   def run_tests(argv, stderr, stdout)
     require 'cucumber/cli/main'
-    ::Cucumber::Cli::Main.new(argv, stderr, stdout).execute!(self)
+    ::Cucumber::Cli::Main.step_mother = @step_mother
+    ::Cucumber::Cli::Main.new(argv, stderr, stdout).execute!(@step_mother)
   end
 end
+
+Spork::Server::Cucumber.step_mother = self
