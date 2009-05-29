@@ -1,6 +1,6 @@
 class Spork::Server::Cucumber < Spork::Server
   CUCUMBER_PORT = 8990
-  CUCUMBER_HELPER_FILE = File.join(Dir.pwd, "features/env.rb")
+  CUCUMBER_HELPER_FILE = File.join(Dir.pwd, "features/support/env.rb")
   
   def self.port
     CUCUMBER_PORT
