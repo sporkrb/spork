@@ -39,11 +39,6 @@ describe Spork do
   end
   
   it "runs both blocks when Spork not activated" do
-    Spork.not_using_spork!
-    spec_helper_simulator.should == [:prefork, :each_run]
-  end
-  
-  it "defaults to not_using_spork" do
     spec_helper_simulator.should == [:prefork, :each_run]
   end
 end
