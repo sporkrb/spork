@@ -12,6 +12,6 @@ class Spork::Server::Cucumber < Spork::Server
   
   def run_tests(argv, stderr, stdout)
     require 'cucumber/cli/main'
-    Cucumber::Cli::Main.new(argv, stderr, stdout).execute!(self)
+    ::Cucumber::Cli::Main.new(argv, stderr, stdout).execute!(self)
   end
 end
