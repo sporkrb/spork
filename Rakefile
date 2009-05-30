@@ -11,8 +11,8 @@ begin
     s.description = %q{A forking Drb spec server}
     s.email = ["timcharper+spork@gmail.com"]
     s.executables = ["spork"]
-    s.extra_rdoc_files = ["README.rdoc"]
-    s.files = ["README.rdoc"] + Dir["lib/**/*"] + Dir["assets/**/*"] + Dir["spec/**/*"]
+    s.extra_rdoc_files = ["README.rdoc", "MIT-LICENSE"]
+    s.files = ["README.rdoc", "MIT-LICENSE"] + Dir["lib/**/*"] + Dir["assets/**/*"] + Dir["spec/**/*"]
     s.has_rdoc = true
     s.homepage = %q{http://github.com/timcharper/spork}
     s.rdoc_options = ["--main", "README.rdoc"]
