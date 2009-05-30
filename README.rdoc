@@ -65,6 +65,6 @@ On one of our projects, many of us using TextMate with spork, only one developer
 
 == Kudos to
 
-* Ben Mabey - help with documentation, testing, suggestions.
+* Ben Mabey - help with documentation, testing, suggestions, patches, collaborated with Cucumber support.
 * David Chelimsky - for the fine RSpec testing framework, and the original rspec-rails spec_server implementation, which Spork has built upon.
 * Lead Media Partners - just for being an awesome place to work.
