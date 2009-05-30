@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{spork}
-  s.version = "0.4.2"
+  s.version = "0.4.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tim Harper"]
@@ -30,12 +30,11 @@ Gem::Specification.new do |s|
      "spec/spork/server_spec.rb",
      "spec/spork_spec.rb"
   ]
-  s.has_rdoc = true
   s.homepage = %q{http://github.com/timcharper/spork}
   s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{spork}
-  s.rubygems_version = %q{1.3.1}
+  s.rubygems_version = %q{1.3.3}
   s.summary = %q{spork}
   s.test_files = [
     "spec/spec_helper.rb",
@@ -47,7 +46,7 @@ Gem::Specification.new do |s|
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
-    s.specification_version = 2
+    s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
     else
