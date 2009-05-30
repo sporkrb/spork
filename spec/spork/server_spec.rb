@@ -26,7 +26,7 @@ end
 describe Spork::Server do
   describe ".available_servers" do
     before(:each) do
-      Spork::Server.defined_servers.each { |s| s.stub!(:available?).and_return(false) }
+      Spork::Server.supported_servers.each { |s| s.stub!(:available?).and_return(false) }
     end
     
     it "returns a list of all available servers" do
@@ -42,16 +42,16 @@ describe Spork::Server do
     end
   end
   
-  describe ".defined_servers" do
+  describe ".supported_servers" do
     it "returns all defined servers" do
-      Spork::Server.defined_servers.should include(Spork::Server::RSpec)
-      Spork::Server.defined_servers.should include(Spork::Server::Cucumber)
+      Spork::Server.supported_servers.should include(Spork::Server::RSpec)
+      Spork::Server.supported_servers.should include(Spork::Server::Cucumber)
     end
     
     it "returns a list of servers matching a case-insensitive prefix" do
-      Spork::Server.defined_servers("rspec").should == [Spork::Server::RSpec]
-      Spork::Server.defined_servers("rs").should == [Spork::Server::RSpec]
-      Spork::Server.defined_servers("cuc").should == [Spork::Server::Cucumber]
+      Spork::Server.supported_servers("rspec").should == [Spork::Server::RSpec]
+      Spork::Server.supported_servers("rs").should == [Spork::Server::RSpec]
+      Spork::Server.supported_servers("cuc").should == [Spork::Server::Cucumber]
     end
   end
   

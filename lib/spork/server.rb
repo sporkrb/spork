@@ -3,7 +3,7 @@ require 'rbconfig'
 
 # This is based off of spec_server.rb from rspec-rails (David Chelimsky), which was based on Florian Weber's TDDMate
 class Spork::Server
-  @@defined_servers = []
+  @@supported_servers = []
   
   LOAD_PREFERENCE = ['RSpec', 'Cucumber']
   BOOTSTRAP_FILE = File.dirname(__FILE__) + "/../../assets/bootstrap.rb"
@@ -21,17 +21,17 @@ class Spork::Server
   end
   
   def self.inherited(subclass)
-    @@defined_servers << subclass
+    @@supported_servers << subclass
   end
   
   def self.available_servers
-    defined_servers.select { |s| s.available? }
+    supported_servers.select { |s| s.available? }
   end
   
-  def self.defined_servers(starting_with = nil)
-    @@defined_servers.sort! { |a,b| a.load_preference_index <=> b.load_preference_index }
-    return @@defined_servers if starting_with.nil?
-    @@defined_servers.select do |s|
+  def self.supported_servers(starting_with = nil)
+    @@supported_servers.sort! { |a,b| a.load_preference_index <=> b.load_preference_index }
+    return @@supported_servers if starting_with.nil?
+    @@supported_servers.select do |s|
       s.server_name.match(/^#{Regexp.escape(starting_with)}/i)
     end
   end

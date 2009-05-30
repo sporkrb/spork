@@ -44,5 +44,20 @@ describe Spork::Runner do
     Spork::Server::RSpec.should_receive(:preload).and_return(true)
     Spork::Server::RSpec.should_receive(:run).and_return(true)
     Spork::Runner.new(['rspec'], @out, @err).run
+    @out.string.should include("Using RSpec")
+  end
+  
+  it "outputs a list of supported servers, along with supported asterisk" do
+    Spork::Server.stub!(:supported_servers).and_return([Spork::Server::RSpec, Spork::Server::Cucumber])
+    Spork::Server::RSpec.stub!(:available?).and_return(true)
+    Spork::Server::Cucumber.stub!(:available?).and_return(false)
+    
+    Spork::Runner.new(['rspec'], @out, @err).supported_servers_text.should == <<-EOF
+Supported test frameworks:
+( ) Cucumber
+(*) RSpec
+
+Legend: ( ) - not detected in project   (*) - detected
+    EOF
   end
 end

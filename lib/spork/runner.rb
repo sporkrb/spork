@@ -15,22 +15,40 @@ module Spork
       @error = error
       @options = {}
       opt = OptionParser.new
-      opt.banner = "Usage: spork [test framework name] [options]"
+      opt.banner = "Usage: spork [test framework name] [options]\n\n"
+      
+      opt.separator "Options:"
       opt.on("-b", "--bootstrap")  {|ignore| @options[:bootstrap] = true }
+      opt.on("-h", "--help")  {|ignore| @options[:help] = true }
       non_option_args = args.select { |arg| ! args[0].match(/^-/) }
       @options[:server_matcher] = non_option_args[0]
       opt.parse!(args)
+      
+      if @options[:help]
+        @output.puts opt
+        @output.puts
+        @output.puts supported_servers_text
+        exit(0)
+      end
+    end
+    
+    def supported_servers_text
+      text = StringIO.new
+      
+      text.puts "Supported test frameworks:"
+      text.puts Spork::Server.supported_servers.sort { |a,b| a.server_name <=> b.server_name }.map { |s| (s.available? ? '(*) ' : '( ) ') + s.server_name }
+      text.puts "\nLegend: ( ) - not detected in project   (*) - detected\n"
+      text.string
     end
     
     def find_server
       if options[:server_matcher]
-        @server = Spork::Server.defined_servers(options[:server_matcher]).first
+        @server = Spork::Server.supported_servers(options[:server_matcher]).first
         unless @server
           @output.puts <<-ERROR
 #{options[:server_matcher].inspect} didn't match a supported test framework.
 
-I support the following test frameworks:
-#{Spork::Server.defined_servers.map { |s| ' - ' + s.server_name.downcase } * "\n"}
+#{supported_servers_text}
           ERROR
           return
         end
@@ -59,6 +77,7 @@ Are you running me from a project directory?
       return false unless find_server
       ENV["DRB"] = 'true'
       ENV["RAILS_ENV"] ||= 'test' if server.using_rails?
+      @output.puts "Using #{server.server_name}"
       return server.bootstrap if options[:bootstrap]
       return(false) unless server.preload
       server.run
