@@ -4,7 +4,7 @@
 
 == SYNOPSIS:
 
-Spork is a Drb spec server (similar to the script/spec_server provided by rspec-rails), except rather than using the Rails constant unloading to reload your files, it forks a copy of the server each time you run your specs.  The result?  Spork runs more solid: it doesn't get corrupted over time, and it properly handles modules and any voo-doo meta programming you may have put in your app.
+Spork is Tim Harper's implementation of a Drb spec server (similar to the script/spec_server provided by rspec-rails), except rather than using the Rails constant unloading to reload your files, it forks a copy of the server each time you run your specs.  The result?  Spork runs more solid: it doesn't get corrupted over time, and it properly handles modules and any voo-doo meta programming you may have put in your app.
 
 Because Spork uses Kernel.fork, it only works on POSIX systems.  This means Windows users are not invited to this party.  Sorry :(
 
@@ -68,3 +68,5 @@ On one of our projects, many of us using TextMate with spork, only one developer
 * Ben Mabey - help with documentation, testing, suggestions, patches, collaborated with Cucumber support.
 * David Chelimsky - for the fine RSpec testing framework, and the original rspec-rails spec_server implementation, which Spork has built upon.
 * Lead Media Partners - just for being an awesome place to work.
+
+Spork (c) 2009 Tim Harper, released under the MIT license
