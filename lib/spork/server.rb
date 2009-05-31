@@ -93,15 +93,18 @@ class Spork::Server
   
   def run(argv, stderr, stdout)
     return false if running?
-    $stdout = stdout
-    $stderr = stderr
+    $stdout, $stderr = stdout, stderr
+    
+    child_io, server_io = UNIXSocket::socketpair
     @child_pid = Kernel.fork do
+      server_io.close
       Spork.exec_each_run(helper_file)
-      run_tests(argv, stderr, stdout)
+      child_io << Marshal.dump(run_tests(argv, stderr, stdout))
     end
+    child_io.close
     Process.wait(@child_pid)
     @child_pid = nil
-    true
+    Marshal.load(server_io.read)
   end
   
   def running?
