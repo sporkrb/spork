@@ -98,6 +98,7 @@ class Spork::Server
     @child_pid = Kernel.fork do
       Spork.exec_each_run(helper_file)
       run_tests(argv, stderr, stdout)
+      exit!(0)
     end
     Process.wait(@child_pid)
     @child_pid = nil
