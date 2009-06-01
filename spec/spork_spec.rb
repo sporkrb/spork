@@ -41,4 +41,15 @@ describe Spork do
   it "runs both blocks when Spork not activated" do
     spec_helper_simulator.should == [:prefork, :each_run]
   end
+  
+  it "prevents blocks from being ran twice" do
+    spec_helper_simulator.should == [:prefork, :each_run]
+    spec_helper_simulator.should == []
+  end
+  
+  it "runs multiple prefork and each_run blocks at different locations" do
+    Spork.prefork { }
+    Spork.each_run { }
+    spec_helper_simulator.should == [:prefork, :each_run]
+  end
 end

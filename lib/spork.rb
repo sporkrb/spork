@@ -3,15 +3,23 @@ module Spork
   SPEC_HELPER_FILE = File.join(Dir.pwd, "spec/spec_helper.rb")
   
   class << self
+    def already_preforked
+      @already_preforked ||= []
+    end
+    
+    def already_run
+      @already_run ||= []
+    end
+    
     def prefork(&block)
-      return if @already_preforked
-      @already_preforked = true
+      return if already_preforked.include?(expanded_caller(caller.first))
+      already_preforked << expanded_caller(caller.first)
       yield
     end
   
     def each_run(&block)
-      return if @state == :preforking || (@state != :not_using_spork && @already_run)
-      @already_run = true
+      return if @state == :preforking || (@state != :not_using_spork && already_run.include?(expanded_caller(caller.first)))
+      already_run << expanded_caller(caller.first)
       yield
     end
   
@@ -35,6 +43,12 @@ module Spork
     def exec_each_run(helper_file)
       running!
       load(helper_file)
+    end
+    
+    def expanded_caller(caller_line)
+      file, line = caller_line.split(":")
+      line.gsub(/:.+/, '')
+      File.expand_path(Dir.pwd, file) + ":" + line
     end
   end
 end
