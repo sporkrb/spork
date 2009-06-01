@@ -20,6 +20,7 @@ class FakeServer < Spork::Server
   
   def run_tests(argv, input, output)
     sleep(@wait_time || 0.5)
+    true
   end
 end
 
@@ -119,8 +120,14 @@ describe Spork::Server do
       sleep(0.05)
       @fake.send(:abort)
       sleep(0.01) while @fake.running?
-    
+      
       (Time.now - started_at).should < @fake.wait_time
+    end
+    
+    it "returns the result of the run_tests method from the forked child" do
+      create_helper_file
+      @fake.stub!(:run_tests).and_return("tests were ran")
+      @fake.run("test", STDOUT, STDIN).should == "tests were ran"
     end
   end
 end

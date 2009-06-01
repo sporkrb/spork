@@ -1,5 +1,6 @@
 require 'drb/drb'
 require 'rbconfig'
+require 'spork/forker.rb'
 
 # This is based off of spec_server.rb from rspec-rails (David Chelimsky), which was based on Florian Weber's TDDMate
 class Spork::Server
@@ -93,20 +94,16 @@ class Spork::Server
   
   def run(argv, stderr, stdout)
     return false if running?
-    $stdout = stdout
-    $stderr = stderr
-    @child_pid = Kernel.fork do
+    @child = ::Spork::Forker.new do
+      $stdout, $stderr = stdout, stderr
       Spork.exec_each_run(helper_file)
       run_tests(argv, stderr, stdout)
-      exit!(0)
     end
-    Process.wait(@child_pid)
-    @child_pid = nil
-    true
+    @child.result
   end
   
   def running?
-    !! @child_pid
+    @child && @child.running?
   end
   
   private
@@ -141,16 +138,13 @@ class Spork::Server
     end
     
     def abort
-      if running?
-        Process.kill(Signal.list['TERM'], @child_pid)
-        true
-      end
+      @child && @child.abort
     end
     
     def sig_int_received
       if running?
         abort
-        puts "Running specs stopped.  Press CTRL-C again to stop the server."
+        puts "Running tests stopped.  Press CTRL-C again to stop the server."
       else
         exit!(0)
       end
