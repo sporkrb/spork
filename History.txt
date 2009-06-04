@@ -1,3 +1,11 @@
+== 0.5.0 2009-06-05
+
+ === New Features
+
+ * Diagnostic mode: run 'spork -d' to find out which project files will be preloaded, and where they are being loading from.
+ * Better Rails integration: automatically delay loading of ApplicationController, observers, and entire app folder.  Also, automatically re-establish the database connection each run if ActiveRecord is being used.
+ * Cucumber feature to test Spork from end to end (integrating with Rails)
+
 == 0.4.4 2009-06-01
 
  === New Features

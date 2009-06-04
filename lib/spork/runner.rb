@@ -77,7 +77,6 @@ Are you running me from a project directory?
     def run
       return false unless find_server
       ENV["DRB"] = 'true'
-      ENV["RAILS_ENV"] ||= 'test' if server.using_rails?
       @error.puts "Using #{server.server_name}"
       @error.flush
       case

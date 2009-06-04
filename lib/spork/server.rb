@@ -2,6 +2,7 @@ require 'drb/drb'
 require 'rbconfig'
 require 'spork/forker.rb'
 require 'spork/custom_io_streams.rb'
+require 'spork/app_framework.rb'
 
 # This is based off of spec_server.rb from rspec-rails (David Chelimsky), which was based on Florian Weber's TDDMate
 class Spork::Server
@@ -46,10 +47,6 @@ class Spork::Server
   
   def self.load_preference_index
     LOAD_PREFERENCE.index(server_name) || LOAD_PREFERENCE.length
-  end
-  
-  def self.using_rails?
-    File.exist?("config/environment.rb")
   end
   
   def self.bootstrapped?
@@ -98,9 +95,10 @@ class Spork::Server
   
   def run(argv, stderr, stdout)
     return false if running?
+    
     @child = ::Spork::Forker.new do
       $stdout, $stderr = stdout, stderr
-      Spork.exec_each_run
+      Spork.exec_each_run { load helper_file }
       run_tests(argv, stderr, stdout)
     end
     @child.result
@@ -111,24 +109,30 @@ class Spork::Server
   end
   
   private
+    def self.framework
+      @framework ||= Spork::AppFramework.detect_framework
+    end
+    
     def self.preload
-      if bootstrapped?
-        stderr.puts "Loading Spork.prefork block..."
-        stderr.flush
-        Spork.exec_prefork { load helper_file }
-      else
-        stderr.puts "#{helper_file} has not been sporked.  Run spork --bootstrap to do so."
-        stderr.flush
-        # are we in a rails app?
-        if using_rails?
-          stderr.puts "Preloading Rails environment"
+      Spork.exec_prefork do
+        unless bootstrapped?
+          stderr.puts "#{helper_file} has not been bootstrapped.  Run spork --bootstrap to do so."
           stderr.flush
-          require "config/environment.rb"
-        else
-          stderr.puts "There's nothing I can really do for you.  Bailing."
-          stderr.flush
-          return false
+        
+          if framework.bootstrap_required?
+            stderr.puts "I can't do anything for you by default for the framework your using: #{framework.short_name}.\nYou must bootstrap #{helper_file} to continue."
+            stderr.flush
+            return false
+          end
         end
+      
+        framework.preload do
+          if bootstrapped?
+            stderr.puts "Loading Spork.prefork block..."
+            stderr.flush
+            load(helper_file)
+          end
+        end  
       end
       true
     end

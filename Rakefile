@@ -7,12 +7,12 @@ begin
     s.name = %q{spork}
     s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
     s.authors = ["Tim Harper"]
-    s.date = %q{2009-05-20}
+    s.date = Date.today.to_s
     s.description = %q{A forking Drb spec server}
     s.email = ["timcharper+spork@gmail.com"]
     s.executables = ["spork"]
     s.extra_rdoc_files = ["README.rdoc", "MIT-LICENSE"]
-    s.files = ["README.rdoc", "MIT-LICENSE"] + Dir["lib/**/*"] + Dir["assets/**/*"] + Dir["spec/**/*"]
+    s.files = ["README.rdoc", "MIT-LICENSE"] + Dir["lib/**/*"] + Dir["assets/**/*"] + Dir["spec/**/*"] + Dir["features/**/*"]
     s.has_rdoc = true
     s.homepage = %q{http://github.com/timcharper/spork}
     s.rdoc_options = ["--main", "README.rdoc"]

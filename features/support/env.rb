@@ -3,6 +3,7 @@ require 'fileutils'
 require 'forwardable'
 require 'tempfile'
 require 'spec/expectations'
+require 'timeout'
 
 class SporkWorld
   RUBY_BINARY   = File.join(Config::CONFIG['bindir'], Config::CONFIG['ruby_install_name'])
@@ -18,10 +19,11 @@ class SporkWorld
 
   def initialize
     @current_dir = SANDBOX_DIR
+    @background_jobs = []
   end
 
   private
-  attr_reader :last_exit_status, :last_stderr, :last_stdout
+  attr_reader :last_exit_status, :last_stderr, :last_stdout, :background_jobs
 
   def create_file(file_name, file_content)
     file_content.gsub!("SPORK_LIB", "'#{spork_lib_dir}'") # Some files, such as Rakefiles need to use the lib dir
@@ -46,7 +48,29 @@ class SporkWorld
   end
 
   def run_in_background(command)
-    background_jobs << Kernel.fork { exec command }
+    child_stdin, parent_stdin = IO::pipe
+    parent_stdout, child_stdout = IO::pipe
+    parent_stderr, child_stderr = IO::pipe
+    
+    background_jobs << Kernel.fork do
+      # grandchild
+      [parent_stdin, parent_stdout, parent_stderr].each { |io| io.close }
+      
+      STDIN.reopen(child_stdin)
+      STDOUT.reopen(child_stdout)
+      STDERR.reopen(child_stderr)
+      
+      [child_stdin, child_stdout, child_stderr].each { |io| io.close }
+
+      in_current_dir do
+        exec command
+      end
+    end
+    
+    [child_stdin, child_stdout, child_stderr].each { |io| io.close }
+    parent_stdin.sync = true
+    
+    @bg_stdin, @bg_stdout, @bg_stderr = [parent_stdin, parent_stdout, parent_stderr]
   end
 
   def terminate_background_jobs

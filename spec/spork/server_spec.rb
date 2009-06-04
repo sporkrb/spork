@@ -54,8 +54,7 @@ describe Spork::Server do
   
   describe "a fake server" do
     def create_helper_file
-      FileUtils.mkdir_p(File.dirname(FakeServer.helper_file))
-      FileUtils.touch(FakeServer.helper_file)
+      create_file(FakeServer.helper_file, "# stub spec helper file")
     end
   
     before(:each) do

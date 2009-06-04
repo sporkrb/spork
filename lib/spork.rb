@@ -42,15 +42,40 @@ module Spork
       yield
     end
     
-    def exec_each_run
+    def exec_each_run(&block)
       each_run_procs.each { |p| p.call }
       each_run_procs.clear
+      yield if block_given?
     end
     
     def expanded_caller(caller_line)
       file, line = caller_line.split(":")
       line.gsub(/:.+/, '')
       File.expand_path(Dir.pwd, file) + ":" + line
+    end
+    
+    def trap_method(klass, method_name)
+      klass.class_eval <<-EOF, __FILE__, __LINE__ + 1
+        alias :#{method_name}_without_spork :#{method_name} unless method_defined?(:#{method_name}_without_spork) 
+        def #{method_name}(*args)
+          Spork.each_run_procs << lambda do
+            #{method_name}_without_spork(*args)
+          end
+        end
+      EOF
+    end
+    
+    def trap_class_method(klass, method_name)
+      klass.class_eval <<-EOF, __FILE__, __LINE__ + 1
+        class << self
+          alias :#{method_name}_without_spork :#{method_name} unless method_defined?(:#{method_name}_without_spork)
+          def #{method_name}(*args)
+            Spork.each_run_procs << lambda do
+              #{method_name}_without_spork(*args)
+            end
+          end
+        end
+      EOF
     end
   end
 end
