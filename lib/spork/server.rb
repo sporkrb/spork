@@ -96,7 +96,7 @@ class Spork::Server
     return false if running?
     @child = ::Spork::Forker.new do
       $stdout, $stderr = stdout, stderr
-      Spork.exec_each_run(helper_file)
+      Spork.exec_each_run
       run_tests(argv, stderr, stdout)
     end
     @child.result
@@ -110,7 +110,7 @@ class Spork::Server
     def self.preload
       if bootstrapped?
         STDERR.puts "Loading Spork.prefork block..."
-        Spork.exec_prefork(helper_file)
+        Spork.exec_prefork { load helper_file }
       else
         STDERR.puts "#{helper_file} has not been sporked.  Run spork --bootstrap to do so."
         # are we in a rails app?

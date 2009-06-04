@@ -1,46 +1,50 @@
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__))) unless $LOAD_PATH.include?(File.expand_path(File.dirname(__FILE__)))
 module Spork
   class << self
-    def already_preforked
-      @already_preforked ||= []
+    def already_ran
+      @already_ran ||= []
     end
     
-    def already_run
-      @already_run ||= []
+    def each_run_procs
+      @each_run_procs ||= []
     end
     
     def prefork(&block)
-      return if already_preforked.include?(expanded_caller(caller.first))
-      already_preforked << expanded_caller(caller.first)
+      return if already_ran?(caller.first)
       yield
     end
-  
+    
     def each_run(&block)
-      return if @state == :preforking || (@state != :not_using_spork && already_run.include?(expanded_caller(caller.first)))
-      already_run << expanded_caller(caller.first)
-      yield
+      return if already_ran?(caller.first)
+      if @state == :using_spork
+        each_run_procs << block
+      else
+        yield
+      end
     end
-  
-    def preforking!
-      @state = :preforking
+    
+    def already_ran?(caller_script_and_line)
+      return true if already_ran.include?(expanded_caller(caller_script_and_line))
+      already_ran << expanded_caller(caller_script_and_line)
+      false
     end
-  
-    def running!
-      @state = :running
+    
+    def using_spork!
+      @state = :using_spork
     end
-  
+    
     def state
       @state ||= :not_using_spork
     end
-  
-    def exec_prefork(helper_file)
-      preforking!
-      load(helper_file)
+    
+    def exec_prefork(&block)
+      using_spork!
+      yield
     end
-  
-    def exec_each_run(helper_file)
-      running!
-      load(helper_file)
+    
+    def exec_each_run
+      each_run_procs.each { |p| p.call }
+      each_run_procs.clear
     end
     
     def expanded_caller(caller_line)

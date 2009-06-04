@@ -3,8 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 Spork.class_eval do
   def self.reset!
     @state = nil
-    @already_run = nil
-    @already_preforked = nil
+    @already_ran = nil
   end
 end
 
@@ -14,28 +13,28 @@ describe Spork do
   end
   
   def spec_helper_simulator
-    ran = []
+    @ran ||= []
     Spork.prefork do
-      ran << :prefork
+      @ran << :prefork
     end
     
     Spork.each_run do
-      ran << :each_run
+      @ran << :each_run
     end
-    ran
+    @ran
   end
   
   it "only runs the preload block when preforking" do
-    ran = []
-    Spork.preforking!
-    spec_helper_simulator.should == [:prefork]
+    Spork.exec_prefork { spec_helper_simulator }
+    @ran.should == [:prefork]
   end
   
   it "only runs the each_run block when running" do
-    Spork.preforking!
-    spec_helper_simulator
-    Spork.running!
-    spec_helper_simulator.should == [:each_run]
+    Spork.exec_prefork { spec_helper_simulator }
+    @ran.should == [:prefork]
+    
+    Spork.exec_each_run
+    @ran.should == [:prefork, :each_run]
   end
   
   it "runs both blocks when Spork not activated" do
@@ -43,8 +42,12 @@ describe Spork do
   end
   
   it "prevents blocks from being ran twice" do
-    spec_helper_simulator.should == [:prefork, :each_run]
-    spec_helper_simulator.should == []
+    Spork.exec_prefork { spec_helper_simulator }
+    Spork.exec_each_run
+    @ran.clear
+    Spork.exec_prefork { spec_helper_simulator }
+    Spork.exec_each_run
+    @ran.should == []
   end
   
   it "runs multiple prefork and each_run blocks at different locations" do
