@@ -24,7 +24,7 @@ class SporkWorld
   attr_reader :last_exit_status, :last_stderr, :last_stdout
 
   def create_file(file_name, file_content)
-    file_content.gsub!("CUCUMBER_LIB", "'#{spork_lib_dir}'") # Some files, such as Rakefiles need to use the lib dir
+    file_content.gsub!("SPORK_LIB", "'#{spork_lib_dir}'") # Some files, such as Rakefiles need to use the lib dir
     in_current_dir do
       FileUtils.mkdir_p(File.dirname(file_name))
       File.open(file_name, 'w') { |f| f << file_content }
@@ -36,7 +36,7 @@ class SporkWorld
   end
 
   def run(command)
-    stderr_file = Tempfile.new('cucumber')
+    stderr_file = Tempfile.new('spork')
     stderr_file.close
     in_current_dir do
       @last_stdout = `#{command} 2> #{stderr_file.path}`
