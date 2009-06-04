@@ -19,6 +19,7 @@ module Spork
       
       opt.separator "Options:"
       opt.on("-b", "--bootstrap")  {|ignore| @options[:bootstrap] = true }
+      opt.on("-d", "--diagnose")  {|ignore| @options[:diagnose] = true }
       opt.on("-h", "--help")  {|ignore| @options[:help] = true }
       non_option_args = args.select { |arg| ! args[0].match(/^-/) }
       @options[:server_matcher] = non_option_args[0]
@@ -78,10 +79,24 @@ Are you running me from a project directory?
       ENV["DRB"] = 'true'
       ENV["RAILS_ENV"] ||= 'test' if server.using_rails?
       @output.puts "Using #{server.server_name}"
-      return server.bootstrap if options[:bootstrap]
-      return(false) unless server.preload
-      server.run
-      return true
+      case
+      when options[:bootstrap]
+        server.bootstrap
+      when options[:diagnose]
+        require 'spork/diagnoser'
+        
+        Spork::Diagnoser.install_hook!
+        server.preload
+        Spork::Diagnoser.output_results(@output)
+        return true
+      else
+        return(false) unless server.preload
+        server.run
+        return true
+      end
+    end
+    
+    def diagnose
     end
 
     private
