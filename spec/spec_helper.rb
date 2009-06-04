@@ -14,6 +14,7 @@ require 'fileutils'
 Spec::Runner.configure do |config|
   config.before(:each) do
     $test_stdout = StringIO.new
+    $test_stderr = StringIO.new
   end
   
   config.after(:each) do
@@ -50,6 +51,30 @@ module Spec
 
     def include_a_string_like(substring_or_regex)
       IncludeAStringLike.new(substring_or_regex)
+    end
+  end
+end
+
+module Spork::TestIOStreams
+  def self.included(klass)
+    klass.send(:extend, ::Spork::TestIOStreams::ClassMethods)
+  end
+  
+  def stderr
+    self.class.stderr
+  end
+
+  def stdout
+    self.class.stdout
+  end
+  
+  module ClassMethods
+    def stderr
+      $test_stderr
+    end
+  
+    def stdout
+      $test_stdout
     end
   end
 end

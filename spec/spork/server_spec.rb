@@ -1,21 +1,17 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+
 class FakeServer < Spork::Server
   attr_accessor :wait_time
+  
+  include Spork::TestIOStreams
+  
   def self.helper_file
     SPEC_TMP_DIR + "/fake/test_helper.rb"
   end
   
   def self.port
     1000
-  end
-  
-  def self.puts(string)
-    $test_stdout.puts(string)
-  end
-  
-  def puts(string)
-    $test_stdout.puts(string)
   end
   
   def run_tests(argv, input, output)
@@ -94,9 +90,9 @@ describe Spork::Server do
       create_helper_file
       FakeServer.bootstrap
     
-      $test_stdout.string.should include("Bootstrapping")
-      $test_stdout.string.should include("Edit")
-      $test_stdout.string.should include("favorite text editor")
+      $test_stderr.string.should include("Bootstrapping")
+      $test_stderr.string.should include("Edit")
+      $test_stderr.string.should include("favorite text editor")
     
       File.read(FakeServer.helper_file).should include(File.read(FakeServer::BOOTSTRAP_FILE))
     end

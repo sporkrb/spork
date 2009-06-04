@@ -79,6 +79,7 @@ Are you running me from a project directory?
       ENV["DRB"] = 'true'
       ENV["RAILS_ENV"] ||= 'test' if server.using_rails?
       @error.puts "Using #{server.server_name}"
+      @error.flush
       case
       when options[:bootstrap]
         server.bootstrap
