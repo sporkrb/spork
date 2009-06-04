@@ -11,7 +11,7 @@ describe Spork::Runner do
   
   it "shows an error message if no matching server was found" do
     Spork::Runner.new(["argle_bargle"], @out, @err).run.should == false
-    @out.string.should include(%("argle_bargle" didn't match a supported test framework))
+    @err.string.should include(%("argle_bargle" didn't match a supported test framework))
   end
   
   it "defaults to use rspec over cucumber" do
@@ -44,7 +44,7 @@ describe Spork::Runner do
     Spork::Server::RSpec.should_receive(:preload).and_return(true)
     Spork::Server::RSpec.should_receive(:run).and_return(true)
     Spork::Runner.new(['rspec'], @out, @err).run
-    @out.string.should include("Using RSpec")
+    @err.string.should include("Using RSpec")
   end
   
   it "outputs a list of supported servers, along with supported asterisk" do

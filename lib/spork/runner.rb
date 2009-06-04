@@ -46,7 +46,7 @@ module Spork
       if options[:server_matcher]
         @server = Spork::Server.supported_servers(options[:server_matcher]).first
         unless @server
-          @output.puts <<-ERROR
+          @error.puts <<-ERROR
 #{options[:server_matcher].inspect} didn't match a supported test framework.
 
 #{supported_servers_text}
@@ -55,7 +55,7 @@ module Spork
         end
         
         unless @server.available?
-          @output.puts  <<-USEFUL_ERROR
+          @error.puts  <<-USEFUL_ERROR
 I can't find the helper file #{@server.helper_file} for the #{@server.server_name} testing framework.
 Are you running me from the project directory?
           USEFUL_ERROR
@@ -64,7 +64,7 @@ Are you running me from the project directory?
       else
         @server = Spork::Server.available_servers.first
         if @server.nil?
-          @output.puts  <<-USEFUL_ERROR
+          @error.puts  <<-USEFUL_ERROR
 I can't find any testing frameworks to use.
 Are you running me from a project directory?
           USEFUL_ERROR
@@ -78,7 +78,7 @@ Are you running me from a project directory?
       return false unless find_server
       ENV["DRB"] = 'true'
       ENV["RAILS_ENV"] ||= 'test' if server.using_rails?
-      @output.puts "Using #{server.server_name}"
+      @error.puts "Using #{server.server_name}"
       case
       when options[:bootstrap]
         server.bootstrap

@@ -109,16 +109,16 @@ class Spork::Server
   private
     def self.preload
       if bootstrapped?
-        puts "Loading Spork.prefork block..."
+        STDERR.puts "Loading Spork.prefork block..."
         Spork.exec_prefork(helper_file)
       else
-        puts "#{helper_file} has not been sporked.  Run spork --bootstrap to do so."
+        STDERR.puts "#{helper_file} has not been sporked.  Run spork --bootstrap to do so."
         # are we in a rails app?
         if using_rails?
-          puts "Preloading Rails environment"
+          STDERR.puts "Preloading Rails environment"
           require "config/environment.rb"
         else
-          puts "There's nothing I can really do for you.  Bailing."
+          STDERR.puts "There's nothing I can really do for you.  Bailing."
           return false
         end
       end
