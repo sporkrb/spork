@@ -3,21 +3,17 @@ class Spork::AppFramework::Rails < Spork::AppFramework
   # TODO - subclass this out to handle different versions of rails
   class NinjaPatcher
     def self.run
-      install_hook
-    end
-    
-    def self.install_hook
       ::Rails::Initializer.class_eval do
-        alias :require_frameworks_without_spork :require_frameworks unless method_defined?(:require_frameworks_without_spork)
-        def require_frameworks
-          result = require_frameworks_without_spork
-          Spork::AppFramework[:Rails].ninja_patcher.install_specific_hooks
+        alias :load_environment_without_spork :load_environment unless method_defined?(:load_environment_without_spork)
+        def load_environment
+          result = load_environment_without_spork
+          Spork::AppFramework[:Rails].ninja_patcher.install_hooks
           result
         end
       end
     end
     
-    def self.install_specific_hooks
+    def self.install_hooks
       auto_reestablish_db_connection
       delay_observer_loading
       delay_app_preload
@@ -25,12 +21,12 @@ class Spork::AppFramework::Rails < Spork::AppFramework
     end
     
     def self.delay_observer_loading
-      if Object.const_defined?(:ActiveRecord)
-        Spork.trap_method(::ActiveRecord::Observing::ClassMethods, :instantiate_observers)
+      if ::Rails::Initializer.instance_methods.include?('load_observers')
+        Spork.trap_method(::Rails::Initializer, :load_observers)
       end
       if Object.const_defined?(:ActionController)
         require "action_controller/dispatcher.rb"
-        Spork.trap_class_method(::ActionController::Dispatcher, :define_dispatcher_callbacks)
+        Spork.trap_class_method(::ActionController::Dispatcher, :define_dispatcher_callbacks) if ActionController::Dispatcher.respond_to?(:define_dispatcher_callbacks)
       end
     end
     
@@ -43,7 +39,7 @@ class Spork::AppFramework::Rails < Spork::AppFramework
     def self.delay_application_controller_loading
       if application_controller_source = ["#{Dir.pwd}/app/controllers/application.rb", "#{Dir.pwd}/app/controllers/application_controller.rb"].find { |f| File.exist?(f) }
         application_helper_source = "#{Dir.pwd}/app/helpers/application_helper.rb"
-        load_paths = (Object.const_defined?(:Dependencies) ? ::Dependencies : ::ActiveSupport::Dependencies).load_paths
+        load_paths = (::ActiveSupport.const_defined?(:Dependencies) ? ::ActiveSupport::Dependencies : ::Dependencies).load_paths
         load_paths.unshift(File.expand_path('rails_stub_files', File.dirname(__FILE__)))
         Spork.each_run do
           require application_controller_source

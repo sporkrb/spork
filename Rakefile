@@ -93,3 +93,15 @@ rescue LoadError
   puts "Rake SshDirPublisher is unavailable or your rubyforge environment is not configured."
 end
 
+task :test_rails do
+  rails_gems = `gem list rails`.grep(/^rails\b/).first
+  versions = rails_gems.scan(/\((.+)\)/).flatten.first.split(", ")
+  versions_2_0 = versions.grep(/^2/)
+  versions_2_0.each do |version|
+    puts "Testing version #{version}"
+    pid = Kernel.fork do
+      exec("env RAILS_VERSION=#{version} cucumber features/rails_integration.feature")
+    end
+    Process.waitpid(pid)
+  end
+end

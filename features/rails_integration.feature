@@ -49,6 +49,10 @@ Feature: Rails Integration
         ($loaded_stuff ||= []) << 'UserObserver'
       end
       """
+    And the following code appears in "config/environment.rb" after /Rails::Initializer.run/:
+      """
+        config.active_record.observers = :user_observer
+      """
     And a file named "spec/models/user_spec.rb" with:
       """
       describe User do

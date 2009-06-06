@@ -12,6 +12,24 @@ Given /^a file named "([^\"]*)" with:$/ do |file_name, file_content|
   create_file(file_name, file_content)
 end
 
+# the following code appears in "config/environment.rb" after /Rails::Initializer.run/:
+Given /^the following code appears in "([^\"]*)" after \/([^\\\/]*)\/:$/ do |file_name, regex, content|
+  # require 'ruby-debug'; Debugger.start; Debugger.start_control; debugger
+  
+  regex = Regexp.new(regex)
+  in_current_dir do
+    content_lines = File.read(file_name).split("\n")
+    0.upto(content_lines.length - 1) do |line_index|
+      if regex.match(content_lines[line_index])
+        puts "found: #{content_lines[line_index]}"
+        content_lines.insert(line_index + 1, content)
+        break
+      end
+    end
+    File.open(file_name, 'wb') { |f| f << (content_lines * "\n") }
+  end
+end
+
 When /^I run (spork|spec)($| .*$)/ do |command, spork_opts|
   if command == 'spork'
     command = SporkWorld::BINARY
