@@ -1,3 +1,11 @@
+== 0.5.1 2009-06-05
+
+ === Bugfixes
+
+ * "Trapped" ApplicationController loading wasn't working in Rails 2.1.0.
+ * Rails 2.0.2 blew up.
+ * Rails 2.3.2, 2.2.2, 2.1.2, 2.1.1, 2.1.0, 2.0.2 are all verified and tested (rake test_rails tests all 2.x rails gems you've installed)
+
 == 0.5.0 2009-06-05
 
  === New Features
