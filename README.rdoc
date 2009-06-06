@@ -8,8 +8,6 @@ Spork is Tim Harper's implementation of a Drb spec server (similar to the script
 
 Because Spork uses Kernel.fork, it only works on POSIX systems.  This means Windows users are not invited to this party.  Sorry :(
 
-Spork is still experimental, but is performing solid for us.
-
 == INSTALL:
 
   [sudo] gem install timcharper-spork --source http://gems.github.com/
@@ -35,23 +33,54 @@ Finally, run spork.  A spec DRb server will be running!
 
   spork
 
-To get the TextMate RSpec bundle to use spork, go to config->advanced->shell variables, and add TM_RSPEC_OPTS=--drb.
+== Diagnostic mode
 
-To run from the command line, use spec --drb spec/lib/my_spec.rb
+Initially, you may find that a few files don't reload automatically.  This is because they are being loaded during Spork startup.  To identify which project files are being pre-loaded, and why, run:
 
-Or, you could add --drb to your spec.opts file.
+  spork --diagnose
+  (or spork -d, for short)
+
+It will output a lot of stuff.  At the top you'll find a summary of all project files loaded.  Down below, the stack trace for each file (how it got loaded).  Spork hooks into Rails and does some magic (TM) to prevent ApplicationController observers, etc from pre-loading.  Similar hooks for other ruby frameworks may come as support demands.
+
+== Running specs over Spork
+
+=== RSpec
+
+To get the TextMate RSpec bundle to use spork, go to config->advanced->shell variables, and add:
+
+  TM_RSPEC_OPTS=--drb.
+
+To run from the command line, use:
+
+  spec --drb spec/lib/my_spec.rb
+
+Or, you could add the following flag to your +spec.opts+ file.
+
+  --drb
+
+=== Cucumber
+
+Cucumber --drb support for spork is not official yet (but it works).  It's the hottest sauce boiling on the world wide web right now.  If you can't wait to try it, head on over to Cucumber core-team member Ben Mabey's drb branch and build your own cucumber gem:
+
+  http://github.com/bmabey/cucumber/tree/drb_server
+
+Use this as a guideline when "Sporking" your features/support/env.rb file
+
+  http://gist.github.com/123370
 
 == Some potential issues and ways to overcome them:
 
-=== ActiveRecord reports "connection has gone away" for the first few specs
+=== Database connections don't work inside of Spork
 
-Not sure why this happens, but if you simply add a line to re-establish your database connection on each line as follows, the problem goes away:
+If you're using ActiveRecord and Rails, Spork will automatically reconnect to the database.  However, if you're not using ActiveRecord, or if you're doing some tricky stuff with connections, you'll have to make sure your connections get re-established on each run.  In your spec/spec_helper.rb file:
 
   Spork.each_run do
-    ActiveRecord::Base.establish_connection # make sure that the db connection is ready.
+    # Do your connection re-establishing here
   end
 
-=== Couldn't find formatter class Spec::Runner::Formatter::TextMateFormatter Make sure the --require option is specified *before* --format
+=== Couldn't find formatter class Spec::Runner::Formatter::TextMateFormatter
+
+  Make sure the --require option is specified *before* --format
 
 On one of our projects, many of us using TextMate with spork, only one developer got this error message while the rest of us ran just fine.  I don't know exactly why it happened, but requiring the textmate formatter in the prefork block made it go away, like this:
 
@@ -65,7 +94,7 @@ On one of our projects, many of us using TextMate with spork, only one developer
 
 == Kudos to
 
-* Ben Mabey - help with documentation, testing, suggestions, patches, collaborated with Cucumber support.
+* Ben Mabey - help with documentation, testing, suggestions, patches, and bringing Cucumber support.
 * David Chelimsky - for the fine RSpec testing framework, and the original rspec-rails spec_server implementation, which Spork has built upon.
 * Lead Media Partners - just for being an awesome place to work.
 
