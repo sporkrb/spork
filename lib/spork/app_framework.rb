@@ -33,7 +33,11 @@ class Spork::AppFramework
   end
   
   def bootstrap_required?
-    raise NotImplemented
+    entry_point.nil?
+  end
+  
+  def entry_point
+    nil
   end
   
   def preload(&block)

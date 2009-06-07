@@ -6,9 +6,16 @@ class Spork::AppFramework::Rails < Spork::AppFramework
       ::Rails::Initializer.class_eval do
         alias :load_environment_without_spork :load_environment unless method_defined?(:load_environment_without_spork)
         def load_environment
+          reset_rails_env
           result = load_environment_without_spork
           Spork::AppFramework[:Rails].ninja_patcher.install_hooks
           result
+        end
+        
+        def reset_rails_env
+          return unless ENV['RAILS_ENV']
+          Object.send(:remove_const, :RAILS_ENV)
+          Object.const_set(:RAILS_ENV, ENV['RAILS_ENV'].dup)
         end
       end
     end
@@ -18,6 +25,7 @@ class Spork::AppFramework::Rails < Spork::AppFramework
       delay_observer_loading
       delay_app_preload
       delay_application_controller_loading
+      delay_route_loading
     end
     
     def self.delay_observer_loading
@@ -55,10 +63,12 @@ class Spork::AppFramework::Rails < Spork::AppFramework
         end
       end
     end
-  end
-  
-  def bootstrap_required?
-    false
+    
+    def self.delay_route_loading
+      if ::Rails::Initializer.instance_methods.include?('initialize_routing')
+        Spork.trap_method(::Rails::Initializer, :initialize_routing)
+      end
+    end
   end
   
   def preload(&block)
@@ -66,13 +76,14 @@ class Spork::AppFramework::Rails < Spork::AppFramework
     STDERR.flush
     ENV["RAILS_ENV"] ||= 'test'
     preload_rails
-    require environment_file
     yield
   end
   
-  def environment_file
-    @environment_file ||= File.expand_path("config/environment.rb", Dir.pwd)
+  def entry_point
+    @entry_point ||= File.expand_path("config/environment.rb", Dir.pwd)
   end
+  
+  alias :environment_file :entry_point
   
   def boot_file
     @boot_file ||= File.join(File.dirname(environment_file), 'boot')

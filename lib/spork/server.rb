@@ -123,6 +123,8 @@ class Spork::Server
             stderr.puts "I can't do anything for you by default for the framework your using: #{framework.short_name}.\nYou must bootstrap #{helper_file} to continue."
             stderr.flush
             return false
+          else
+            load(framework.entry_point)
           end
         end
       

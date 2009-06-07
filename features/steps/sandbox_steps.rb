@@ -21,7 +21,6 @@ Given /^the following code appears in "([^\"]*)" after \/([^\\\/]*)\/:$/ do |fil
     content_lines = File.read(file_name).split("\n")
     0.upto(content_lines.length - 1) do |line_index|
       if regex.match(content_lines[line_index])
-        puts "found: #{content_lines[line_index]}"
         content_lines.insert(line_index + 1, content)
         break
       end
