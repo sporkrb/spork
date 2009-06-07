@@ -6,6 +6,7 @@
  
  * Cucumber env.rb (and RSpec spec_helper.rb) are now able to set the environment via ENV['RAILS_ENV'] if they wish.
  * Rails config/routes.rb is no longer cached
+ * Unknown application frameworks blew up if not spork bootstrapped
 
 == 0.5.1 2009-06-05
 

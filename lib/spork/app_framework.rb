@@ -44,7 +44,7 @@ class Spork::AppFramework
     yield
   end
   
-  def name
+  def short_name
     self.class.short_name
   end
 end
