@@ -85,7 +85,7 @@ Are you running me from a project directory?
       when options[:diagnose]
         require 'spork/diagnoser'
         
-        Spork::Diagnoser.install_hook!
+        Spork::Diagnoser.install_hook!(server.entry_point)
         server.preload
         Spork::Diagnoser.output_results(@output)
         return true

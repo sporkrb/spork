@@ -22,13 +22,11 @@ describe Spork::Diagnoser do
   it "installs it's hook and tells you when files have been loaded" do
     run_simulation(SPEC_TMP_DIR, 'my_awesome_library_include.rb', '1 + 5')
     Spork::Diagnoser.loaded_files.keys.should include_a_string_like('my_awesome_library_include')
-    
   end
-  
+
   it 'excludes files outside of Dir.pwd' do
     run_simulation(SPEC_TMP_DIR + '/project_root', '../external_dependency.rb', '1 + 5')
     Spork::Diagnoser.loaded_files.keys.should_not include_a_string_like('external_dependency')
-    
   end
   
   it "excludes files outside of Dir.pwd but in ruby's include path" do
@@ -79,13 +77,29 @@ describe Spork::Diagnoser do
     $:.pop
   end
   
-  it "outputs the results relative to the current directory" do
-    Spork::Diagnoser.loaded_files["/project_path/lib/file.rb"] = "/project_path/lib/parent_file.rb:35"
-    Dir.stub!(:pwd).and_return("/project_path")
-    out = StringIO.new
-    Spork::Diagnoser.output_results(out)
-    out.string.should =~ %r([^/]lib/file.rb)
-    out.string.should =~ %r([^/]lib/parent_file.rb)
-    out.string.should_not include("/project_path/")
+  it "filters backtrace beyond the last line matching the entry point" do
+    Spork::Diagnoser.install_hook!("test_filter/environment.rb")
+    create_file("test_filter/environment.rb", "require 'test_filter/app.rb'")
+    create_file("test_filter/app.rb", "require 'test_filter/my_model.rb'")
+    create_file("test_filter/my_model.rb", "'my model here'")
+    in_current_dir do
+      require 'test_filter/environment.rb'
+    end
+    f = Spork::Diagnoser.loaded_files
+    f[f.keys.grep(/app.rb/).first].last.should include('test_filter/environment.rb')
+    f[f.keys.grep(/my_model.rb/).first].last.should include('test_filter/environment.rb')
+    f[f.keys.grep(/environment.rb/).first].should == []
+  end
+  
+  describe ".output_results" do
+    it "outputs the results relative to the current directory" do
+      Spork::Diagnoser.loaded_files["/project_path/lib/file.rb"] = "/project_path/lib/parent_file.rb:35"
+      Dir.stub!(:pwd).and_return("/project_path")
+      out = StringIO.new
+      Spork::Diagnoser.output_results(out)
+      out.string.should =~ %r([^/]lib/file.rb)
+      out.string.should =~ %r([^/]lib/parent_file.rb)
+      out.string.should_not include("/project_path/")
+    end
   end
 end

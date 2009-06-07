@@ -4,8 +4,9 @@ class Spork::Diagnoser
       @loaded_files ||= {}
     end
     
-    def install_hook!(dir = Dir.pwd)
+    def install_hook!(entry_file = nil, dir = Dir.pwd)
       @dir = File.expand_path(Dir.pwd, dir)
+      @entry_file = entry_file
       
       Kernel.class_eval do
         alias :require_without_diagnoser :require
@@ -26,21 +27,7 @@ class Spork::Diagnoser
     def add_included_file(filename, callstack)
       filename = expand_filename(filename)
       return unless File.exist?(filename)
-      loaded_files[filename] = caller.select { |f| ! f.include?('lib/spork/diagnoser.rb')} if subdirectory?(filename)
-    end
-    
-    def expand_filename(filename)
-      ([Dir.pwd] + $:).each do |attempted_path|
-        attempted_filename = File.expand_path(filename, attempted_path)
-        return attempted_filename if File.file?(attempted_filename)
-        attempted_filename = attempted_filename + ".rb"
-        return attempted_filename if File.file?(attempted_filename)
-      end
-      filename
-    end
-    
-    def subdirectory?(directory)
-      File.expand_path(directory, Dir.pwd).include?(@dir)
+      loaded_files[filename] = filter_callstack(caller) if subdirectory?(filename)
     end
     
     def remove_hook!
@@ -68,5 +55,26 @@ class Spork::Diagnoser
         stdout.puts loaded_files[file].map(&minimify)
       end
     end
+    
+    private
+      def filter_callstack(callstack, entry_file = @entry_file)
+        callstack = callstack.select { |f| ! f.include?('lib/spork/diagnoser.rb')} 
+        callstack.pop until callstack.empty? || callstack.last.include?(@entry_file) if @entry_file
+        callstack
+      end
+    
+      def expand_filename(filename)
+        ([Dir.pwd] + $:).each do |attempted_path|
+          attempted_filename = File.expand_path(filename, attempted_path)
+          return attempted_filename if File.file?(attempted_filename)
+          attempted_filename = attempted_filename + ".rb"
+          return attempted_filename if File.file?(attempted_filename)
+        end
+        filename
+      end
+    
+      def subdirectory?(directory)
+        File.expand_path(directory, Dir.pwd).include?(@dir)
+      end
   end
 end

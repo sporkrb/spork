@@ -18,6 +18,7 @@ unless $spec_helper_loaded
     config.before(:each) do
       $test_stdout = StringIO.new
       $test_stderr = StringIO.new
+      @current_dir = nil
     end
   
     config.after(:each) do
@@ -40,6 +41,10 @@ unless $spec_helper_loaded
   
     def current_dir
       @current_dir ||= SPEC_TMP_DIR
+    end
+    
+    def change_current_dir(sub_path)
+      @current_dir = File.expand_path(sub_path, SPEC_TMP_DIR)
     end
   end
 

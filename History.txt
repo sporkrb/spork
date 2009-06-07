@@ -1,3 +1,7 @@
+ === New Features
+ 
+ * Cleaner backtrace in diagnostic mode
+ 
  === Bugfixes
  
  * Cucumber env.rb (and RSpec spec_helper.rb) are now able to set the environment via ENV['RAILS_ENV'] if they wish.

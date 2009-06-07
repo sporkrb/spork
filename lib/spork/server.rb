@@ -113,6 +113,10 @@ class Spork::Server
       @framework ||= Spork::AppFramework.detect_framework
     end
     
+    def self.entry_point
+      bootstrapped? ? helper_file : framework.entry_point
+    end
+
     def self.preload
       Spork.exec_prefork do
         unless bootstrapped?
