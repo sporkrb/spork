@@ -29,7 +29,7 @@ Given /^the following code appears in "([^\"]*)" after \/([^\\\/]*)\/:$/ do |fil
   end
 end
 
-When /^I run (spork|spec)($| .*$)/ do |command, spork_opts|
+When /^I run (spork|spec|cucumber)($| .*$)/ do |command, spork_opts|
   if command == 'spork'
     command = SporkWorld::BINARY
   else
@@ -56,22 +56,26 @@ When /^I fire up a spork instance with "spork(.*)"$/ do |spork_opts|
   end
 end
 
-Then /^the output should contain$/ do |text|
-  last_stdout.should include(text)
+Then /^the (error output|output) should contain$/ do |which, text|
+  (which == "error output" ? last_stderr : last_stdout).should include(text)
 end
 
-Then /^the output should contain "(.+)"$/ do |text|
-  last_stdout.should include(text)
+Then /^the (error output|output) should contain "(.+)"$/ do |which, text|
+  (which == "error output" ? last_stderr : last_stdout).should include(text)
 end
 
-Then /^the output should not contain$/ do |text|
-  last_stdout.should_not include(text)
+Then /^the (error output|output) should match \/(.+)\/$/ do |which, regex|
+  (which == "error output" ? last_stderr : last_stdout).should match(Regexp.new(regex))
 end
 
-Then /^the output should not contain "(.+)"$/ do |text|
-  last_stdout.should_not include(text)
+Then /^the (error output|output) should not contain$/ do |which, text|
+  (which == "error output" ? last_stderr : last_stdout).should_not include(text)
 end
 
-Then /^the output should be$/ do |text|
-  last_stdout.should == text
+Then /^the (error output|output) should not contain "(.+)"$/ do |which, text|
+  (which == "error output" ? last_stderr : last_stdout).should_not include(text)
+end
+
+Then /^the (error output|output) should be$/ do |which, text|
+  (which == "error output" ? last_stderr : last_stdout).should == text
 end

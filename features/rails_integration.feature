@@ -31,12 +31,7 @@ Feature: Rails Integration
         end
       end
       """
-    And a file named "app/models/user.rb" with:
-      """
-      class User < ActiveRecord::Base
-        ($loaded_stuff ||= []) << 'User'
-      end
-      """
+    And the application has a model, observer, route, and application helper
     And a file named "config/environments/testeroni.rb" with:
       """
       $testeroni_used = true
@@ -47,26 +42,6 @@ Feature: Rails Integration
         adapter: sqlite3
         database: db/testeroni.sqlite3
         timeout: 5000
-      """
-    And a file named "app/helpers/application_helper.rb" with:
-      """
-      module ApplicationHelper
-        ($loaded_stuff ||= []) << 'ApplicationHelper'
-      end
-      """
-    And a file named "app/models/user_observer.rb" with:
-      """
-      class UserObserver < ActiveRecord::Observer
-        ($loaded_stuff ||= []) << 'UserObserver'
-      end
-      """
-    And the following code appears in "config/environment.rb" after /Rails::Initializer.run/:
-      """
-        config.active_record.observers = :user_observer
-      """
-    And the following code appears in "config/routes.rb" after /^end/:
-      """
-        ($loaded_stuff ||= []) << 'config/routes.rb'
       """
     And a file named "spec/did_it_work_spec.rb" with:
       """
