@@ -1,26 +1,24 @@
 class Spork::AppFramework::Rails < Spork::AppFramework
   
   # TODO - subclass this out to handle different versions of rails
-  class NinjaPatcher
-    def self.run
-      ::Rails::Initializer.class_eval do
-        alias :load_environment_without_spork :load_environment unless method_defined?(:load_environment_without_spork)
-        def load_environment
-          reset_rails_env
-          result = load_environment_without_spork
-          Spork::AppFramework[:Rails].ninja_patcher.install_hooks
-          result
-        end
-        
-        def reset_rails_env
-          return unless ENV['RAILS_ENV']
-          Object.send(:remove_const, :RAILS_ENV)
-          Object.const_set(:RAILS_ENV, ENV['RAILS_ENV'].dup)
+  module NinjaPatcher
+    def self.included(klass)
+      klass.class_eval do
+        unless method_defined?(:load_environment_without_spork)
+          alias :load_environment_without_spork :load_environment
+          alias :load_environment :load_environment_with_spork
         end
       end
     end
     
-    def self.install_hooks
+    def load_environment_with_spork
+      reset_rails_env
+      result = load_environment_without_spork
+      install_hooks
+      result
+    end
+    
+    def install_hooks
       auto_reestablish_db_connection
       delay_observer_loading
       delay_app_preload
@@ -28,7 +26,13 @@ class Spork::AppFramework::Rails < Spork::AppFramework
       delay_route_loading
     end
     
-    def self.delay_observer_loading
+    def reset_rails_env
+      return unless ENV['RAILS_ENV']
+      Object.send(:remove_const, :RAILS_ENV)
+      Object.const_set(:RAILS_ENV, ENV['RAILS_ENV'].dup)
+    end
+    
+    def delay_observer_loading
       if ::Rails::Initializer.instance_methods.include?('load_observers')
         Spork.trap_method(::Rails::Initializer, :load_observers)
       end
@@ -38,13 +42,13 @@ class Spork::AppFramework::Rails < Spork::AppFramework
       end
     end
     
-    def self.delay_app_preload
+    def delay_app_preload
       if ::Rails::Initializer.instance_methods.include?('load_application_classes')
         Spork.trap_method(::Rails::Initializer, :load_application_classes)
       end
     end
     
-    def self.delay_application_controller_loading
+    def delay_application_controller_loading
       if application_controller_source = ["#{Dir.pwd}/app/controllers/application.rb", "#{Dir.pwd}/app/controllers/application_controller.rb"].find { |f| File.exist?(f) }
         application_helper_source = "#{Dir.pwd}/app/helpers/application_helper.rb"
         load_paths = (::ActiveSupport.const_defined?(:Dependencies) ? ::ActiveSupport::Dependencies : ::Dependencies).load_paths
@@ -56,7 +60,7 @@ class Spork::AppFramework::Rails < Spork::AppFramework
       end
     end
     
-    def self.auto_reestablish_db_connection
+    def auto_reestablish_db_connection
       if Object.const_defined?(:ActiveRecord)
         Spork.each_run do
           ActiveRecord::Base.establish_connection
@@ -64,7 +68,7 @@ class Spork::AppFramework::Rails < Spork::AppFramework
       end
     end
     
-    def self.delay_route_loading
+    def delay_route_loading
       if ::Rails::Initializer.instance_methods.include?('initialize_routing')
         Spork.trap_method(::Rails::Initializer, :initialize_routing)
       end
@@ -107,14 +111,10 @@ class Spork::AppFramework::Rails < Spork::AppFramework
     )
   end
   
-  def ninja_patcher
-    ::Spork::AppFramework::Rails::NinjaPatcher
-  end
-  
   def preload_rails
     Object.const_set(:RAILS_GEM_VERSION, version) if version
     require boot_file
-    ninja_patcher.run
+    ::Rails::Initializer.send(:include, Spork::AppFramework::Rails::NinjaPatcher)
   end
   
 end
