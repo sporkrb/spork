@@ -63,6 +63,8 @@ class Spork::AppFramework::Rails < Spork::AppFramework
     def auto_reestablish_db_connection
       if Object.const_defined?(:ActiveRecord)
         Spork.each_run do
+          # spec/rails is very aggressive about overriding RAILS_ENV and will switch it back to test after the cucumber env was loaded
+          reset_rails_env
           ActiveRecord::Base.establish_connection
         end
       end

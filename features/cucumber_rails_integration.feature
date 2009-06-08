@@ -26,8 +26,6 @@ Feature: Cucumber integration with rails
         require 'cucumber' # I needed to add this... We could move this require to Spork if we think it is better there...
         require 'cucumber/formatter/unicode' # Comment out this line if you don't want Cucumber Unicode support
         require 'spec/rails' # I needed to add this as well to avoid the #records error...
-        Object.send(:remove_const, :RAILS_ENV)
-        Object.const_set(:RAILS_ENV, ENV['RAILS_ENV'].dup)
         require 'cucumber/rails/rspec'
         class ActiveRecord::Base
           class << self
