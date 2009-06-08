@@ -58,9 +58,12 @@ class Spork::Diagnoser
     
     private
       def filter_callstack(callstack, entry_file = @entry_file)
-        callstack = callstack.select { |f| ! f.include?('lib/spork/diagnoser.rb')} 
         callstack.pop until callstack.empty? || callstack.last.include?(@entry_file) if @entry_file
-        callstack
+        callstack.map do |line|
+          next if line.include?('lib/spork/diagnoser.rb')
+          line.gsub!('require_without_diagnoser', 'require')
+          line
+        end.compact
       end
     
       def expand_filename(filename)
