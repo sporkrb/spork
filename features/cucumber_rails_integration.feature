@@ -32,9 +32,9 @@ Feature: Cucumber integration with rails
         require 'spec/rails'
         require 'cucumber/rails/rspec'
         
-        # ---- this is for this test only ----
-        $loaded_stuff << 'prefork block'
-        # ---- end test stuff ----
+        #### this is for this test only #######
+        $loaded_stuff << 'prefork block' ######
+        #######################################
       end
 
       Spork.each_run do
@@ -44,9 +44,9 @@ Feature: Cucumber integration with rails
         Cucumber::Rails.bypass_rescue # Comment out this line if you want Rails own error handling
                                       # (e.g. rescue_action_in_public / rescue_responses / rescue_from)
         
-        # ---- this is for this test only ----
-        $loaded_stuff << 'each_run block'
-        # ---- end test stuff ----
+        #### this is for this test only #######
+        $loaded_stuff << 'each_run block' #####
+        #######################################
       end
       """
     And a file named "features/cucumber_rails.feature" with:

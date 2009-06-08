@@ -19,17 +19,17 @@ Feature: Rails Integration
         require 'spec'
         require 'spec/rails'
         
-        # ---- this is for this test only ----
-        $loaded_stuff << 'prefork block'
-        # ---- end test stuff ----
+        #### this is for this test only #######
+        $loaded_stuff << 'prefork block' ######
+        #######################################
       end
 
       Spork.each_run do
         # This code will be run each time you run your specs.
         
-        # ---- this is for this test only ----
-        $loaded_stuff << 'each_run block'
-        # ---- end test stuff ----
+        #### this is for this test only #######
+        $loaded_stuff << 'each_run block' #####
+        #######################################
       end
       """
     And the application has a model, observer, route, and application helper
