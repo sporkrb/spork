@@ -1,3 +1,9 @@
+== 0.5.4 2009-06-08
+
+ === Bugfixes
+ 
+ * ApplicationHelper delayed loading was causing methods from Rails ApplicationHelper included modules weren't being registered in controller specs.  Fixed.
+
 == 0.5.3 2009-06-08
 
  === Bugfixes

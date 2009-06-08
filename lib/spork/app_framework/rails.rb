@@ -56,6 +56,8 @@ class Spork::AppFramework::Rails < Spork::AppFramework
         Spork.each_run do
           require application_controller_source
           require application_helper_source if File.exist?(application_helper_source)
+          # update the rails magic to refresh the module
+          ApplicationController.send(:helper, ApplicationHelper)
         end
       end
     end

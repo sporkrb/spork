@@ -11,20 +11,19 @@ Given "the application has a model, observer, route, and application helper" do
   Given 'a file named "app/models/user.rb" with:',
     """
     class User < ActiveRecord::Base
-      ($loaded_stuff ||= []) << 'User'
-    end
-    """
-
-  Given 'a file named "app/helpers/application_helper.rb" with:',
-    """
-    module ApplicationHelper
-      ($loaded_stuff ||= []) << 'ApplicationHelper'
+      $loaded_stuff << 'User'
     end
     """
   Given 'a file named "app/models/user_observer.rb" with:',
     """
     class UserObserver < ActiveRecord::Observer
-      ($loaded_stuff ||= []) << 'UserObserver'
+      $loaded_stuff << 'UserObserver'
+    end
+    """
+  Given 'a file named "app/helpers/application_helper.rb" with:',
+    """
+    module ApplicationHelper
+      $loaded_stuff << 'ApplicationHelper'
     end
     """
   Given 'the following code appears in "config/environment.rb" after /Rails::Initializer.run/:',
@@ -33,14 +32,12 @@ Given "the application has a model, observer, route, and application helper" do
     """
   Given 'the following code appears in "config/routes.rb" after /^end/:',
     """
-      ($loaded_stuff ||= []) << 'config/routes.rb'
+      $loaded_stuff << 'config/routes.rb'
     """
-  
   Given 'a file named "config/initializers/initialize_loaded_stuff.rb" with:',
     """
     $loaded_stuff ||= []
     """
-  
   Given 'a file named "config/initializers/log_establish_connection_calls.rb" with:',
     """
     class ActiveRecord::Base

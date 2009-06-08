@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{spork}
-  s.version = "0.5.3"
+  s.version = "0.5.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tim Harper"]
@@ -21,7 +21,8 @@ Gem::Specification.new do |s|
      "assets/bootstrap.rb",
      "features/cucumber_rails_integration.feature",
      "features/diagnostic_mode.feature",
-     "features/rails_integration.feature",
+     "features/rails_delayed_loading_workarounds.feature",
+     "features/rspec_rails_integration.feature",
      "features/steps/rails_steps.rb",
      "features/steps/sandbox_steps.rb",
      "features/support/env.rb",

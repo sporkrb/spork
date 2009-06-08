@@ -33,22 +33,6 @@ Feature: Rails Integration
       end
       """
     And the application has a model, observer, route, and application helper
-    And a file named "spec/did_it_work_spec.rb" with:
-      """
-      describe "Did it work?" do
-        it "checks to see if all worked" do
-          Spork.state.should == :using_spork
-          $loaded_stuff.should include('ActiveRecord::Base.establish_connection')
-          $loaded_stuff.should include('User')
-          $loaded_stuff.should include('UserObserver')
-          $loaded_stuff.should include('ApplicationHelper')
-          $loaded_stuff.should include('config/routes.rb')
-          $loaded_stuff.should include('each_run block')
-          $loaded_stuff.should include('prefork block')
-          puts "Specs successfully run within spork, and all initialization files were loaded"
-        end
-      end
-      """
   Scenario: Analyzing files were preloaded
     When I run spork --diagnose
     Then the output should not contain "user_observer.rb"
@@ -59,7 +43,22 @@ Feature: Rails Integration
     Then the output should not contain "config/routes.rb"
   
   Scenario: Running spork with a rails app and observers
-  
+    Given a file named "spec/did_it_work_spec.rb" with:
+    """
+    describe "Did it work?" do
+      it "checks to see if all worked" do
+        Spork.state.should == :using_spork
+        $loaded_stuff.should include('ActiveRecord::Base.establish_connection')
+        $loaded_stuff.should include('User')
+        $loaded_stuff.should include('UserObserver')
+        $loaded_stuff.should include('ApplicationHelper')
+        $loaded_stuff.should include('config/routes.rb')
+        $loaded_stuff.should include('each_run block')
+        $loaded_stuff.should include('prefork block')
+        puts "Specs successfully run within spork, and all initialization files were loaded"
+      end
+    end
+    """
     When I fire up a spork instance with "spork rspec"
     And I run spec --drb spec/did_it_work_spec.rb 
     Then the output should contain "Specs successfully run within spork, and all initialization files were loaded"
