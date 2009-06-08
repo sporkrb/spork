@@ -3,7 +3,7 @@ Feature: Cucumber integration with rails
   I want to use Spork with Cucumber
   In order to eliminate the startup cost of my application each time I run them
   
-  Scenario: Sporked env.rb
+  Background: Sporked env.rb
     Given I am in a fresh rails project named "test_rails_project"
     And the application has a model, observer, route, and application helper
     And a file named "features/support/env.rb" with:
@@ -76,6 +76,16 @@ Feature: Cucumber integration with rails
         database: db/cucumber.sqlite3
         timeout: 5000
       """
-    When I fire up a spork instance with "spork cucumber"
-    And I run cucumber --drb features/cucumber_rails.feature
-    Then the output should contain "It worked!"
+    Scenario: Analyzing files were preloaded
+      When I run spork --diagnose
+      Then the output should not contain "user_observer.rb"
+      Then the output should not contain "user.rb"
+      Then the output should not contain "app/controllers/application.rb"
+      Then the output should not contain "app/controllers/application_controller.rb"
+      Then the output should not contain "app/controllers/application_helper.rb"
+      Then the output should not contain "config/routes.rb"
+      
+    Scenario: Running spork with a rails app and observers
+      When I fire up a spork instance with "spork cucumber"
+      And I run cucumber --drb features/cucumber_rails.feature
+      Then the output should contain "It worked!"
