@@ -51,7 +51,7 @@ module Spork
     def expanded_caller(caller_line)
       file, line = caller_line.split(":")
       line.gsub(/:.+/, '')
-      File.expand_path(Dir.pwd, file) + ":" + line
+      File.expand_path(file, Dir.pwd) + ":" + line
     end
     
     def trap_method(klass, method_name)

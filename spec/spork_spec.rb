@@ -55,4 +55,8 @@ describe Spork do
     Spork.each_run { }
     spec_helper_simulator.should == [:prefork, :each_run]
   end
+  
+  it "expands a caller line, preserving the line number" do
+    Spork.expanded_caller("/boo/../yah.rb:31").should == "/yah.rb:31"
+  end
 end

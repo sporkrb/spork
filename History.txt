@@ -1,3 +1,9 @@
+== 0.5.3 2009-06-08
+
+ === Bugfixes
+ 
+ * Spork.expanded_caller was flawed, and was causing a very strange regression fix where Spork.each_run block wouldn't load if it happened to occur on line 65.
+
 == 0.5.2 2009-06-08
 
  === New Features
