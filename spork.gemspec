@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{spork}
-  s.version = "0.5.1"
+  s.version = "0.5.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tim Harper"]
-  s.date = %q{2009-06-06}
+  s.date = %q{2009-06-08}
   s.default_executable = %q{spork}
   s.description = %q{A forking Drb spec server}
   s.email = ["timcharper+spork@gmail.com"]
@@ -19,11 +19,13 @@ Gem::Specification.new do |s|
     "MIT-LICENSE",
      "README.rdoc",
      "assets/bootstrap.rb",
+     "features/cucumber_rails_integration.feature",
      "features/diagnostic_mode.feature",
      "features/rails_integration.feature",
      "features/steps/rails_steps.rb",
      "features/steps/sandbox_steps.rb",
      "features/support/env.rb",
+     "features/unknown_app_framework.feature",
      "lib/spork.rb",
      "lib/spork/app_framework.rb",
      "lib/spork/app_framework/rails.rb",
@@ -40,6 +42,7 @@ Gem::Specification.new do |s|
      "lib/spork/server/rspec.rb",
      "spec/spec_helper.rb",
      "spec/spork/app_framework/rails_spec.rb",
+     "spec/spork/app_framework/unknown_spec.rb",
      "spec/spork/app_framework_spec.rb",
      "spec/spork/diagnoser_spec.rb",
      "spec/spork/forker_spec.rb",
@@ -58,6 +61,7 @@ Gem::Specification.new do |s|
   s.test_files = [
     "spec/spec_helper.rb",
      "spec/spork/app_framework/rails_spec.rb",
+     "spec/spork/app_framework/unknown_spec.rb",
      "spec/spork/app_framework_spec.rb",
      "spec/spork/diagnoser_spec.rb",
      "spec/spork/forker_spec.rb",
