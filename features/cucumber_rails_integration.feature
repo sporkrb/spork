@@ -50,6 +50,10 @@ Feature: Cucumber integration with rails
         Scenario: did it work
           Then it should work
       """
+    And a file named "features/support/cucumber_rails_helper.rb" with:
+      """
+      ($loaded_stuff ||= []) << 'features/support/cucumber_rails_helper.rb'
+      """
     And a file named "features/step_definitions/cucumber_rails_steps.rb" with:
       """
       Then "it should work" do
@@ -60,6 +64,7 @@ Feature: Cucumber integration with rails
         $loaded_stuff.should include('UserObserver')
         $loaded_stuff.should include('ApplicationHelper')
         $loaded_stuff.should include('config/routes.rb')
+        $loaded_stuff.should include('features/support/cucumber_rails_helper.rb')
         puts "It worked!"
       end
       """
@@ -82,6 +87,8 @@ Feature: Cucumber integration with rails
       Then the output should not contain "app/controllers/application_controller.rb"
       Then the output should not contain "app/controllers/application_helper.rb"
       Then the output should not contain "config/routes.rb"
+      Then the output should not contain "features/step_definitions/cucumber_rails_steps.rb"
+      Then the output should not contain "features/support/cucumber_rails_helper.rb"
       
     Scenario: Running spork with a rails app and observers
       When I fire up a spork instance with "spork cucumber"
