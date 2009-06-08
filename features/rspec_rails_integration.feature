@@ -10,48 +10,35 @@ Feature: Rails Integration
       """
       require 'rubygems'
       require 'spork'
-      require 'spec'
 
       Spork.prefork do
-        ENV["RAILS_ENV"] = "testeroni"
-        $run_phase = :prefork
-        ($loaded_stuff ||= []) << 'prefork block'
+        # Loading more in this block will cause your specs to run faster. However, 
+        # if you change any configuration or code from libraries loaded here, you'll
+        # need to restart spork for it take effect.
         require File.dirname(__FILE__) + '/../config/environment.rb'
+        require 'spec'
+        require 'spec/rails'
+        
+        # ---- this is for this test only ----
+        $loaded_stuff << 'prefork block'
+        # ---- end test stuff ----
       end
 
       Spork.each_run do
-        $run_phase = :each_run
-        ($loaded_stuff ||= []) << 'each_run block'
-        puts "I'm loading the stuff just for this run..."
-      end
-      
-      class ActiveRecord::Base
-        class << self
-          def establish_connection
-            ($loaded_stuff ||= []) << 'establish_connection'
-          end
-        end
+        # This code will be run each time you run your specs.
+        
+        # ---- this is for this test only ----
+        $loaded_stuff << 'each_run block'
+        # ---- end test stuff ----
       end
       """
     And the application has a model, observer, route, and application helper
-    And a file named "config/environments/testeroni.rb" with:
-      """
-      $testeroni_used = true
-      """
-    And a file named "config/database.yml" with:
-      """
-      testeroni:
-        adapter: sqlite3
-        database: db/testeroni.sqlite3
-        timeout: 5000
-      """
     And a file named "spec/did_it_work_spec.rb" with:
       """
       describe "Did it work?" do
         it "checks to see if all worked" do
           Spork.state.should == :using_spork
-          RAILS_ENV.should == 'testeroni'
-          $loaded_stuff.should include('establish_connection')
+          $loaded_stuff.should include('ActiveRecord::Base.establish_connection')
           $loaded_stuff.should include('User')
           $loaded_stuff.should include('UserObserver')
           $loaded_stuff.should include('ApplicationHelper')
