@@ -34,6 +34,7 @@ Feature: Cucumber integration with rails
             end
           end
         end
+        ($loaded_stuff ||= []) << 'prefork block'
       end
 
       Spork.each_run do
@@ -42,6 +43,7 @@ Feature: Cucumber integration with rails
         Cucumber::Rails.use_transactional_fixtures
         Cucumber::Rails.bypass_rescue # Comment out this line if you want Rails own error handling
                                       # (e.g. rescue_action_in_public / rescue_responses / rescue_from)
+        ($loaded_stuff ||= []) << 'each_run block'
       end
       """
     And a file named "features/cucumber_rails.feature" with:
@@ -65,6 +67,8 @@ Feature: Cucumber integration with rails
         $loaded_stuff.should include('ApplicationHelper')
         $loaded_stuff.should include('config/routes.rb')
         $loaded_stuff.should include('features/support/cucumber_rails_helper.rb')
+        $loaded_stuff.should include('each_run block')
+        $loaded_stuff.should include('prefork block')
         puts "It worked!"
       end
       """

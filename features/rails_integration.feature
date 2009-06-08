@@ -15,11 +15,13 @@ Feature: Rails Integration
       Spork.prefork do
         ENV["RAILS_ENV"] = "testeroni"
         $run_phase = :prefork
+        ($loaded_stuff ||= []) << 'prefork block'
         require File.dirname(__FILE__) + '/../config/environment.rb'
       end
 
       Spork.each_run do
         $run_phase = :each_run
+        ($loaded_stuff ||= []) << 'each_run block'
         puts "I'm loading the stuff just for this run..."
       end
       
@@ -54,6 +56,8 @@ Feature: Rails Integration
           $loaded_stuff.should include('UserObserver')
           $loaded_stuff.should include('ApplicationHelper')
           $loaded_stuff.should include('config/routes.rb')
+          $loaded_stuff.should include('each_run block')
+          $loaded_stuff.should include('prefork block')
           puts "Specs successfully run within spork, and all initialization files were loaded"
         end
       end
