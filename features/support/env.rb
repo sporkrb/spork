@@ -53,7 +53,6 @@ class SporkWorld
     parent_stderr, child_stderr = IO::pipe
     
     background_jobs << Kernel.fork do
-      # grandchild
       [parent_stdin, parent_stdout, parent_stderr].each { |io| io.close }
       
       STDIN.reopen(child_stdin)
