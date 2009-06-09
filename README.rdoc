@@ -10,7 +10,7 @@ Because Spork uses Kernel.fork, it only works on POSIX systems.  This means Wind
 
 == INSTALL:
 
-  [sudo] gem install timcharper-spork --source http://gems.github.com/
+  [sudo] gem install spork
 
 alternatively:
 
