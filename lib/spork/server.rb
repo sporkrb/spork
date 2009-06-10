@@ -94,7 +94,7 @@ class Spork::Server
   end
   
   def run(argv, stderr, stdout)
-    return false if running?
+    abort if running?
     
     @child = ::Spork::Forker.new do
       $stdout, $stderr = stdout, stderr
