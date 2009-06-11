@@ -1,6 +1,9 @@
 = Spork
 
-* http://github.com/timcharper/spork
+* Repository: http://github.com/timcharper/spork
+* Issues: http://github.com/timcharper/spork/issues
+* Changes: http://github.com/timcharper/spork/blob/master/History.txt
+* Mailing list: http://groups.google.com/group/sporkgem
 
 == SYNOPSIS:
 
