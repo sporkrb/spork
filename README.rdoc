@@ -4,6 +4,7 @@
 * Issues: http://github.com/timcharper/spork/issues
 * Changes: http://github.com/timcharper/spork/blob/master/History.txt
 * Mailing list: http://groups.google.com/group/sporkgem
+* Wiki: http://wiki.github.com/timcharper/spork
 
 == SYNOPSIS:
 
