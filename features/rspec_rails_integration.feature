@@ -48,6 +48,7 @@ Feature: Rails Integration
     describe "Did it work?" do
       it "checks to see if all worked" do
         Spork.state.should == :using_spork
+        (Rails.respond_to?(:logger) ? Rails.logger : ActionController::Base.logger).info "hey there"
         $loaded_stuff.should include('ActiveRecord::Base.establish_connection')
         $loaded_stuff.should include('User')
         $loaded_stuff.should include('UserObserver')
@@ -62,3 +63,4 @@ Feature: Rails Integration
     When I fire up a spork instance with "spork rspec"
     And I run spec --drb spec/did_it_work_spec.rb 
     Then the output should contain "Specs successfully run within spork, and all initialization files were loaded"
+    And the file "log/test.log" should include "hey there"

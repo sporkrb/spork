@@ -75,6 +75,7 @@ Feature: Cucumber integration with rails
       Then "it should work" do
         Spork.state.should == :using_spork
         RAILS_ENV.should == 'features'
+        (Rails.respond_to?(:logger) ? Rails.logger : ActionController::Base.logger).info "hey there"
         $loaded_stuff.should include('ActiveRecord::Base.establish_connection')
         $loaded_stuff.should include('User')
         $loaded_stuff.should include('UserObserver')
@@ -101,3 +102,5 @@ Feature: Cucumber integration with rails
       When I fire up a spork instance with "spork cucumber"
       And I run cucumber --drb features/cucumber_rails.feature
       Then the output should contain "It worked!"
+      And the file "log/features.log" should include "hey there"
+      

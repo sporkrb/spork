@@ -1,6 +1,7 @@
 class Spork::AppFramework::Rails < Spork::AppFramework
   
   # TODO - subclass this out to handle different versions of rails
+  # Also... this is the nastiest duck punch ever.  Clean this up.
   module NinjaPatcher
     def self.included(klass)
       klass.class_eval do
@@ -8,11 +9,25 @@ class Spork::AppFramework::Rails < Spork::AppFramework
           alias :load_environment_without_spork :load_environment
           alias :load_environment :load_environment_with_spork
         end
+        
+        def self.run_with_spork(*args, &block) # it's all fun and games until someone gets an eye poked out
+          if ENV['RAILS_ENV']
+            Object.send(:remove_const, :RAILS_ENV)
+            Object.const_set(:RAILS_ENV, ENV['RAILS_ENV'].dup)
+          end
+          run_without_spork(*args, &block)
+        end
+        
+        class << self
+          unless method_defined?(:run_without_spork)
+            alias :run_without_spork :run
+            alias :run :run_with_spork
+          end
+        end
       end
     end
     
     def load_environment_with_spork
-      reset_rails_env
       result = load_environment_without_spork
       install_hooks
       result

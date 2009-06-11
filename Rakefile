@@ -114,7 +114,14 @@ task :test_rails do
     
     puts "Testing version #{version}"
     pid = Kernel.fork do
-      exec("env RAILS_VERSION=#{version} cucumber features/rspec_rails_integration.feature features/rails_delayed_loading_workarounds.feature; echo $? > result")
+      test_files = %w[features/rspec_rails_integration.feature features/rails_delayed_loading_workarounds.feature]
+      
+      unless version < '2.1'
+        # pending a fix, the following error happens with rails 2.0:
+        # /opt/local/lib/ruby/gems/1.8/gems/cucumber-0.3.11/lib/cucumber/rails/world.rb:41:in `use_transactional_fixtures': undefined method `configuration' for Rails:Module (NoMethodError)
+        test_files << "features/cucumber_rails_integration.feature "
+      end
+      exec("env RAILS_VERSION=#{version} cucumber #{test_files * ' '}; echo $? > result")
     end
     Process.waitpid(pid)
     result = File.read('result').chomp

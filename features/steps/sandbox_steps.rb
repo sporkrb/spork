@@ -56,6 +56,12 @@ When /^I fire up a spork instance with "spork(.*)"$/ do |spork_opts|
   end
 end
 
+Then /the file "([^\"]*)" should include "([^\"]*)"/ do |filename, content|
+  in_current_dir do
+    File.read(filename).should include(content)
+  end
+end
+
 Then /^the (error output|output) should contain$/ do |which, text|
   (which == "error output" ? last_stderr : last_stdout).should include(text)
 end
