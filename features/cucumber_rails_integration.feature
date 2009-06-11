@@ -17,7 +17,7 @@ Feature: Cucumber integration with rails
         # need to restart spork for it take effect.
         
         # Sets up the Rails environment for Cucumber
-        ENV['RAILS_ENV'] = "cucumber"
+        ENV['RAILS_ENV'] = "features"
         require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
 
         require 'webrat'
@@ -59,22 +59,22 @@ Feature: Cucumber integration with rails
       """
       $loaded_stuff << 'features/support/cucumber_rails_helper.rb'
       """
-    And a file named "config/environments/cucumber.rb" with:
+    And a file named "config/environments/features.rb" with:
       """
       # your cucumber env here
       """
     And a file named "config/database.yml" with:
       """
-      cucumber:
+      features:
         adapter: sqlite3
-        database: db/cucumber.sqlite3
+        database: db/features.sqlite3
         timeout: 5000
       """
     And a file named "features/step_definitions/cucumber_rails_steps.rb" with:
       """
       Then "it should work" do
         Spork.state.should == :using_spork
-        RAILS_ENV.should == 'cucumber'
+        RAILS_ENV.should == 'features'
         $loaded_stuff.should include('ActiveRecord::Base.establish_connection')
         $loaded_stuff.should include('User')
         $loaded_stuff.should include('UserObserver')
