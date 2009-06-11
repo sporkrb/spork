@@ -1,3 +1,9 @@
+== 0.5.6 2009-06-10
+
+ === Bugfixes
+ 
+ * bugfix: cucumber was logging to log/test.log, even though RAILS_ENV 'features' was specified
+
 == 0.5.5 2009-06-10
 
  === Bugfixes
@@ -79,3 +85,4 @@
 
 == 0.3.0 2009-05
   * Initial release with SpecServer, Bootstraper, and basic option parsing. (Tim Harper)
+
