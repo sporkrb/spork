@@ -1,4 +1,16 @@
+# A helper class that allows you to run a block inside of a fork, and then get the result from that block.
+#
+# == Example:
+#
+#   forker = Spork::Forker.new do
+#     sleep 3
+#     "success"
+#   end
+#   
+#   forker.result # => "success"
 class Spork::Forker
+  
+  # Raised if the fork died (was killed) before it sent it's response back.
   class ForkDiedException < Exception; end
   def initialize(&block)
     return unless block_given?
@@ -20,6 +32,9 @@ class Spork::Forker
     @child_io.close
   end
   
+  # Wait for the fork to finish running, and then return its return value.
+  #
+  # If the fork was aborted, then result returns nil.
   def result
     return unless running?
     result_thread = Thread.new do
@@ -36,6 +51,7 @@ class Spork::Forker
     @result
   end
   
+  # abort the current running fork
   def abort
     if running?
       Process.kill(Signal.list['TERM'], @child_pid)

@@ -57,6 +57,73 @@ describe Spork do
   end
   
   it "expands a caller line, preserving the line number" do
-    Spork.expanded_caller("/boo/../yah.rb:31").should == "/yah.rb:31"
+    Spork.send(:expanded_caller, "/boo/../yah.rb:31").should == "/yah.rb:31"
+  end
+  
+  describe "#trap_method" do
+    before(:each) do
+      Object.class_eval do
+        class TrapTest
+          def self.output
+            @output ||= []
+          end
+          
+          def hello
+            TrapTest.output << 'hello'
+          end
+          
+          def goodbye
+            TrapTest.output << 'goodbye'
+          end
+        end
+      end
+    end
+    
+    after(:each) do
+      Object.send(:remove_const, :TrapTest)
+    end
+    
+    it "delays execution of a method until after Spork.exec_each_run is called" do
+      Spork.using_spork!
+      Spork.trap_method(TrapTest, :hello)
+      trap_test = TrapTest.new
+      trap_test.hello
+      trap_test.goodbye
+      Spork.exec_each_run
+      TrapTest.output.should == ['goodbye', 'hello']
+    end
+  end
+  
+  describe "#trap_class_method" do
+    before(:each) do
+      Object.class_eval do
+        class TrapTest
+          def self.output
+            @output ||= []
+          end
+          
+          def self.hello
+            output << 'hello'
+          end
+          
+          def self.goodbye
+            output << 'goodbye'
+          end
+        end
+      end
+    end
+    
+    after(:each) do
+      Object.send(:remove_const, :TrapTest)
+    end
+    
+    it "delays execution of a method until after Spork.exec_each_run is called" do
+      Spork.using_spork!
+      Spork.trap_class_method(TrapTest, :hello)
+      TrapTest.hello
+      TrapTest.goodbye
+      Spork.exec_each_run
+      TrapTest.output.should == ['goodbye', 'hello']
+    end
   end
 end

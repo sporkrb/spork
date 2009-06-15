@@ -1,9 +1,23 @@
+# The Diagnoser hooks into load and require and keeps track of when files are required / loaded, and who loaded them.
+# It's used when you run spork --diagnose
+#
+# = Example
+#  
+#  Spork::Diagnoser.install_hook!('/path/env.rb', '/path')
+#  require '/path/to/env.rb'
+#  Spork::Diagnoser.output_results(STDOUT)
 class Spork::Diagnoser
   class << self
     def loaded_files
       @loaded_files ||= {}
     end
     
+    # Installs the diagnoser hook into Kernel#require and Kernel#load
+    #
+    # == Parameters
+    #
+    # * +entry_file+ - The file that is used to load the project.  Used to filter the backtrace so anything that happens after it is hidden.
+    # * +dir+ - The project directory.  Any file loaded outside of this directory will not be logged.
     def install_hook!(entry_file = nil, dir = Dir.pwd)
       @dir = File.expand_path(Dir.pwd, dir)
       @entry_file = entry_file
@@ -30,6 +44,7 @@ class Spork::Diagnoser
       loaded_files[filename] = filter_callstack(caller) if subdirectory?(filename)
     end
     
+    # Uninstall the hook. Generally useful only for testing the Diagnoser.
     def remove_hook!
       return unless Kernel.private_instance_methods.include?('require_without_diagnoser')
       Kernel.class_eval do
@@ -42,6 +57,11 @@ class Spork::Diagnoser
       true
     end
     
+    # output the results of a diagnostic run.
+    #
+    # == Parameters
+    #
+    # * +stdout+ - An IO stream to output the results to.
     def output_results(stdout)
       project_prefix = Dir.pwd + "/"
       minimify = lambda { |f| f.gsub(project_prefix, '')}

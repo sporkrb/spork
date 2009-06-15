@@ -96,12 +96,12 @@ describe Spork::Server do
       File.read(FakeServer.helper_file).should include(File.read(FakeServer::BOOTSTRAP_FILE))
     end
   
-    it "prevents you from running specs twice in parallel" do
+    it "aborts the current running thread when another run is started" do
       create_helper_file
       @fake.wait_time = 0.25
-      first_run = Thread.new { @fake.run("test", STDOUT, STDIN).should == true }
+      first_run = Thread.new { @fake.run("test", STDOUT, STDIN).should == nil }
       sleep(0.05)
-      @fake.run("test", STDOUT, STDIN).should == false
+      @fake.run("test", STDOUT, STDIN).should == true
     
       # wait for the first to finish
       first_run.join

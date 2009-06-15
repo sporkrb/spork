@@ -4,7 +4,9 @@ require 'spork/forker.rb'
 require 'spork/custom_io_streams.rb'
 require 'spork/app_framework.rb'
 
-# This is based off of spec_server.rb from rspec-rails (David Chelimsky), which was based on Florian Weber's TDDMate
+# An abstract class that is implemented to create a server
+#
+# (This was originally based off of spec_server.rb from rspec-rails (David Chelimsky), which was based on Florian Weber's TDDMate)
 class Spork::Server
   @@supported_servers = []
   
@@ -13,26 +15,27 @@ class Spork::Server
   
   include Spork::CustomIOStreams
   
+  # Abstract method: returns the servers port.  Override this to return the port that should be used by the test framework.
   def self.port
     raise NotImplemented
   end
   
+  # Abstract method: returns the entry file that loads the testing environment, such as spec/spec_helper.rb.
   def self.helper_file
     raise NotImplemented
   end
   
+  # Convenience method that turns the class name without the namespace
   def self.server_name
     self.name.gsub('Spork::Server::', '')
   end
   
-  def self.inherited(subclass)
-    @@supported_servers << subclass
-  end
-  
+  # Returns a list of all testing servers that have detected their testing framework being used in the project.
   def self.available_servers
     supported_servers.select { |s| s.available? }
   end
   
+  # Returns a list of all servers that have been implemented (it keeps track of them automatically via Class.inherited)
   def self.supported_servers(starting_with = nil)
     @@supported_servers.sort! { |a,b| a.load_preference_index <=> b.load_preference_index }
     return @@supported_servers if starting_with.nil?
@@ -41,18 +44,22 @@ class Spork::Server
     end
   end
   
+  # Returns true if the testing frameworks helper file exists.  Override if this is not sufficient to detect your testing framework.
   def self.available?
     File.exist?(helper_file)
   end
   
+  # Used to specify
   def self.load_preference_index
     LOAD_PREFERENCE.index(server_name) || LOAD_PREFERENCE.length
   end
   
+  # Detects if the test helper has been bootstrapped.
   def self.bootstrapped?
     File.read(helper_file).include?("Spork.prefork")
   end
   
+  # Bootstraps the current test helper file by prepending a Spork.prefork and Spork.each_run block at the beginning.
   def self.bootstrap
     if bootstrapped?
       stderr.puts "Already bootstrapped!"
@@ -75,6 +82,7 @@ class Spork::Server
     new.listen
   end
   
+  # Sets up signals and starts the DRb service. If it's successful, it doesn't return. Not ever.  You don't need to override this.
   def listen
     trap("SIGINT") { sig_int_received }
     trap("SIGTERM") { abort; exit!(0) }
@@ -93,6 +101,14 @@ class Spork::Server
     self.class.helper_file
   end
   
+  # This is the public facing method that is served up by DRb.  To use it from the client side (in a testing framework):
+  # 
+  #   DRb.start_service("druby://localhost:0") # this allows Ruby to do some magical stuff so you can pass an output stream over DRb.
+  #                                            # see http://redmine.ruby-lang.org/issues/show/496 to see why localhost:0 is used.
+  #   spec_server = DRbObject.new_with_uri("druby://127.0.0.1:8989")
+  #   spec_server.run(options.argv, $stderr, $stdout)
+  #
+  # When implementing a test server, don't override this method: override run_tests instead.
   def run(argv, stderr, stdout)
     abort if running?
     
@@ -104,11 +120,22 @@ class Spork::Server
     @child.result
   end
   
+  # returns whether or not the child (a test run) is running right now.
   def running?
     @child && @child.running?
   end
   
+  protected
+    # Abstract method: here is where the server runs the tests.
+    def run_tests(argv, input, output)
+      raise NotImplemented
+    end
+  
   private
+    def self.inherited(subclass)
+      @@supported_servers << subclass
+    end
+    
     def self.framework
       @framework ||= Spork::AppFramework.detect_framework
     end
@@ -141,10 +168,6 @@ class Spork::Server
         end  
       end
       true
-    end
-    
-    def run_tests(argv, input, output)
-      raise NotImplemented
     end
     
     def restart

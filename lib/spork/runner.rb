@@ -2,6 +2,7 @@ require 'optparse'
 require 'spork/server'
 
 module Spork
+  # This is used by bin/spork. It's wrapped in a class because it's easier to test that way.
   class Runner
     attr_reader :server
     
@@ -42,6 +43,7 @@ module Spork
       text.string
     end
     
+    # Returns a server for the specified (or the detected default) testing framework.  Returns nil if none detected, or if the specified is not supported or available.
     def find_server
       if options[:server_matcher]
         @server = Spork::Server.supported_servers(options[:server_matcher]).first
@@ -96,9 +98,6 @@ Are you running me from a project directory?
       end
     end
     
-    def diagnose
-    end
-
     private
     attr_reader :options 
 

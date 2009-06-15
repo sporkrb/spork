@@ -1,3 +1,5 @@
+# This class is mainly used for testing.
+# When included (and used), it gives us an opportunity to stub out the output streams used for a given class
 module Spork::CustomIOStreams
   def self.included(klass)
     klass.send(:extend, ::Spork::CustomIOStreams::ClassMethods)

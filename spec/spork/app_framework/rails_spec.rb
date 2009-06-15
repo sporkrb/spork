@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-Spork::AppFramework[:Rails]
-
 describe Spork::AppFramework::Rails do
   describe ".version" do
     it "detects the current version of rails" do

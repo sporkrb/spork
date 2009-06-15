@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-Spork::AppFramework[:Unknown]
-
 describe Spork::AppFramework::Unknown do
   it "requires bootstrapping" do
     Spork::AppFramework::Unknown.new.bootstrap_required?.should == true
