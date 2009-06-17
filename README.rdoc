@@ -8,9 +8,24 @@
 
 == SYNOPSIS:
 
-Spork is Tim Harper's implementation of a Drb spec server (similar to the script/spec_server provided by rspec-rails), except rather than using the Rails constant unloading to reload your files, it forks a copy of the server each time you run your specs.  The result?  Spork runs more solid: it doesn't get corrupted over time, and it properly handles modules and any voo-doo meta programming you may have put in your app.
+Spork is Tim Harper's implementation of test server (similar to the script/spec_server provided by rspec-rails), except rather than using the Rails constant unloading to reload your files, it forks a copy of the server each time you run your tests.  The result?  Spork runs more solid: it doesn't get corrupted over time, and it properly handles modules and any voo-doo meta programming you may have put in your app.
 
 Because Spork uses Kernel.fork, it only works on POSIX systems.  This means Windows users are not invited to this party.  Sorry :(
+
+== Supported Testing Frameworks
+
+* Rspec
+* Cucumber
+
+And more to come!  Vote for your favorite at http://github.com/timcharper/spork/issues
+
+== Supported Application Frameworks
+
+Actually, Spork ~can~ work with any application framework.  But, it ships with hooks and helpers to help make the experience much more "out of the box"
+
+* Rails
+
+More can be added!  Vote for your favorite at http://github.com/timcharper/spork/issues
 
 == INSTALL:
 
@@ -95,6 +110,15 @@ On one of our projects, many of us using TextMate with spork, only one developer
     require 'spec/runner/formatter/text_mate_formatter'
     ...
   end
+
+
+=== uninitialized constant MissingSourceFile
+
+This is kind of an issue with RSpec.  See this ticket for more info:
+
+http://tinyurl.com/kmbnm8
+
+Basically, just remove the " unless defined?(RAILS_ROOT)" from your spec/spec_helper.rb, and this should go away.
 
 == Kudos to
 
