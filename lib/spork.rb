@@ -50,11 +50,13 @@ module Spork
     
     # Traps an instance method of a class (or module) so any calls to it don't actually run until Spork.exec_each_run
     def trap_method(klass, method_name)
+      method_name_without_spork, method_name_with_spork = alias_method_names(method_name, :spork)
+      
       klass.class_eval <<-EOF, __FILE__, __LINE__ + 1
-        alias :#{method_name}_without_spork :#{method_name} unless method_defined?(:#{method_name}_without_spork) 
+        alias :#{method_name_without_spork} :#{method_name} unless method_defined?(:#{method_name_without_spork}) 
         def #{method_name}(*args)
           Spork.each_run(false) do
-            #{method_name}_without_spork(*args)
+            #{method_name_without_spork}(*args)
           end
         end
       EOF
@@ -62,19 +64,15 @@ module Spork
     
     # Same as trap_method, but for class methods instead
     def trap_class_method(klass, method_name)
-      klass.class_eval <<-EOF, __FILE__, __LINE__ + 1
-        class << self
-          alias :#{method_name}_without_spork :#{method_name} unless method_defined?(:#{method_name}_without_spork)
-          def #{method_name}(*args)
-            Spork.each_run(false) do
-              #{method_name}_without_spork(*args)
-            end
-          end
-        end
-      EOF
+      trap_method((class << klass; self; end), method_name)
     end
     
     private
+      def alias_method_names(method_name, feature)
+        /^(.+?)([\?\!]{0,1})$/.match(method_name.to_s)
+        ["#{$1}_without_spork#{$2}", "#{$1}_with_spork#{$2}"]
+      end
+      
       def already_ran
         @already_ran ||= []
       end

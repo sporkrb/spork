@@ -62,6 +62,8 @@ describe Spork do
   
   describe "#trap_method" do
     before(:each) do
+      Spork.using_spork!
+      
       Object.class_eval do
         class TrapTest
           def self.output
@@ -75,8 +77,13 @@ describe Spork do
           def goodbye
             TrapTest.output << 'goodbye'
           end
+          
+          def say_something!
+            TrapTest.output << 'something'
+          end
         end
       end
+      @trap_test = TrapTest.new
     end
     
     after(:each) do
@@ -86,11 +93,18 @@ describe Spork do
     it "delays execution of a method until after Spork.exec_each_run is called" do
       Spork.using_spork!
       Spork.trap_method(TrapTest, :hello)
-      trap_test = TrapTest.new
-      trap_test.hello
-      trap_test.goodbye
+      @trap_test.hello
+      @trap_test.goodbye
       Spork.exec_each_run
       TrapTest.output.should == ['goodbye', 'hello']
+    end
+    
+    it "works with methods that have punctuation" do
+      Spork.trap_method(TrapTest, :say_something!)
+      @trap_test.say_something!
+      TrapTest.output.should == []
+      Spork.exec_each_run
+      TrapTest.output.should == ['something']
     end
   end
   
