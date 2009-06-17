@@ -1,3 +1,9 @@
+== 0.5.7 2009-06-17
+
+ === Bugfixes
+ 
+ * bugfix: Spork was allowing view eager-loading to happen during prefork in Rails 2.2.x, 2.3.x
+
 == 0.5.6 2009-06-10
 
  === Bugfixes
