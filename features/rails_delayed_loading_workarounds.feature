@@ -62,10 +62,19 @@ Feature: Rails Delayed Work arounds
           get :index
           response.body.should include('listing users')
           puts "Controller stack is functioning"
+          response.body.should include('Here is a list of users')
+          puts "Views are not being cached"
         end
       end
       """
     When I fire up a spork instance with "spork rspec"
+    And the contents of "app/views/users/index.html.erb" are changed to:
+      """
+      <%= reverse_text('listing users'.reverse) %>
+      <p>Here is a list of users</p>
+      """
+      
     And I run spec --drb spec/controllers/users_controller_spec.rb
     Then the output should contain "Controller stack is functioning"
+    Then the output should contain "Views are not being cached"
   

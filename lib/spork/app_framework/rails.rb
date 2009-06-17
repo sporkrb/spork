@@ -39,6 +39,7 @@ class Spork::AppFramework::Rails < Spork::AppFramework
       delay_app_preload
       delay_application_controller_loading
       delay_route_loading
+      delay_eager_view_loading
     end
     
     def reset_rails_env
@@ -91,6 +92,24 @@ class Spork::AppFramework::Rails < Spork::AppFramework
       if ::Rails::Initializer.instance_methods.include?('initialize_routing')
         Spork.trap_method(::Rails::Initializer, :initialize_routing)
       end
+    end
+    
+    def delay_eager_view_loading
+      # So, in testing mode it seems it would be optimal to not eager load 
+      # views (as your may only run a test that uses one or two views).
+      # However, I decided to delay eager loading rather than force it to 
+      # disable because you may wish to eager load your views (I.E. you're 
+      # testing concurrency)
+      
+      # Rails 2.3.x +
+      if defined?(::ActionView::Template::EagerPath)
+        Spork.trap_method(::ActionView::Template::EagerPath, :load!)
+      end
+      # Rails 2.2.x
+      if defined?(::ActionView::PathSet::Path)
+        Spork.trap_method(::ActionView::PathSet::Path, :load)
+      end
+      # Rails 2.0.5 - 2.1.x don't appear to eager cache views.
     end
   end
   

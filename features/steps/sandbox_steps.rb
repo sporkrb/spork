@@ -12,6 +12,10 @@ Given /^a file named "([^\"]*)" with:$/ do |file_name, file_content|
   create_file(file_name, file_content)
 end
 
+When /^the contents of "([^\"]*)" are changed to:$/ do |file_name, file_content|
+  create_file(file_name, file_content)
+end
+
 # the following code appears in "config/environment.rb" after /Rails::Initializer.run/:
 Given /^the following code appears in "([^\"]*)" after \/([^\\\/]*)\/:$/ do |file_name, regex, content|
   # require 'ruby-debug'; Debugger.start; Debugger.start_control; debugger
