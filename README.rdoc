@@ -89,36 +89,7 @@ Use this as a guideline when "Sporking" your features/support/env.rb file
 
 == Some potential issues and ways to overcome them:
 
-=== Database connections don't work inside of Spork
-
-If you're using ActiveRecord and Rails, Spork will automatically reconnect to the database.  However, if you're not using ActiveRecord, or if you're doing some tricky stuff with connections, you'll have to make sure your connections get re-established on each run.  In your spec/spec_helper.rb file:
-
-  Spork.each_run do
-    # Do your connection re-establishing here
-  end
-
-=== Couldn't find formatter class Spec::Runner::Formatter::TextMateFormatter
-
-  Make sure the --require option is specified *before* --format
-
-On one of our projects, many of us using TextMate with spork, only one developer got this error message while the rest of us ran just fine.  I don't know exactly why it happened, but requiring the textmate formatter in the prefork block made it go away, like this:
-
-  Spork.prefork do
-    gem "rspec", "= 1.2.6"
-    require 'spec'
-    ...
-    require 'spec/runner/formatter/text_mate_formatter'
-    ...
-  end
-
-
-=== uninitialized constant MissingSourceFile
-
-This is kind of an issue with RSpec.  See this ticket for more info:
-
-http://tinyurl.com/kmbnm8
-
-Basically, just remove the " unless defined?(RAILS_ROOT)" from your spec/spec_helper.rb, and this should go away.
+See http://wiki.github.com/timcharper/spork/troubleshooting
 
 == Kudos to
 
