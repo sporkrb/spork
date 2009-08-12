@@ -10,19 +10,10 @@ class Spork::Server::Cucumber < Spork::Server
     def helper_file
       CUCUMBER_HELPER_FILE
     end
-
-    attr_accessor :step_mother
-  end
-  
-  def step_mother
-    self.class.step_mother
   end
   
   def run_tests(argv, stderr, stdout)
     require 'cucumber/cli/main'
-    ::Cucumber::Cli::Main.step_mother = step_mother
-    ::Cucumber::Cli::Main.new(argv, stdout, stderr).execute!(step_mother)
+    ::Cucumber::Cli::Main.new(argv, stdout, stderr).execute!(::Cucumber::StepMother.new)
   end
 end
-
-Spork::Server::Cucumber.step_mother = self
