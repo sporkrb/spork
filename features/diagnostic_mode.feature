@@ -30,7 +30,11 @@ Feature: Diagnostic Mode
       end
       """
     When I run spork --diagnose
-    Then the output should contain "lib/awesome.rb"
+    Then the error output should contain
+      """
+      Loading Spork.prefork block...
+      """
+    And the output should contain "lib/awesome.rb"
     And the output should contain "spec/spec_helper.rb:5"
     And the output should not contain "super_duper.rb"
     And the output should not contain "diagnose.rb"

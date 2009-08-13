@@ -1,5 +1,8 @@
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__))) unless $LOAD_PATH.include?(File.expand_path(File.dirname(__FILE__)))
 module Spork
+  BINARY = File.expand_path(File.dirname(__FILE__) + '/../bin/spork')
+  LIBDIR = File.expand_path(File.dirname(__FILE__))
+
   class << self
     # Run a block, during prefork mode.  By default, if prefork is called twice in the same file and line number, the supplied block will only be ran once.
     #

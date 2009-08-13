@@ -1,3 +1,5 @@
+require 'cucumber'
+
 class Spork::Server::Cucumber < Spork::Server
   CUCUMBER_PORT = 8990
   CUCUMBER_HELPER_FILE = File.join(Dir.pwd, "features/support/env.rb")
@@ -22,7 +24,6 @@ class Spork::Server::Cucumber < Spork::Server
 
   def run_tests(argv, stderr, stdout)
     begin
-      require 'cucumber/cli/main'
       ::Cucumber::Cli::Main.new(argv, stdout, stderr).execute!(::Cucumber::StepMother.new)
     rescue NoMethodError => pre_cucumber_0_4 # REMOVE WHEN SUPPORT FOR PRE-0.4 IS DROPPED
       ::Cucumber::Cli::Main.step_mother = step_mother
@@ -31,4 +32,10 @@ class Spork::Server::Cucumber < Spork::Server
   end
 end
 
-Spork::Server::Cucumber.step_mother = self # REMOVE WHEN SUPPORT FOR PRE-0.4 IS DROPPED
+begin
+  step_mother = ::Cucumber::StepMother.new
+  step_mother.load_rb_language
+  Spork::Server::Cucumber.step_mother = step_mother
+rescue NoMethodError => pre_cucumber_0_4 # REMOVE WHEN SUPPORT FOR PRE-0.4 IS DROPPED
+  Spork::Server::Cucumber.step_mother = self
+end
