@@ -39,11 +39,11 @@ When /^I run (spork|spec|cucumber)($| .*$)/ do |command, spork_opts|
   else
     command = %x{which #{command}}.chomp
   end
-  run "#{SporkWorld::RUBY_BINARY} #{command} #{spork_opts}"
+  run "#{SporkWorld::RUBY_BINARY} -I #{Cucumber::LIBDIR} #{command} #{spork_opts}"
 end
 
 When /^I fire up a spork instance with "spork(.*)"$/ do |spork_opts|
-  run_in_background "#{SporkWorld::RUBY_BINARY} #{SporkWorld::BINARY} #{spork_opts}"
+  run_in_background "#{SporkWorld::RUBY_BINARY} -I #{Cucumber::LIBDIR} #{SporkWorld::BINARY} #{spork_opts}"
   output = ""
   begin
     status = Timeout::timeout(15) do
