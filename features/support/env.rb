@@ -4,10 +4,11 @@ require 'forwardable'
 require 'tempfile'
 require 'spec/expectations'
 require 'timeout'
+require 'spork'
 
 class SporkWorld
-  RUBY_BINARY   = File.join(Config::CONFIG['bindir'], Config::CONFIG['ruby_install_name'])
   BINARY        = File.expand_path(File.dirname(__FILE__) + '/../../bin/spork')
+  RUBY_BINARY   = File.join(Config::CONFIG['bindir'], Config::CONFIG['ruby_install_name'])
   SANDBOX_DIR   = File.expand_path(File.join(File.dirname(__FILE__), '../../tmp/sandbox'))
   
   extend Forwardable
