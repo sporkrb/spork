@@ -1,3 +1,9 @@
+== (In Git)
+
+ === Bugfixes
+ 
+ * bugfix: Add compatibility for Cucumber 0.4.
+
 == 0.5.7 2009-06-17
 
  === Bugfixes
