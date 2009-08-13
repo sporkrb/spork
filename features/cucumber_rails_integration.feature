@@ -101,6 +101,7 @@ Feature: Cucumber integration with rails
     Scenario: Running spork with a rails app and observers
       When I fire up a spork instance with "spork cucumber"
       And I run cucumber --drb features/cucumber_rails.feature
-      Then the output should contain "It worked!"
+      Then the error output should be empty
+      And the output should contain "It worked!"
       And the file "log/features.log" should include "hey there"
       
