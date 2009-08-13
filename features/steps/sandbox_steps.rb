@@ -34,12 +34,15 @@ Given /^the following code appears in "([^\"]*)" after \/([^\\\/]*)\/:$/ do |fil
 end
 
 When /^I run (spork|spec|cucumber)($| .*$)/ do |command, spork_opts|
-  if command == 'spork'
+  case command
+  when 'spork'
     command = SporkWorld::BINARY
+  when 'cucumber'
+    command = Cucumber::BINARY
   else
     command = %x{which #{command}}.chomp
   end
-  run "#{SporkWorld::RUBY_BINARY} -I #{Cucumber::LIBDIR} #{command} #{spork_opts}"
+  run "#{SporkWorld::RUBY_BINARY} #{command} #{spork_opts}"
 end
 
 When /^I fire up a spork instance with "spork(.*)"$/ do |spork_opts|
@@ -84,6 +87,10 @@ end
 
 Then /^the (error output|output) should not contain "(.+)"$/ do |which, text|
   (which == "error output" ? last_stderr : last_stdout).should_not include(text)
+end
+
+Then /^the (error output|output) should be empty$/ do |which|
+  (which == "error output" ? last_stderr : last_stdout).should == ""
 end
 
 Then /^the (error output|output) should be$/ do |which, text|
