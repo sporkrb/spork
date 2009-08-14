@@ -26,7 +26,6 @@ class Spork::Server::Cucumber < Spork::Server
     begin
       ::Cucumber::Cli::Main.new(argv, stdout, stderr).execute!(::Cucumber::StepMother.new)
     rescue NoMethodError => pre_cucumber_0_4 # REMOVE WHEN SUPPORT FOR PRE-0.4 IS DROPPED
-      ::Cucumber::Cli::Main.step_mother = step_mother
       ::Cucumber::Cli::Main.new(argv, stdout, stderr).execute!(step_mother)
     end
   end
