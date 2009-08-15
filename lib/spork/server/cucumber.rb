@@ -6,7 +6,7 @@ class Spork::Server::Cucumber < Spork::Server
 
   class << self
     def port
-      CUCUMBER_PORT
+      (ENV['CUCUMBER_DRB'] || CUCUMBER_PORT).to_i
     end
 
     def helper_file
