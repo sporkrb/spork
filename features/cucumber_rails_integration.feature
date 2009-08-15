@@ -105,3 +105,9 @@ Feature: Cucumber integration with rails
       And the output should contain "It worked!"
       And the file "log/features.log" should include "hey there"
       
+    Scenario: Running spork with a rails app and a non-standard port
+      When I fire up a spork instance with "spork cucumber -p 9000"
+      And I run cucumber --drb --port 9000 features/cucumber_rails.feature
+      Then the error output should be empty
+      And the output should contain "It worked!"
+      And the file "log/features.log" should include "hey there"
