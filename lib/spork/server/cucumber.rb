@@ -23,18 +23,12 @@ class Spork::Server::Cucumber < Spork::Server
   end
 
   def run_tests(argv, stderr, stdout)
-    begin
-      ::Cucumber::Cli::Main.new(argv, stdout, stderr).execute!(::Cucumber::StepMother.new)
-    rescue NoMethodError => pre_cucumber_0_4 # REMOVE WHEN SUPPORT FOR PRE-0.4 IS DROPPED
-      ::Cucumber::Cli::Main.step_mother = step_mother
-      ::Cucumber::Cli::Main.new(argv, stdout, stderr).execute!(step_mother)
-    end
+    ::Cucumber::Cli::Main.new(argv, stdout, stderr).execute!(step_mother)
   end
 end
 
 begin
   step_mother = ::Cucumber::StepMother.new
-  step_mother.load_rb_language
   Spork::Server::Cucumber.step_mother = step_mother
 rescue NoMethodError => pre_cucumber_0_4 # REMOVE WHEN SUPPORT FOR PRE-0.4 IS DROPPED
   Spork::Server::Cucumber.step_mother = self
