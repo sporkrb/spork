@@ -13,11 +13,11 @@ class Spork::Server::Cucumber < Spork::Server
       CUCUMBER_HELPER_FILE
     end
 
-    # REMOVE WHEN SUPPORT FOR PRE-0.4 IS DROPPED
+    # REMOVE WHEN SUPPORT FOR 0.3.95 AND EARLIER IS DROPPED
     attr_accessor :step_mother
   end
 
-  # REMOVE WHEN SUPPORT FOR PRE-0.4 IS DROPPED
+  # REMOVE WHEN SUPPORT FOR 0.3.95 AND EARLIER IS DROPPED
   def step_mother
     self.class.step_mother
   end
@@ -30,6 +30,6 @@ end
 begin
   step_mother = ::Cucumber::StepMother.new
   Spork::Server::Cucumber.step_mother = step_mother
-rescue NoMethodError => pre_cucumber_0_4 # REMOVE WHEN SUPPORT FOR PRE-0.4 IS DROPPED
+rescue NoMethodError => pre_cucumber_0_4 # REMOVE WHEN SUPPORT FOR 0.3.95 AND EARLIER IS DROPPED
   Spork::Server::Cucumber.step_mother = self
 end
