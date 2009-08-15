@@ -22,6 +22,7 @@ module Spork
       opt.on("-b", "--bootstrap")  {|ignore| @options[:bootstrap] = true }
       opt.on("-d", "--diagnose")  {|ignore| @options[:diagnose] = true }
       opt.on("-h", "--help")  {|ignore| @options[:help] = true }
+      opt.on("-p", "--port [PORT]") {|port| @options[:port] = port }
       non_option_args = args.select { |arg| ! args[0].match(/^-/) }
       @options[:server_matcher] = non_option_args[0]
       opt.parse!(args)
@@ -81,6 +82,9 @@ Are you running me from a project directory?
       ENV["DRB"] = 'true'
       @error.puts "Using #{server.server_name}"
       @error.flush
+
+      server.port = options[:port]
+
       case
       when options[:bootstrap]
         server.bootstrap
