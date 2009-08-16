@@ -30,7 +30,6 @@ Feature: Cucumber integration with rails
         require 'cucumber'
         require 'cucumber/formatter/unicode' # Comment out this line if you don't want Cucumber Unicode support
         require 'spec/rails'
-        Spork::Server::Cucumber.step_mother.load_programming_language('rb') if defined?(Spork::Server)
         require 'cucumber/rails/rspec'
         
         #### this is for this test only #######
@@ -84,8 +83,6 @@ Feature: Cucumber integration with rails
     And a file named "features/step_definitions/cucumber_rails_steps.rb" with:
       """
       Then "it should work" do
-        Spork.state.should == :using_spork
-        RAILS_ENV.should == 'features'
         (Rails.respond_to?(:logger) ? Rails.logger : ActionController::Base.logger).info "hey there"
         $loaded_stuff.should include('ActiveRecord::Base.establish_connection')
         $loaded_stuff.should include('User')
@@ -112,6 +109,13 @@ Feature: Cucumber integration with rails
       Then the output should not contain "features/step_definitions/cucumber_rails_steps.rb"
       Then the output should not contain "features/support/cucumber_rails_helper.rb"
       
+    Scenario: Running spork with a rails app and no server
+      When I run cucumber --drb features
+      Then the error output should contain
+        """
+        WARNING: No DRb server is running. Running features locally
+        """
+
     Scenario: Running spork with a rails app and observers
       When I fire up a spork instance with "spork cucumber"
       And I run cucumber --drb features

@@ -29,6 +29,7 @@ end
 
 begin
   Spork::Server::Cucumber.step_mother = ::Cucumber::StepMother.new
+  Spork::Server::Cucumber.step_mother.load_programming_language('rb') if defined?(Spork::Server)
 rescue NoMethodError => pre_cucumber_0_4 # REMOVE WHEN SUPPORT FOR 0.3.95 AND EARLIER IS DROPPED
   Spork::Server::Cucumber.step_mother = self
 end
