@@ -62,5 +62,31 @@ Feature: Rails Integration
     """
     When I fire up a spork instance with "spork rspec"
     And I run spec --drb spec/did_it_work_spec.rb 
-    Then the output should contain "Specs successfully run within spork, and all initialization files were loaded"
+    Then the error output should be empty
+    And the output should contain "Specs successfully run within spork, and all initialization files were loaded"
+    And the file "log/test.log" should include "hey there"
+
+
+  Scenario: Running spork with a rails app and a non-standard port
+    Given a file named "spec/did_it_work_spec.rb" with:
+    """
+    describe "Did it work?" do
+      it "checks to see if all worked" do
+        Spork.state.should == :using_spork
+        (Rails.respond_to?(:logger) ? Rails.logger : ActionController::Base.logger).info "hey there"
+        $loaded_stuff.should include('ActiveRecord::Base.establish_connection')
+        $loaded_stuff.should include('User')
+        $loaded_stuff.should include('UserObserver')
+        $loaded_stuff.should include('ApplicationHelper')
+        $loaded_stuff.should include('config/routes.rb')
+        $loaded_stuff.should include('each_run block')
+        $loaded_stuff.should include('prefork block')
+        puts "Specs successfully run within spork, and all initialization files were loaded"
+      end
+    end
+    """
+    When I fire up a spork instance with "spork rspec --port 7000"
+    And I run spec --drb --port 7000 spec/did_it_work_spec.rb
+    Then the error output should be empty
+    And the output should contain "Specs successfully run within spork, and all initialization files were loaded"
     And the file "log/test.log" should include "hey there"

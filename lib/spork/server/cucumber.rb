@@ -6,7 +6,7 @@ class Spork::Server::Cucumber < Spork::Server
 
   class << self
     def port
-      CUCUMBER_PORT
+      (ENV['CUCUMBER_DRB'] || CUCUMBER_PORT).to_i
     end
 
     def helper_file
@@ -28,8 +28,7 @@ class Spork::Server::Cucumber < Spork::Server
 end
 
 begin
-  step_mother = ::Cucumber::StepMother.new
-  Spork::Server::Cucumber.step_mother = step_mother
+  Spork::Server::Cucumber.step_mother = ::Cucumber::StepMother.new
 rescue NoMethodError => pre_cucumber_0_4 # REMOVE WHEN SUPPORT FOR 0.3.95 AND EARLIER IS DROPPED
   Spork::Server::Cucumber.step_mother = self
 end

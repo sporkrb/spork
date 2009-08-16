@@ -94,7 +94,11 @@ class Spork::Server
   end
   
   def port
-    self.class.port
+    self.class.instance_variable_get("@port") || self.class.port
+  end
+
+  def self.port= p
+    @port = p
   end
   
   def helper_file

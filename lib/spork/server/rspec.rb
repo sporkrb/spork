@@ -3,7 +3,7 @@ class Spork::Server::RSpec < Spork::Server
   RSPEC_HELPER_FILE = File.join(Dir.pwd, "spec/spec_helper.rb")
   
   def self.port
-    RSPEC_PORT
+    (ENV['RSPEC_DRB'] ||  RSPEC_PORT).to_i
   end
   
   def self.helper_file

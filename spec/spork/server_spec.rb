@@ -124,5 +124,18 @@ describe Spork::Server do
       @fake.stub!(:run_tests).and_return("tests were ran")
       @fake.run("test", STDOUT, STDIN).should == "tests were ran"
     end
+
+    it "accepts a port" do
+      create_helper_file
+      @fake.class.port = 12345
+      @fake.port.should == 12345
+    end
+
+    it "falls back to a default port" do
+      create_helper_file
+      @fake.class.port = nil
+      @fake.port.should == FakeServer.port
+    end
+
   end
 end

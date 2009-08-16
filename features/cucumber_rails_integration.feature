@@ -30,6 +30,7 @@ Feature: Cucumber integration with rails
         require 'cucumber'
         require 'cucumber/formatter/unicode' # Comment out this line if you don't want Cucumber Unicode support
         require 'spec/rails'
+        Spork::Server::Cucumber.step_mother.load_programming_language('rb') if defined?(Spork::Server)
         require 'cucumber/rails/rspec'
         
         #### this is for this test only #######
@@ -39,11 +40,11 @@ Feature: Cucumber integration with rails
 
       Spork.each_run do
         # This code will be run each time you run your specs.
-        require 'cucumber/rails/world'
+
         Cucumber::Rails.use_transactional_fixtures
         Cucumber::Rails.bypass_rescue # Comment out this line if you want Rails own error handling
                                       # (e.g. rescue_action_in_public / rescue_responses / rescue_from)
-        
+
         #### this is for this test only #######
         $loaded_stuff << 'each_run block' #####
         #######################################
@@ -52,8 +53,18 @@ Feature: Cucumber integration with rails
     And a file named "features/cucumber_rails.feature" with:
       """
       Feature: cucumber rails
-        Scenario: did it work
+        Scenario: did it work?
           Then it should work
+
+        Scenario: did it work again?
+          Then it should work
+      """
+    And a file named "features/cucumber_rails_fr.feature" with:
+      """
+      # language: fr
+      Fonction: French
+        Scénario: ca marche?
+          Alors ca marche
       """
     And a file named "features/support/cucumber_rails_helper.rb" with:
       """
@@ -86,6 +97,9 @@ Feature: Cucumber integration with rails
         $loaded_stuff.should include('prefork block')
         puts "It worked!"
       end
+      
+      Alors /ca marche/ do
+      end
       """
     Scenario: Analyzing files were preloaded
       When I run spork --diagnose
@@ -100,8 +114,14 @@ Feature: Cucumber integration with rails
       
     Scenario: Running spork with a rails app and observers
       When I fire up a spork instance with "spork cucumber"
-      And I run cucumber --drb features/cucumber_rails.feature
+      And I run cucumber --drb features
       Then the error output should be empty
       And the output should contain "It worked!"
       And the file "log/features.log" should include "hey there"
       
+    Scenario: Running spork with a rails app and a non-standard port
+      When I fire up a spork instance with "spork cucumber -p 9000"
+      And I run cucumber --drb --port 9000 features
+      Then the error output should be empty
+      And the output should contain "It worked!"
+      And the file "log/features.log" should include "hey there"
