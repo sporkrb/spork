@@ -1,10 +1,11 @@
 require 'optparse'
 require 'spork/server'
+require 'spork/test_framework'
 
 module Spork
   # This is used by bin/spork. It's wrapped in a class because it's easier to test that way.
   class Runner
-    attr_reader :server
+    attr_reader :test_framework
     
     def self.run(args, output, error)
       self.new(args, output, error).run
@@ -30,74 +31,48 @@ module Spork
       if @options[:help]
         @output.puts opt
         @output.puts
-        @output.puts supported_servers_text
+        @output.puts supported_test_frameworks_text
         exit(0)
       end
     end
     
-    def supported_servers_text
+    def supported_test_frameworks_text
       text = StringIO.new
       
       text.puts "Supported test frameworks:"
-      text.puts Spork::Server.supported_servers.sort { |a,b| a.server_name <=> b.server_name }.map { |s| (s.available? ? '(*) ' : '( ) ') + s.server_name }
+      text.puts Spork::TestFramework.supported_test_frameworks.sort { |a,b| a.short_name <=> b.short_name }.map { |s| (s.available? ? '(*) ' : '( ) ') + s.short_name }
       text.puts "\nLegend: ( ) - not detected in project   (*) - detected\n"
       text.string
     end
     
     # Returns a server for the specified (or the detected default) testing framework.  Returns nil if none detected, or if the specified is not supported or available.
-    def find_server
-      if options[:server_matcher]
-        @server = Spork::Server.supported_servers(options[:server_matcher]).first
-        unless @server
-          @error.puts <<-ERROR
-#{options[:server_matcher].inspect} didn't match a supported test framework.
-
-#{supported_servers_text}
-          ERROR
-          return
-        end
-        
-        unless @server.available?
-          @error.puts  <<-USEFUL_ERROR
-I can't find the helper file #{@server.helper_file} for the #{@server.server_name} testing framework.
-Are you running me from the project directory?
-          USEFUL_ERROR
-          return
-        end
-      else
-        @server = Spork::Server.available_servers.first
-        if @server.nil?
-          @error.puts  <<-USEFUL_ERROR
-I can't find any testing frameworks to use.
-Are you running me from a project directory?
-          USEFUL_ERROR
-          return
-        end
-      end
-      @server
+    def find_test_framework
+      Spork::TestFramework.factory(@output, @error, options[:server_matcher])
+    rescue Spork::TestFramework::NoFrameworksAvailable => e
+      @error.puts e.message
+    rescue Spork::TestFramework::FactoryException => e
+      @error.puts "#{e.message}\n\n#{supported_test_frameworks_text}"
     end
     
     def run
-      return false unless find_server
+      return false unless test_framework = find_test_framework
       ENV["DRB"] = 'true'
-      @error.puts "Using #{server.server_name}"
+      @error.puts "Using #{test_framework.short_name}"
       @error.flush
-
-      server.port = options[:port]
 
       case
       when options[:bootstrap]
-        server.bootstrap
+        test_framework.bootstrap
       when options[:diagnose]
         require 'spork/diagnoser'
         
-        Spork::Diagnoser.install_hook!(server.entry_point)
-        server.preload
+        Spork::Diagnoser.install_hook!(test_framework.entry_point)
+        test_framework.preload
         Spork::Diagnoser.output_results(@output)
         return true
       else
-        return(false) unless server.preload
-        server.run
+        return(false) unless test_framework.preload
+        Spork::Server.run(:port => @options[:port], :test_framework => test_framework)
         return true
       end
     end
