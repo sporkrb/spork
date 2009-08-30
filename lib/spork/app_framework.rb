@@ -54,7 +54,7 @@ class Spork::AppFramework
   
   # Abstract: The path to the file that loads the project environment, ie config/environment.rb.  Returns nil if there is none.
   def entry_point
-    raise NotImplemented
+    raise NotImplementedError
   end
   
   def preload(&block)
