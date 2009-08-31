@@ -68,6 +68,7 @@ Feature: Rails Integration
 
 
   Scenario: Running spork with a rails app and a non-standard port
+    Given this scenario is pending until rspec releases a version that supports --port
     Given a file named "spec/did_it_work_spec.rb" with:
     """
     describe "Did it work?" do
