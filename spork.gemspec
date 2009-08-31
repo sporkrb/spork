@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{spork}
-  s.version = "0.5.10"
+  s.version = "0.5.11"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tim Harper"]
@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
      "features/diagnostic_mode.feature",
      "features/rails_delayed_loading_workarounds.feature",
      "features/rspec_rails_integration.feature",
+     "features/steps/general_steps.rb",
      "features/steps/rails_steps.rb",
      "features/steps/sandbox_steps.rb",
      "features/support/env.rb",
@@ -39,8 +40,9 @@ Gem::Specification.new do |s|
      "lib/spork/forker.rb",
      "lib/spork/runner.rb",
      "lib/spork/server.rb",
-     "lib/spork/server/cucumber.rb",
-     "lib/spork/server/rspec.rb",
+     "lib/spork/test_framework.rb",
+     "lib/spork/test_framework/cucumber.rb",
+     "lib/spork/test_framework/rspec.rb",
      "spec/spec_helper.rb",
      "spec/spork/app_framework/rails_spec.rb",
      "spec/spork/app_framework/unknown_spec.rb",
@@ -48,10 +50,12 @@ Gem::Specification.new do |s|
      "spec/spork/diagnoser_spec.rb",
      "spec/spork/forker_spec.rb",
      "spec/spork/runner_spec.rb",
-     "spec/spork/server/cucumber_spec.rb",
-     "spec/spork/server/rspec_spec.rb",
      "spec/spork/server_spec.rb",
-     "spec/spork_spec.rb"
+     "spec/spork/test_framework/cucumber_spec.rb",
+     "spec/spork/test_framework/rspec_spec.rb",
+     "spec/spork/test_framework_spec.rb",
+     "spec/spork_spec.rb",
+     "spec/support/fake_framework.rb"
   ]
   s.homepage = %q{http://github.com/timcharper/spork}
   s.rdoc_options = ["--main", "README.rdoc"]
@@ -67,10 +71,12 @@ Gem::Specification.new do |s|
      "spec/spork/diagnoser_spec.rb",
      "spec/spork/forker_spec.rb",
      "spec/spork/runner_spec.rb",
-     "spec/spork/server/cucumber_spec.rb",
-     "spec/spork/server/rspec_spec.rb",
      "spec/spork/server_spec.rb",
-     "spec/spork_spec.rb"
+     "spec/spork/test_framework/cucumber_spec.rb",
+     "spec/spork/test_framework/rspec_spec.rb",
+     "spec/spork/test_framework_spec.rb",
+     "spec/spork_spec.rb",
+     "spec/support/fake_framework.rb"
   ]
 
   if s.respond_to? :specification_version then

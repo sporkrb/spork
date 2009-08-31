@@ -1,4 +1,4 @@
-== 0.5.10
+== 0.5.11
 
 === Bugfixes
 
@@ -7,6 +7,10 @@
 === Notably
 
 * refactoring. TestFramework class extracted from Server (should've been that way from the beginning). Runner no longer handling TestFramework selection logic, extracted that to a factory method. Hurray for refactoring.
+
+== 0.5.10
+
+Failed release. Github doesn't allow one to repent of a failed release, so, here it is.  It's exactly the same as 0.5.9
 
 == 0.5.9
 
