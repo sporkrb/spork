@@ -1,4 +1,14 @@
-== 0.5.9 (In Git)
+== 0.5.10
+
+=== Bugfixes
+
+* bugfix: no-longer load cucumber when rspec is being used
+
+=== Notably
+
+* refactoring. TestFramework class extracted from Server (should've been that way from the beginning). Runner no longer handling TestFramework selection logic, extracted that to a factory method. Hurray for refactoring.
+
+== 0.5.9
 
 === Bugfixes
 
