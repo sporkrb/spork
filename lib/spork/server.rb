@@ -8,11 +8,11 @@ require 'spork/app_framework.rb'
 #
 # (This was originally based off of spec_server.rb from rspec-rails (David Chelimsky), which was based on Florian Weber's TDDMate)
 class Spork::Server
-  attr_reader :test_framework
+  attr_reader :run_strategy
   include Spork::CustomIOStreams
   
   def initialize(options = {})
-    @test_framework = options[:test_framework]
+    @run_strategy = options[:run_strategy]
     @port = options[:port]
   end
   
@@ -31,11 +31,7 @@ class Spork::Server
     DRb.thread.join
   end
   
-  attr_writer :port
-
-  def port
-    @port || test_framework.class.default_port
-  end
+  attr_accessor :port
 
   # This is the public facing method that is served up by DRb.  To use it from the client side (in a testing framework):
   # 
@@ -46,20 +42,7 @@ class Spork::Server
   #
   # When implementing a test server, don't override this method: override run_tests instead.
   def run(argv, stderr, stdout)
-    abort if running?
-    
-    @child = ::Spork::Forker.new do
-      $stdout, $stderr = stdout, stderr
-      load test_framework.helper_file
-      Spork.exec_each_run
-      test_framework.run_tests(argv, stderr, stdout)
-    end
-    @child.result
-  end
-  
-  # returns whether or not the child (a test run) is running right now.
-  def running?
-    @child && @child.running?
+    run_strategy.run(argv, stderr, stdout)
   end
   
   private
@@ -72,12 +55,8 @@ class Spork::Server
       exec(command_line)
     end
     
-    def abort
-      @child && @child.abort
-    end
-    
     def sig_int_received
-      if running?
+      if run_strategy.running?
         abort
         stderr.puts "Running tests stopped.  Press CTRL-C again to stop the server."
         stderr.flush

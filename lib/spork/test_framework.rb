@@ -150,6 +150,10 @@ class Spork::TestFramework
     bootstrapped? ? helper_file : framework.entry_point
   end
 
+  def default_port
+    self.class.default_port
+  end
+
   protected
     def self.inherited(subclass)
       @@supported_test_frameworks << subclass

@@ -1,6 +1,7 @@
 require 'optparse'
 require 'spork/server'
 require 'spork/test_framework'
+require 'spork/run_strategy'
 
 module Spork
   # This is used by bin/spork. It's wrapped in a class because it's easier to test that way.
@@ -71,8 +72,9 @@ module Spork
         Spork::Diagnoser.output_results(@output)
         return true
       else
-        return(false) unless test_framework.preload
-        Spork::Server.run(:port => @options[:port], :test_framework => test_framework)
+        run_strategy = Spork::RunStrategy.factory(test_framework)
+        return(false) unless run_strategy.preload
+        Spork::Server.run(:port => @options[:port] || test_framework.default_port, :run_strategy => run_strategy)
         return true
       end
     end
