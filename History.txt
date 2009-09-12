@@ -1,3 +1,13 @@
+== 0.6.0
+
+== Features
+
+* auto-load spork supplementary test_framework gems. This will allow anyone to release a gem that enables support for a given test framework. (spork-testunit)
+
+=== Notably
+
+* refactoring. RunStrategy extracted from server, paving the way for different ways of running tests (windows support)
+
 == 0.5.11
 
 === Bugfixes
