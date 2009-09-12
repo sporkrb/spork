@@ -164,4 +164,4 @@ class Spork::TestFramework
     end
 end
 
-Dir[File.dirname(__FILE__) + "/test_framework/*.rb"].each { |file| require file }
+Spork.detect_and_require('spork/test_framework/*.rb')

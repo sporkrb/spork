@@ -1,7 +1,7 @@
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__))) unless $LOAD_PATH.include?(File.expand_path(File.dirname(__FILE__)))
 module Spork
   BINARY = File.expand_path(File.dirname(__FILE__) + '/../bin/spork')
-  LIBDIR = File.expand_path(File.dirname(__FILE__))
+  LIBDIR = File.expand_path("..", File.dirname(__FILE__))
 
   class << self
     # Run a block, during prefork mode.  By default, if prefork is called twice in the same file and line number, the supplied block will only be ran once.
@@ -70,6 +70,12 @@ module Spork
       trap_method((class << klass; self; end), method_name)
     end
     
+    def detect_and_require(subfolder)
+      ([LIBDIR] + Gem.latest_load_paths.grep(/spork/)).uniq.each do |gem_path|
+        Dir.glob(File.join(gem_path, subfolder)).each { |file| require file }
+      end
+    end
+
     private
       def alias_method_names(method_name, feature)
         /^(.+?)([\?\!]{0,1})$/.match(method_name.to_s)
