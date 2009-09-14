@@ -45,6 +45,10 @@ class Spork::Server
     run_strategy.run(argv, stderr, stdout)
   end
   
+  def abort
+    run_strategy.abort
+  end
+
   private
     def restart
       stderr.puts "restarting"
