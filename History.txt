@@ -1,3 +1,9 @@
+== 0.6.1
+
+== Bug-fix
+
+* fixes regression where abort wasn't working.
+
 == 0.6.0
 
 == Features
