@@ -60,6 +60,7 @@ class Spork::Server
     end
     
     def sig_int_received
+      stdout.puts "\n"
       if run_strategy.running?
         abort
         stderr.puts "Running tests stopped.  Press CTRL-C again to stop the server."
