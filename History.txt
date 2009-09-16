@@ -1,3 +1,10 @@
+== 0.6.2
+
+== Bug-fix
+
+* fixes regression where entry point was not being loaded (which basically rendered Spork speed gains non-existent)
+* prevent the client from listening for DRb calls
+
 == 0.6.1
 
 == Bug-fix
