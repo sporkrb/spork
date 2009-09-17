@@ -33,6 +33,10 @@ module Spork
       @state = :using_spork
     end
     
+    def using_spork?
+      @state == :using_spork
+    end
+
     # Used by the server.  Returns the current state of Spork.
     def state
       @state ||= :not_using_spork

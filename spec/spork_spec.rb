@@ -60,6 +60,14 @@ describe Spork do
     Spork.send(:expanded_caller, "/boo/../yah.rb:31").should == "/yah.rb:31"
   end
   
+  describe "#using_spork?" do
+    it "returns true if Spork is being used" do
+      Spork.using_spork?.should be_false
+      Spork.using_spork!
+      Spork.using_spork?.should be_true
+    end
+  end
+
   describe "#trap_method" do
     before(:each) do
       Spork.using_spork!
