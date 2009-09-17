@@ -1,3 +1,9 @@
+== 0.6.3
+
+== fixes
+
+* the regression fix in 0.6.2 was not actually a bug with spork, but a bug with the test framework integration, and fixing it this way broke cucumber and rspec. doh! (sorry)
+
 == 0.6.2
 
 == Bug-fix
