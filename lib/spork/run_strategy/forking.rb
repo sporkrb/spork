@@ -20,7 +20,6 @@ class Spork::RunStrategy::Forking < Spork::RunStrategy
   end
 
   def preload
-    require test_framework.entry_point
     test_framework.preload
   end
 
