@@ -1,3 +1,9 @@
+== 0.7.1
+
+== fixes
+
+* allow normal debugger to operate if tests not run within spork
+
 == 0.7.0
 
 == features
