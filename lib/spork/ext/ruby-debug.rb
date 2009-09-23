@@ -136,7 +136,5 @@ class SporkDebugger
   end
 end
 
-Spork.prefork do
-  SporkDebugger.run
-end
+Spork.prefork { SporkDebugger.run } if Spork.using_spork?
 
