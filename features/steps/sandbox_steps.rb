@@ -56,7 +56,7 @@ When /^I fire up a spork instance with "spork(.*)"$/ do |spork_opts|
   end
 end
 
-Then /the file "([^\"]*)" should include "([^\"]*)"/ do |filename, content|
+Then /^the file "([^\"]*)" should include "([^\"]*)"$/ do |filename, content|
   in_current_dir do
     File.read(filename).should include(content)
   end
