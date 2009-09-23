@@ -1,3 +1,9 @@
+== 0.7.0
+
+== features
+
+* Experimental ruby-debug support for spork.  See features/spork_debugger.feature for usage.  May not work in certain setups, please report any issues with it!
+
 == 0.6.3
 
 == fixes
