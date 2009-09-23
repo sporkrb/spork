@@ -46,12 +46,13 @@ When /^I run (spork|spec|cucumber)($| .*$)/ do |command, spork_opts|
 end
 
 When /^I fire up a spork instance with "spork(.*)"$/ do |spork_opts|
-  run_in_background "#{SporkWorld::RUBY_BINARY} -I #{Cucumber::LIBDIR} #{SporkWorld::BINARY} #{spork_opts}"
+  @spork_server = run_in_background("#{SporkWorld::RUBY_BINARY} -I #{Cucumber::LIBDIR} #{SporkWorld::BINARY} #{spork_opts}")
+
   output = ""
   begin
     status = Timeout::timeout(15) do
       # Something that should be interrupted if it takes too much time...
-      while line = @bg_stderr.gets
+      while line = @spork_server.stderr.gets
         output << line
         puts line
         break if line.include?("Spork is ready and listening")

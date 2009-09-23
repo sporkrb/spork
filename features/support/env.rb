@@ -6,6 +6,8 @@ require 'spec/expectations'
 require 'timeout'
 require 'spork'
 
+require(File.dirname(__FILE__) + '/background_job.rb')
+
 class SporkWorld
   BINARY        = File.expand_path(File.dirname(__FILE__) + '/../../bin/spork')
   RUBY_BINARY   = File.join(Config::CONFIG['bindir'], Config::CONFIG['ruby_install_name'])
@@ -49,34 +51,17 @@ class SporkWorld
   end
 
   def run_in_background(command)
-    child_stdin, parent_stdin = IO::pipe
-    parent_stdout, child_stdout = IO::pipe
-    parent_stderr, child_stderr = IO::pipe
-    
-    background_jobs << Kernel.fork do
-      [parent_stdin, parent_stdout, parent_stderr].each { |io| io.close }
-      
-      STDIN.reopen(child_stdin)
-      STDOUT.reopen(child_stdout)
-      STDERR.reopen(child_stderr)
-      
-      [child_stdin, child_stdout, child_stderr].each { |io| io.close }
-
-      in_current_dir do
-        exec command
-      end
+    in_current_dir do
+      @background_job = BackgroundJob.run(command)
     end
-    
-    [child_stdin, child_stdout, child_stderr].each { |io| io.close }
-    parent_stdin.sync = true
-    
-    @bg_stdin, @bg_stdout, @bg_stderr = [parent_stdin, parent_stdout, parent_stderr]
+    @background_jobs << @background_job
+    @background_job
   end
 
   def terminate_background_jobs
     if @background_jobs
-      @background_jobs.each do |pid|
-        Process.kill(Signal.list['TERM'], pid)
+      @background_jobs.each do |background_job|
+        background_job.kill
       end
     end
   end
