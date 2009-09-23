@@ -33,16 +33,8 @@ Given /^the following code appears in "([^\"]*)" after \/([^\\\/]*)\/:$/ do |fil
   end
 end
 
-When /^I run (spork|spec|cucumber)($| .*$)/ do |command, spork_opts|
-  case command
-  when 'spork'
-    command = SporkWorld::BINARY
-  when 'cucumber'
-    command = Cucumber::BINARY
-  else
-    command = %x{which #{command}}.chomp
-  end
-  run "#{SporkWorld::RUBY_BINARY} -I #{Cucumber::LIBDIR} #{command} #{spork_opts}"
+When /^I run (spork|spec|cucumber)(| .*)$/ do |command, args|
+  run(localized_command(command, args))
 end
 
 When /^I fire up a spork instance with "spork(.*)"$/ do |spork_opts|
