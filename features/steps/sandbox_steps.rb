@@ -37,6 +37,10 @@ When /^I run (spork|spec|cucumber)(| .*)$/ do |command, args|
   run(localized_command(command, args))
 end
 
+When /^I run this in the background: (spork|spec|cucumber)(| .*)$/ do |command, args|
+  @background_script = run_in_background(localized_command(command, args))
+end
+
 When /^I fire up a spork instance with "spork(.*)"$/ do |spork_opts|
   @spork_server = run_in_background("#{SporkWorld::RUBY_BINARY} -I #{Cucumber::LIBDIR} #{SporkWorld::BINARY} #{spork_opts}")
 
@@ -55,6 +59,28 @@ When /^I fire up a spork instance with "spork(.*)"$/ do |spork_opts|
     true.should == false
   end
 end
+
+Then /^the spork window should output a line containing "(.+)"/ do |expected|
+  output = ""
+  begin
+    status = Timeout::timeout(5) do
+      # Something that should be interrupted if it takes too much time...
+      while line = @spork_server.stdout.gets
+        output << line
+        puts line
+        break if output.include?(expected)
+      end
+    end
+  rescue Timeout::Error
+    output.should include(expected)
+  end
+end
+
+When /^I type this in the spork window: "(.+)"/ do |line|
+  @spork_server.stdin.puts(line)
+  @spork_server.stdin.flush
+end
+
 
 Then /^the file "([^\"]*)" should include "([^\"]*)"$/ do |filename, content|
   in_current_dir do

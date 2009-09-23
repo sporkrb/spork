@@ -27,6 +27,20 @@ class SporkWorld
 
   private
   attr_reader :last_exit_status, :last_stderr, :last_stdout, :background_jobs
+  def last_stderr
+    return @last_stderr if @last_stderr
+    if @background_job
+      @last_stderr = @background_job.stderr.read
+    end
+  end
+
+
+  def last_stdout
+    return @last_stdout if @last_stdout
+    if @background_job
+      @last_stdout = @background_job.stdout.read
+    end
+  end
 
   def create_file(file_name, file_content)
     file_content.gsub!("SPORK_LIB", "'#{spork_lib_dir}'") # Some files, such as Rakefiles need to use the lib dir
@@ -76,6 +90,8 @@ class SporkWorld
         background_job.kill
       end
     end
+    @background_jobs.clear
+    @background_job = nil
   end
 
 end
