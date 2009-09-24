@@ -12,7 +12,7 @@ begin
     s.email = ["timcharper+spork@gmail.com"]
     s.executables = ["spork"]
     s.extra_rdoc_files = ["README.rdoc", "MIT-LICENSE"]
-    s.files = ["README.rdoc", "MIT-LICENSE"] + Dir["lib/**/*"] + Dir["assets/**/*"] + Dir["spec/**/*"] + Dir["features/**/*"]
+    s.files = ["geminstaller.yml", "README.rdoc", "MIT-LICENSE"] + Dir["lib/**/*"] + Dir["assets/**/*"] + Dir["spec/**/*"] + Dir["features/**/*"]
     s.has_rdoc = true
     s.homepage = %q{http://github.com/timcharper/spork}
     s.rdoc_options = ["--main", "README.rdoc"]
