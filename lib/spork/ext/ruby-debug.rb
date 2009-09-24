@@ -96,8 +96,7 @@ class SporkDebugger
         puts "\n\n - Debug Session Started - \n\n\n"
         begin
           Debugger.start_client(SporkDebugger::HOST, port)
-        rescue Errno::ECONNRESET => e
-
+        rescue Errno::EPIPE, Errno::ECONNRESET, Errno::ECONNREFUSED
         end
         puts "\n\n - Debug Session Terminated - \n\n\n"
       end
