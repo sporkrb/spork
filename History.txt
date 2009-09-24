@@ -1,3 +1,4 @@
+* fix lock on second encounter of 'debugger' statement
 * prevent situation where debugger stops functioning if connection is dropped by ctrl-c or other forceful means.
 
 == 0.7.1

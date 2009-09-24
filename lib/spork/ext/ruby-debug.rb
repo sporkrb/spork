@@ -62,7 +62,8 @@ class SporkDebugger
         Kernel.class_eval do
           alias :debugger_without_spork_hook :debugger
           def debugger(steps = 1)
-            SporkDebugger.instance.prepare_debugger
+            SporkDebugger.instance.prepare_debugger unless @debugger_invoked
+            @debugger_invoked = true
             debugger_without_spork_hook
           end
         end
