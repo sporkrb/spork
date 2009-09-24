@@ -88,12 +88,16 @@ class SporkDebugger
           socket.close
         end
       rescue => e
-        puts "#{$$} - error: #{e}"
+        puts "error: #{e.class} - #{e}"
       end
 
       def connect_rdebug_client(port = Debugger::PORT)
         puts "\n\n - Debug Session Started - \n\n\n"
-        Debugger.start_client(SporkDebugger::HOST, port)
+        begin
+          Debugger.start_client(SporkDebugger::HOST, port)
+        rescue Errno::ECONNRESET => e
+
+        end
         puts "\n\n - Debug Session Terminated - \n\n\n"
       end
   end
