@@ -1,0 +1,9 @@
+defaults:
+  install_options: "--no-ri --no-rdoc"
+gems:
+- { name: 'ruby-sqlite3',            version: '>= 1.2.5' }
+- { name: 'cucumber',                version: '>= 0.3.101' }
+- { name: 'rspec',                   version: '>= 1.2.8' }
+- { name: 'rspec-rails',             version: '>= 1.2.7.1' }
+- { name: 'rails',                   version: '>= 2.3' }
+
