@@ -62,8 +62,7 @@ class SporkDebugger
         Kernel.class_eval do
           alias :debugger_without_spork_hook :debugger
           def debugger(steps = 1)
-            SporkDebugger.instance.prepare_debugger unless @debugger_invoked
-            @debugger_invoked = true
+            SporkDebugger.instance.prepare_debugger
             debugger_without_spork_hook
           end
         end
@@ -109,6 +108,8 @@ class SporkDebugger
     end
 
     def prepare_debugger
+      return if @debugger_prepared
+      @debugger_prepared = true
       port, cport = start_rdebug_server
       signal_spork_server_to_connect_to_rdebug_server(port)
       wait_for_connection
