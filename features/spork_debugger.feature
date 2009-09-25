@@ -26,8 +26,11 @@ Feature: Spork Debugger integration
 
       describe "Debugger" do
         it "should debug" do
-          @variable = "variable contents"
-          debugger
+          2.times do |count|
+            @message = "count = #{count}"
+            debugger
+            @message = nil
+          end
           puts "it worked!"
         end
       end
@@ -38,8 +41,13 @@ Feature: Spork Debugger integration
 
     Then the spork window should output a line containing "Debug Session Started"
 
-    When I type this in the spork window: "e @variable"
-    Then the spork window should output a line containing "variable contents"
+    When I type this in the spork window: "e @message"
+    Then the spork window should output a line containing "count = 0"
+
+    When I type this in the spork window: "continue"
+
+    When I type this in the spork window: "e @message"
+    Then the spork window should output a line containing "count = 1"
 
     When I type this in the spork window: "continue"
 
