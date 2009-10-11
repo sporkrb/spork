@@ -1,3 +1,4 @@
+* removed unneeded require 'test-unit' 
 * prevent more connection errors from destroying the debug client listener loop
 * fix lock on second encounter of 'debugger' statement
 * prevent situation where debugger stops functioning if connection is dropped by ctrl-c or other forceful means.

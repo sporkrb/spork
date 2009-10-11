@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 require 'rubygems'
-gem 'test-unit', '1.2.3' if RUBY_VERSION.to_f >= 1.9 # Why do we need this?
 
 $LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib') unless $LOAD_PATH.include?(File.dirname(__FILE__) + '/../lib')
 
