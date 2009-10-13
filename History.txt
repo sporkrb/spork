@@ -1,4 +1,11 @@
-* removed unneeded require 'test-unit' 
+== fixes
+
+* removed unneeded require 'test-unit' (Aslak Hellesoy)
+
+== 0.7.2
+
+== fixes
+
 * prevent more connection errors from destroying the debug client listener loop
 * fix lock on second encounter of 'debugger' statement
 * prevent situation where debugger stops functioning if connection is dropped by ctrl-c or other forceful means.
