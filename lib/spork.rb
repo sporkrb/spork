@@ -84,9 +84,17 @@ module Spork
     end
     
     def detect_and_require(subfolder)
-      ([LIBDIR.to_s] + Gem.latest_load_paths.grep(/spork/)).uniq.each do |gem_path|
+      ([LIBDIR.to_s] + other_spork_gem_load_paths).uniq.each do |gem_path|
         Dir.glob(File.join(gem_path, subfolder)).each { |file| require file }
       end
+    end
+
+    def other_spork_gem_load_paths
+      @other_spork_gem_load_paths ||= (
+        Gem.latest_load_paths.grep(/spork/).select do |g|
+          not g.match(%r{/spork-[0-9\-.]+/lib}) # don't include other versions of spork
+        end
+      )
     end
 
     private
