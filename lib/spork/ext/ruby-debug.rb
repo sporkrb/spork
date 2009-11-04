@@ -1,6 +1,8 @@
-require 'ruby-debug'
 require 'socket'
 require 'forwardable'
+
+begin
+require 'ruby-debug'
 
 # Experimental!
 
@@ -143,3 +145,6 @@ end
 
 Spork.prefork { SporkDebugger.run } if Spork.using_spork?
 
+rescue LoadError
+  raise Loaderorr, "Your project has loaded spork/ext/ruby-debug, which relies on the ruby-debug gem. It appears that ruby-debug is not installed. Please install it."
+end
