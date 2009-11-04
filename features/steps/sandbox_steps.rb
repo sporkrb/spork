@@ -18,8 +18,6 @@ end
 
 # the following code appears in "config/environment.rb" after /Rails::Initializer.run/:
 Given /^the following code appears in "([^\"]*)" after \/([^\\\/]*)\/:$/ do |file_name, regex, content|
-  # require 'ruby-debug'; Debugger.start; Debugger.start_control; debugger
-  
   regex = Regexp.new(regex)
   in_current_dir do
     content_lines = File.read(file_name).split("\n")

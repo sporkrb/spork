@@ -2,7 +2,7 @@ require 'ruby-debug'
 require 'socket'
 require 'forwardable'
 
-# Experimental! No automated tests are checking this, use at your own risk!
+# Experimental!
 
 class SporkDebugger
   DEFAULT_PORT = 10_123
