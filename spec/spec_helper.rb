@@ -5,10 +5,7 @@ unless $spec_helper_loaded
 
   $LOAD_PATH.unshift(File.expand_path('../lib', File.dirname(__FILE__)))
   SPEC_TMP_DIR = File.expand_path('tmp', File.dirname(__FILE__))
-  
   require 'spork'
-  require 'spork/runner.rb'
-  require 'spork/diagnoser.rb'
   require 'stringio'
   require 'fileutils'
 

@@ -1,7 +1,4 @@
 require 'optparse'
-require 'spork/server'
-require 'spork/test_framework'
-require 'spork/run_strategy'
 
 module Spork
   # This is used by bin/spork. It's wrapped in a class because it's easier to test that way.
