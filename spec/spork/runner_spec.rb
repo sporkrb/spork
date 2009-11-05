@@ -25,13 +25,6 @@ describe Spork::Runner do
     Spork::Runner.new(['rspec', '-b'], @out, @err).run
   end
   
-  it "aborts if it can't preload" do
-    use_test_server
-    @test_framework.should_receive(:preload).and_return(false)
-    Spork::Server.should_not_receive(:run)
-    Spork::Runner.new(['rspec'], @out, @err).run
-  end
-  
   it "runs the server if all is well" do
     use_test_server
     @test_framework.should_receive(:preload).and_return(true)

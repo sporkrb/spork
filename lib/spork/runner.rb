@@ -70,7 +70,7 @@ module Spork
         return true
       else
         run_strategy = Spork::RunStrategy.factory(test_framework)
-        return(false) unless run_strategy.preload
+        run_strategy.preload_in_background
         Spork::Server.run(:port => @options[:port] || test_framework.default_port, :run_strategy => run_strategy)
         return true
       end
