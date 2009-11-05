@@ -1,3 +1,14 @@
+== 0.8.0
+
+== New Features
+
+* Immediately start listening when firing up spork.
+
+== Fixes
+
+* more descriptive LoadError for spork/ext/ruby-debug
+* don't load app/test frameworks from other versions of spork
+
 == 0.7.3
 
 == fixes
