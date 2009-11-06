@@ -22,6 +22,7 @@ class Spork::Server
   
   # Sets up signals and starts the DRb service. If it's successful, it doesn't return. Not ever.  You don't need to override this.
   def listen
+    raise RuntimeError, "you must call Spork.using_spork! before starting the server" unless Spork.using_spork?
     trap("SIGINT") { sig_int_received }
     trap("SIGTERM") { abort; exit!(0) }
     trap("USR2") { abort; restart } if Signal.list.has_key?("USR2")
