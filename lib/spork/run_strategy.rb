@@ -22,7 +22,15 @@ class Spork::RunStrategy
   end
 
   def preload_in_background
-    Thread.new { preload }
+    Thread.new do
+      begin
+        preload
+      rescue Object => e
+        puts "#{e} (#{e.class})"
+        puts e.backtrace
+        exit(1)
+      end
+    end
   end
 
   def running?

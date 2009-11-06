@@ -136,6 +136,7 @@ class Spork::TestFramework
           stderr.puts "Loading Spork.prefork block..."
           stderr.flush
           load(helper_file)
+          stderr.puts "Ready."
         end
       end
     end
