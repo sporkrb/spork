@@ -3,24 +3,17 @@ Feature: Spork Debugger integration
   I want to invoke the debugger my specs within Spork
   In order to drill in and figure out what's wrong
 
-  Background: Rails App with RSpec and Spork
-
+  Scenario: Invoking the debugger via 'debugger'
     Given a file named "spec/spec_helper.rb" with:
       """
       require 'rubygems'
       require 'spork'
       require 'spork/ext/ruby-debug'
 
-      Spork.prefork do
-        require 'spec'
-      end
-
-      Spork.each_run do
-      end
+      Spork.prefork { require 'spec' }
+      Spork.each_run { }
       """
-
-  Scenario: Invoking the debugger via 'debugger'
-    Given a file named "spec/debugger_spec.rb" with:
+    And a file named "spec/debugger_spec.rb" with:
       """
       require File.dirname(__FILE__) + '/spec_helper.rb'
 
@@ -55,11 +48,22 @@ Feature: Spork Debugger integration
     And the output should contain "it worked!"
 
   Scenario: When ruby-debug is already required and started.
-    Given a file named "spec/debugger_spec.rb" with:
+      Given a file named "spec/spec_helper.rb" with:
       """
-      require File.dirname(__FILE__) + '/spec_helper.rb'
+      require 'rubygems'
+      require 'spork'
       require 'ruby-debug'
       Debugger.start
+
+      require 'spork/ext/ruby-debug'
+
+      Spork.prefork { require 'spec' }
+      Spork.each_run { }
+      """
+
+    And a file named "spec/debugger_spec.rb" with:
+      """
+      require File.dirname(__FILE__) + '/spec_helper.rb'
 
       describe "Debugger" do
         it "should debug" do
@@ -82,3 +86,22 @@ Feature: Spork Debugger integration
 
     Then the spork window should output a line containing "Debug Session Terminated"
     And the output should contain "it worked!"
+
+  Scenario: When ruby-debug is invoked during preload
+      Given a file named "spec/spec_helper.rb" with:
+      """
+      require 'rubygems'
+      require 'spork'
+      require 'spork/ext/ruby-debug'
+
+      @message = "it worked"
+      debugger
+      Spork.prefork { require 'spec' }
+      Spork.each_run { }
+      """
+
+    When I fire up a spork instance with "spork rspec"
+    Then the spork window should output a line containing "spec_helper.rb"
+    When I type this in the spork window: "e @message"
+    Then the spork window should output a line containing "it worked"
+    When I type this in the spork window: "continue"

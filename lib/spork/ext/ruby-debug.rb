@@ -17,7 +17,7 @@ class SporkDebugger
   class << self
     attr_reader :instance
     def run
-      @instance = new
+      @instance ||= new
     end
   end
 
@@ -46,7 +46,7 @@ class SporkDebugger
   class PreloadState
     include NetworkHelpers
     def initialize
-      install_hook
+      Spork.each_run { install_hook }
       listen_for_connection_signals
     end
 
@@ -146,5 +146,5 @@ end
 Spork.prefork { SporkDebugger.run } if Spork.using_spork?
 
 rescue LoadError
-  raise Loaderorr, "Your project has loaded spork/ext/ruby-debug, which relies on the ruby-debug gem. It appears that ruby-debug is not installed. Please install it."
+  raise LoadError, "Your project has loaded spork/ext/ruby-debug, which relies on the ruby-debug gem. It appears that ruby-debug is not installed. Please install it."
 end
