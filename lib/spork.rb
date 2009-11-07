@@ -11,6 +11,8 @@ module Spork
   autoload :Runner,        (LIBDIR + 'spork/runner').to_s
   autoload :Forker,        (LIBDIR + 'spork/forker').to_s
   autoload :Diagnoser,     (LIBDIR + 'spork/diagnoser').to_s
+  autoload :EventDispatcher, (LIBDIR + 'spork/event_dispatcher').to_s
+
 
   class << self
     # Run a block, during prefork mode.  By default, if prefork is called twice in the same file and line number, the supplied block will only be ran once.
