@@ -70,9 +70,13 @@ module Spork
         return true
       else
         Spork.using_spork!
-        run_strategy = Spork::RunStrategy.factory(test_framework)
-        run_strategy.preload_in_background
-        Spork::Server.run(:port => @options[:port] || test_framework.default_port, :run_strategy => run_strategy)
+        Spork::RunStrategy.factory(test_framework).setup_observers
+        Spork::Server.setup_observers
+
+        EventDispatcher[:work].trigger(:start_listening, {:port => @options[:port] || test_framework.default_port})
+        EventDispatcher[:work].trigger(:preload)
+        EventDispatcher[:work].consumer_thread.join
+        # MessageQueue.stop(true)
         return true
       end
     end

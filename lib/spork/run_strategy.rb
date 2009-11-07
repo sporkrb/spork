@@ -42,7 +42,27 @@ class Spork::RunStrategy
   end
 
   def abort
-    do_abort
+    do_abort if running?
+  end
+
+  def abort_or_quit_server
+    if running?
+      abort
+      $stderr.puts "Running tests stopped.  Press CTRL-C again to quit."
+      $stderr.flush
+    else
+      Spork::EventDispatcher[:interrupt].trigger(:quit)
+    end
+  end
+
+  def setup_observers
+    Spork::EventDispatcher[:work].observe(:preload) { |payload| preload }
+    Spork::EventDispatcher[:work].observe(:run) { |args| run(*args) }
+    Spork::EventDispatcher[:interrupt].observe(:abort) { |payload| abort }
+    Spork::EventDispatcher[:interrupt].observe(:sigint) { |payload| abort_or_quit_server }
+    trap("SIGINT") do
+      Spork::EventDispatcher[:interrupt].trigger(:sigint)
+    end
   end
 
   protected

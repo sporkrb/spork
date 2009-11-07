@@ -8,29 +8,42 @@ require 'spork/app_framework.rb'
 #
 # (This was originally based off of spec_server.rb from rspec-rails (David Chelimsky), which was based on Florian Weber's TDDMate)
 class Spork::Server
-  attr_reader :run_strategy
   include Spork::CustomIOStreams
   
-  def initialize(options = {})
-    @run_strategy = options[:run_strategy]
-    @port = options[:port]
+  def self.setup_observers
+    Spork::EventDispatcher[:work].observe(:start_listening) do |options|
+      @instance = new(options).listen
+    end
+  end
+
+  def self.instance
+    @instance
   end
   
-  def self.run(options = {})
-    new(options).listen
+  def initialize(options = {})
+    @port = options[:port]
+    Spork::EventDispatcher[:interrupt].observe(:quit) { |options| quit }
+    Spork::EventDispatcher[:interrupt].observe(:restart) { |options| restart }
+    if Signal.list.has_key?("USR2")
+      trap("USR2") do
+        Spork::EventDispatcher[:interrupt].trigger(:abort)
+        Spork::EventDispatcher[:interrupt].trigger(:restart)
+      end
+    end
+
+    trap("SIGTERM") do
+      Spork::EventDispatcher[:interrupt].trigger(:abort)
+      Spork::EventDispatcher[:interrupt].trigger(:quit)
+    end
   end
   
   # Sets up signals and starts the DRb service. If it's successful, it doesn't return. Not ever.  You don't need to override this.
   def listen
     raise RuntimeError, "you must call Spork.using_spork! before starting the server" unless Spork.using_spork?
-    trap("SIGINT") { sig_int_received }
-    trap("SIGTERM") { abort; exit!(0) }
-    trap("USR2") { abort; restart } if Signal.list.has_key?("USR2")
     @drb_service = DRb.start_service("druby://127.0.0.1:#{port}", self)
     Spork.each_run { @drb_service.stop_service }
     stderr.puts "Spork is ready and listening on #{port}!"
     stderr.flush
-    DRb.thread.join
   end
   
   attr_accessor :port
@@ -44,11 +57,12 @@ class Spork::Server
   #
   # When implementing a test server, don't override this method: override run_tests instead.
   def run(argv, stderr, stdout)
-    run_strategy.run(argv, stderr, stdout)
+    abort
+    Spork::EventDispatcher[:work].trigger(:run, [argv, stderr, stdout], :synchronous => true)
   end
   
   def abort
-    run_strategy.abort
+    Spork::EventDispatcher[:interrupt].trigger(:abort, nil, :synchronous => true)
   end
 
   private
@@ -61,14 +75,7 @@ class Spork::Server
       exec(command_line)
     end
     
-    def sig_int_received
-      stdout.puts "\n"
-      if run_strategy.running?
-        abort
-        stderr.puts "Running tests stopped.  Press CTRL-C again to stop the server."
-        stderr.flush
-      else
-        exit!(0)
-      end
+    def quit
+      exit!(0)
     end
 end
