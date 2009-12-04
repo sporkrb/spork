@@ -1,3 +1,10 @@
+== 0.7.4
+
+* output tested rails versions to TESTED_RAILS_VERSIONS.txt
+* bugfix: "Custom helper aren't found when running spork"
+* bugfix: ruby-debug no longer blows up if breakpoint occurs during preload phase
+* more descriptive LoadError for spork/ext/ruby-debug
+
 == 0.7.3
 
 == fixes
