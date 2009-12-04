@@ -45,13 +45,6 @@ describe Spork::Runner do
     Spork::TestFramework::RSpec.stub!(:available?).and_return(true)
     Spork::TestFramework::Cucumber.stub!(:available?).and_return(false)
     
-    Spork::Runner.new(['rspec'], @out, @err).supported_test_frameworks_text.should == <<-EOF
-Supported test frameworks:
-( ) Cucumber
-( ) FakeFramework
-(*) RSpec
-
-Legend: ( ) - not detected in project   (*) - detected
-    EOF
+    Spork::Runner.new(['rspec'], @out, @err).supported_test_frameworks_text.should include("(*) RSpec")
   end
 end
