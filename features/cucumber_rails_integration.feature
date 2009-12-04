@@ -20,13 +20,6 @@ Feature: Cucumber integration with rails
         ENV['RAILS_ENV'] = "features"
         require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
 
-        require 'webrat'
-
-        Webrat.configure do |config|
-          config.mode = :rails
-        end
-
-        require 'webrat/core/matchers'
         require 'cucumber'
         require 'cucumber/formatter/unicode' # Comment out this line if you don't want Cucumber Unicode support
         require 'spec/rails'
