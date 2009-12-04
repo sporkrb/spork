@@ -113,7 +113,7 @@ task :test_rails do
       puts "Rails #{version} is not officially supported by Spork"
       puts "Why?  http://www.nabble.com/rspec-rails-fails-to-find-a-controller-name-td23223425.html"
       puts "-----------------------------------------------------"
-      results[version] = "unsupported"
+      results[version] = UNSUPPORTED_MSG
       next
     end
     
@@ -140,8 +140,12 @@ task :test_rails do
   end
   
   puts "Results:"
-  results.keys.sort.each do |version|
-    puts "#{version}:\t#{results[version]}"
+  File.open("TESTED_RAILS_VERSIONS.txt", 'wb') do |f|
+    results.keys.sort.each do |version|
+      s = "#{version}:\t#{results[version]}"
+      f.puts(s)
+      puts(s)
+    end
   end
   if results.values.any? { |r| r == FAIL_MSG }
     exit 1
