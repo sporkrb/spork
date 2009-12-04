@@ -98,6 +98,7 @@ rescue LoadError
   puts "Rake SshDirPublisher is unavailable or your rubyforge environment is not configured."
 end
 
+desc "Test all supported versions of rails"
 task :test_rails do
   FAIL_MSG = "!! FAIL !!"
   OK_MSG = "OK"
