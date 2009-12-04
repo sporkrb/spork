@@ -21,7 +21,6 @@ Feature: Rails Delayed Work arounds
       end
       """
     And the application has a model, observer, route, and application helper
-  Scenario: within a view, calling helper methods from an included module in ApplicationHelper
     Given a file named "app/helpers/application_helper.rb" with:
       """
       module ApplicationHelper
@@ -45,25 +44,55 @@ Feature: Rails Delayed Work arounds
         end
       end
       """
-    Given a file named "app/controllers/users_helper.rb" with:
+    Given a file named "app/helpers/misc_helper.rb" with:
+      """
+      module MiscHelper
+        def misc_helper_method
+          'hello miscellaneous'
+        end
+      end
+      """
+    Given a file named "app/helpers/users_helper.rb" with:
       """
       module UsersHelper
       end
       """
     Given a file named "app/views/users/index.html.erb" with:
       """
-      <%= reverse_text('listing users'.reverse) %>
+        Original View
       """
+  Scenario: within a view rendered by a controller, calling helper methods from an included module in ApplicationHelper
     Given a file named "spec/controllers/users_controller_spec.rb" with:
       """
       describe UsersController do
         integrate_views
         it "renders a page, using a method inherited from ApplicationController" do
           get :index
+          response.body.should_not include('Original View')
+          puts "Views are not being cached when rendering from a controller"
+
           response.body.should include('listing users')
-          puts "Controller stack is functioning"
-          response.body.should include('Here is a list of users')
-          puts "Views are not being cached"
+          puts "Controller stack is functioning when rendering from a controller"
+
+          response.body.should include('hello miscellaneous')
+          puts "All helper modules were included when rendering from a controller"
+        end
+      end
+      """
+    Given a file named "spec/views/index.html.erb_spec.rb" with:
+      """
+      describe "/users/index.html.erb" do
+
+        it "renders the view" do
+          render
+          response.body.should_not include('Original View')
+          puts "Views are not being cached when rendering directly"
+
+          response.body.should include('listing users')
+          puts "Controller stack is functioning when rendering directly"
+
+          response.body.should include('hello miscellaneous')
+          puts "All helper modules were included when rendering directly"
         end
       end
       """
@@ -71,10 +100,16 @@ Feature: Rails Delayed Work arounds
     And the contents of "app/views/users/index.html.erb" are changed to:
       """
       <%= reverse_text('listing users'.reverse) %>
+      <%= misc_helper_method rescue nil %>
       <p>Here is a list of users</p>
       """
       
     And I run spec --drb spec/controllers/users_controller_spec.rb
-    Then the output should contain "Controller stack is functioning"
-    Then the output should contain "Views are not being cached"
-  
+    Then the output should contain "Controller stack is functioning when rendering from a controller"
+    Then the output should contain "Views are not being cached when rendering from a controller"
+    Then the output should contain "All helper modules were included when rendering from a controller"
+
+    And I run spec --drb spec/views/index.html.erb_spec.rb
+    Then the output should contain "Controller stack is functioning when rendering directly"
+    Then the output should contain "Views are not being cached when rendering directly"
+    Then the output should contain "All helper modules were included when rendering directly"
