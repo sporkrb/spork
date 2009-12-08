@@ -79,9 +79,9 @@ Or, you could add the following flag to your +spec.opts+ file.
 
 === Cucumber
 
-Cucumber --drb support for spork is not official yet (but it works).  It's the hottest sauce boiling on the world wide web right now.  If you can't wait to try it, head on over to Cucumber core-team member Ben Mabey's drb branch and build your own cucumber gem:
+Cucumber has DRb support (see http://wiki.github.com/aslakhellesoy/cucumber/spork-and-drb )
 
-  http://github.com/bmabey/cucumber/tree/drb_server
+  cucumber --drb
 
 Use this as a guideline when "Sporking" your features/support/env.rb file
 
