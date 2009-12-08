@@ -19,7 +19,7 @@ class Spork::TestFramework
     end
 
     def message
-      "I can't find the file #{e.test_framework.helper_file} for the #{e.test_framework.short_name} testing framework.\nAre you running me from the project directory?"
+      "I can't find the file #{@framework.helper_file} for the #{@framework.short_name} testing framework.\nAre you running me from the project directory?"
     end
   end
 
