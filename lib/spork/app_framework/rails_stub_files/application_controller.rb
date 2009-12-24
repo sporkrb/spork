@@ -9,11 +9,11 @@ class ::ApplicationController < ActionController::Base
 
     def reapply_inheritance!
       @@preloading = false
-      @_descendants.each do |descendant|
+      Array(@_descendants).each do |descendant|
         descendant.master_helper_module.send(:include, master_helper_module)
         descendant.send(:default_helper_module!)
 
-        descendant.respond_to?(:reapply_inheritance) && descendant.reapply_inheritance!
+        descendant.respond_to?(:reapply_inheritance!) && descendant.reapply_inheritance!
       end
     end
   end
