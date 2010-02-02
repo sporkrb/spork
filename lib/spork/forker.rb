@@ -41,7 +41,7 @@ class Spork::Forker
       begin
         @result = Marshal.load(@server_io)
         Marshal.dump('ACK', @server_io)
-      rescue ForkDiedException
+      rescue ForkDiedException, EOFError
         @result = nil
       end
     end
