@@ -8,7 +8,7 @@ class Spork::AppFramework
     :Rails => lambda {
       File.exist?("config/environment.rb") && File.read("config/environment.rb").include?('RAILS_GEM_VERSION')
     }
-  }
+  } unless defined? SUPPORTED_FRAMEWORKS
   
   def self.setup_autoload
     ([:Unknown] + SUPPORTED_FRAMEWORKS.keys).each do |name|
