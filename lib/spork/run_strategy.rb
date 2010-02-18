@@ -28,7 +28,11 @@ class Spork::RunStrategy
 
   protected
     def self.factory(test_framework)
-      Spork::RunStrategy::Forking.new(test_framework)
+      if Spork::RunStrategy::Forking.available?
+        Spork::RunStrategy::Forking.new(test_framework)
+      else
+        Spork::RunStrategy::Magazine.new(test_framework)
+      end
     end
 
     def self.inherited(subclass)
