@@ -4,17 +4,17 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |s|
-    s.name = %q{spork}
+    s.name = %q{milhouse-spork}
     s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-    s.authors = ["Tim Harper"]
+    s.authors = ["Tim Harper", "Donald Parish"]
     s.date = Date.today.to_s
     s.description = %q{A forking Drb spec server}
-    s.email = ["timcharper+spork@gmail.com"]
+    s.email = ["timcharper+spork@gmail.com", "donald.parish@gmail.com"]
     s.executables = ["spork"]
     s.extra_rdoc_files = ["README.rdoc", "MIT-LICENSE"]
     s.files = ["geminstaller.yml", "README.rdoc", "MIT-LICENSE"] + Dir["lib/**/*"] + Dir["assets/**/*"] + Dir["spec/**/*"] + Dir["features/**/*"]
     s.has_rdoc = true
-    s.homepage = %q{http://github.com/timcharper/spork}
+    s.homepage = %q{http://github.com/milhouse/spork}
     s.rdoc_options = ["--main", "README.rdoc"]
     s.require_paths = ["lib"]
     s.rubyforge_project = %q{spork}
