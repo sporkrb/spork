@@ -27,7 +27,7 @@ class Spork::Server
     trap("SIGTERM") { abort; exit!(0) }
     trap("USR2") { abort; restart } if Signal.list.has_key?("USR2")
     @drb_service = DRb.start_service("druby://127.0.0.1:#{port}", self)
-    Spork.each_run { @drb_service.stop_service }
+    Spork.each_run { @drb_service.stop_service } if @run_strategy.class == Spork::RunStrategy::Forking
     stderr.puts "Spork is ready and listening on #{port}!"
     stderr.flush
     DRb.thread.join
