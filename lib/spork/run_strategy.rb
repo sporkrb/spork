@@ -28,10 +28,10 @@ class Spork::RunStrategy
 
   protected
     def self.factory(test_framework)
-      if Spork::RunStrategy::Forking.available?
-        Spork::RunStrategy::Forking.new(test_framework)
-      else
+      if RUBY_PLATFORM =~ /mswin/
         Spork::RunStrategy::Magazine.new(test_framework)
+      else
+        Spork::RunStrategy::Forking.new(test_framework)
       end
     end
 
