@@ -5,6 +5,6 @@ require 'rinda/tuplespace'
 DRb.start_service
 
 Rinda::RingServer.new(Rinda::TupleSpace.new)
-puts "Ringer Server listening for connections...\n\n"
+puts "Rinda Ring Server listening for connections...\n\n"
 $stdout.flush
 DRb.thread.join
