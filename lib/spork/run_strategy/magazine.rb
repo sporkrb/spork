@@ -3,7 +3,7 @@
 # as they come in
 require 'drb'
 require 'rinda/ring'
-require 'win32/process'
+require 'win32/process' if RUBY_PLATFORM =~ /mswin|mingw/
 
 $:.unshift(File.dirname(__FILE__))
 require 'magazine/magazine_slave'
