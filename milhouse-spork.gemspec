@@ -5,14 +5,14 @@
 
 Gem::Specification.new do |s|
   s.name = %q{milhouse-spork}
-  s.version = "0.7.5.1"
+  s.version = "0.7.5.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Tim Harper", "Donald Parish"]
+  s.authors = ["Donald Parish","Tim Harper"]
   s.date = %q{2010-02-23}
   s.default_executable = %q{spork}
   s.description = %q{A Windows fork of a forking Drb spec server}
-  s.email = ["timcharper+spork@gmail.com", "donald.parish@gmail.com"]
+  s.email = ["donald.parish@gmail.com", "timcharper+spork@gmail.com"]
   s.executables = ["spork"]
   s.extra_rdoc_files = [
     "MIT-LICENSE",
@@ -75,7 +75,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/milhouse/spork}
   s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
-  s.requirements = ["win32-process >=0.6.1 for Windows"]
+  s.requirements = ["gem win32-process >=0.6.1 (only for Windows)"]
   s.rubyforge_project = %q{spork}
   s.rubygems_version = %q{1.3.6}
   s.summary = %q{spork}
