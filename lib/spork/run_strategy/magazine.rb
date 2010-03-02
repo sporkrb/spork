@@ -41,7 +41,7 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
     Slave_Id_Range.each do |id|
       start_slave(id)
     end
-    puts "---- start to fill pool...------"; $stdout.flush
+    puts "  -- start to fill pool..."; $stdout.flush
   end
 
   def start_slave(id)
@@ -59,7 +59,7 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
         DRb.start_service
         ts = Rinda::RingFinger.primary
         if ts.read_all([:name, :MagazineSlave, nil, nil]).size > 0
-          print '  --> take tuple'; stdout.flush
+          print '  <-- take tuple'; stdout.flush
           tuple = ts.take([:name, :MagazineSlave, nil, nil])
           slave = tuple[2]
           id = tuple[3]
