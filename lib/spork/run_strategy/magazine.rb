@@ -65,11 +65,12 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
           id = tuple[3]
 
           puts "(#{slave.id_num}); slave.run..."; $stdout.flush
-          slave.run(argv,stderr,stdout)
-          puts "  <-- (#{slave.id_num});run done"; $stdout.flush
-
-          restart_slave(id)
-#           kill_all_processes
+          begin
+            slave.run(argv,stderr,stdout)
+            puts "   -- (#{slave.id_num});run done"; $stdout.flush
+          ensure
+            restart_slave(id)
+          end
         else
           puts '- NO tuple'; $stdout.flush
         end
