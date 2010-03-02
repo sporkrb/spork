@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{milhouse-spork}
-  s.version = "0.7.5.2"
+  s.version = "0.7.5.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Donald Parish","Tim Harper"]
@@ -72,7 +72,7 @@ Gem::Specification.new do |s|
      "spec/support/fake_framework.rb",
      "spec/support/fake_run_strategy.rb"
   ]
-  s.homepage = %q{http://github.com/milhouse/spork}
+  s.homepage = %q{http://wiki.github.com/Milhouse/spork/}
   s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.requirements = ["gem win32-process >=0.6.1 (only for Windows)"]
