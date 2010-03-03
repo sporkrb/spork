@@ -1,3 +1,7 @@
+== 0.7.6
+
+* Kernel#at_exit hooks defined during a run (child process) are called at the termination of said process.  (Kernel#at_exit hooks defined during pre-fork initialization aren't called until the server shuts down)
+
 == 0.7.4
 
 * output tested rails versions to TESTED_RAILS_VERSIONS.txt
