@@ -15,7 +15,8 @@ Feature: At exit during each run
 
       Spork.each_run do
         puts "running"
-        at_exit { puts "each_run at_exit called" }
+        at_exit { printf "first " }
+        at_exit { printf "second " }
       end
 
       """
@@ -30,5 +31,5 @@ Feature: At exit during each run
       """
     When I fire up a spork instance with "spork rspec"
     And I run spec --drb spec/did_it_work_spec.rb
-    Then the output should contain "each_run at_exit called"
+    Then the output should contain "second first"
     Then the output should not contain "prefork at_exit called"

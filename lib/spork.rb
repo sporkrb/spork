@@ -77,8 +77,9 @@ module Spork
     
     # Used by the server.  Called to run all of the after_each_run blocks.
     def exec_after_each_run
-      after_each_run_procs.each { |p| p.call }
-      after_each_run_procs.clear
+      # processes in reverse order similar to at_exit
+      while p = after_each_run_procs.pop; p.call; end
+      true
     end
 
     # Traps an instance method of a class (or module) so any calls to it don't actually run until Spork.exec_each_run
