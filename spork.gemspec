@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{spork}
-  s.version = "0.7.7"
+  s.version = "0.7.8"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tim Harper"]
@@ -44,6 +44,7 @@ Gem::Specification.new do |s|
      "lib/spork/app_framework/unknown.rb",
      "lib/spork/custom_io_streams.rb",
      "lib/spork/diagnoser.rb",
+     "lib/spork/ext/rails-reloader.rb",
      "lib/spork/ext/ruby-debug.rb",
      "lib/spork/forker.rb",
      "lib/spork/run_strategy.rb",
@@ -103,3 +104,4 @@ Gem::Specification.new do |s|
   else
   end
 end
+

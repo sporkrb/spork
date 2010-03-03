@@ -1,3 +1,7 @@
+== 0.7.8
+
+* Experimental rails-reloader snippet added.
+
 == 0.7.7
 
 * prevent exceptions not caught from invoking Prefork at_exit hooks
