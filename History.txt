@@ -1,3 +1,8 @@
+== 0.7.7
+
+* prevent exceptions not caught from invoking Prefork at_exit hooks
+* process at_exit hooks trapped inside of an each_run in reverse order, similar to Kernel#at_exit
+
 == 0.7.6
 
 * Kernel#at_exit hooks defined during a run (child process) are called at the termination of said process.  (Kernel#at_exit hooks defined during pre-fork initialization aren't called until the server shuts down)
