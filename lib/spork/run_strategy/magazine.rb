@@ -41,7 +41,10 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
     Slave_Id_Range.each do |id|
       start_slave(id)
     end
-    puts "  -- start to fill pool..."; $stdout.flush
+    puts "  -- Starting to fill pool..."
+    puts "     Wait until at least one slave is provided before running tests..."
+    puts "  ** CTRL+BREAK to stop Spork and kill all ruby slave processes **"
+    $stdout.flush
   end
 
   def start_slave(id)
