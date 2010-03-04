@@ -37,6 +37,16 @@ module Spork
       end
     end
     
+    # Run a block after specs are run.
+    #
+    # == Parameters
+    #
+    # * +prevent_double_run+ - Pass false to disable double run prevention
+    def after_each_run(prevent_double_run = true, &block)
+      return if prevent_double_run && already_ran?(caller.first)
+      after_each_run_procs << block
+    end
+
     # Used by the server. Sets the state to activate spork. Otherwise, prefork and each_run are run in passive mode, allowing specs without a Spork server.
     def using_spork!
       @state = :using_spork
@@ -59,11 +69,19 @@ module Spork
     
     # Used by the server.  Called to run all of the prefork blocks.
     def exec_each_run(&block)
+      activate_after_each_run_at_exit_hook
       each_run_procs.each { |p| p.call }
       each_run_procs.clear
       yield if block_given?
     end
     
+    # Used by the server.  Called to run all of the after_each_run blocks.
+    def exec_after_each_run
+      # processes in reverse order similar to at_exit
+      while p = after_each_run_procs.pop; p.call; end
+      true
+    end
+
     # Traps an instance method of a class (or module) so any calls to it don't actually run until Spork.exec_each_run
     def trap_method(klass, method_name)
       method_name_without_spork, method_name_with_spork = alias_method_names(method_name, :spork)
@@ -98,6 +116,14 @@ module Spork
     end
 
     private
+      def activate_after_each_run_at_exit_hook
+        Kernel.module_eval do
+          def at_exit(&block)
+            Spork.after_each_run(false, &block)
+          end
+        end
+      end
+
       def alias_method_names(method_name, feature)
         /^(.+?)([\?\!]{0,1})$/.match(method_name.to_s)
         ["#{$1}_without_spork#{$2}", "#{$1}_with_spork#{$2}"]
@@ -121,6 +147,10 @@ module Spork
       
       def each_run_procs
         @each_run_procs ||= []
+      end
+
+      def after_each_run_procs
+        @after_each_run_procs ||= []
       end
   end
 end

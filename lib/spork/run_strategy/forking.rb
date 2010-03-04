@@ -10,7 +10,9 @@ class Spork::RunStrategy::Forking < Spork::RunStrategy
       $stdout, $stderr = stdout, stderr
       load test_framework.helper_file
       Spork.exec_each_run
-      test_framework.run_tests(argv, stderr, stdout)
+      result = test_framework.run_tests(argv, stderr, stdout)
+      Spork.exec_after_each_run
+      result
     end
     @child.result
   end

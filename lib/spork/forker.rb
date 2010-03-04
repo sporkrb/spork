@@ -16,15 +16,16 @@ class Spork::Forker
     return unless block_given?
     @child_io, @server_io = UNIXSocket.socketpair
     @child_pid = Kernel.fork do
-      @server_io.close
-      Marshal.dump(yield, @child_io)
-      # wait for the parent to acknowledge receipt of the result.
-      master_response = 
-        begin
-          Marshal.load(@child_io)
-        rescue EOFError
-          nil
-        end
+      begin
+        @server_io.close
+        Marshal.dump(yield, @child_io)
+        # wait for the parent to acknowledge receipt of the result.
+        master_response = Marshal.load(@child_io)
+      rescue EOFError
+        nil
+      rescue Exception => e
+        puts "Exception encountered: #{e.inspect}\nbacktrace:\n#{e.backtrace * %(\n)}"
+      end
       
       # terminate, skipping any at_exit blocks.
       exit!(0)
