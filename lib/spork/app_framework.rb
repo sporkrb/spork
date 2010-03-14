@@ -5,6 +5,9 @@ class Spork::AppFramework
   #
   # This is used to reduce the amount of code needed to be loaded - only the detected application framework's support code is loaded.
   SUPPORTED_FRAMEWORKS = {
+    :Padrino => lambda {
+      File.exist?("config/boot.rb") && File.read("config/boot.rb").include?('PADRINO')
+    },
     :Rails => lambda {
       File.exist?("config/environment.rb") && File.read("config/environment.rb").include?('RAILS_GEM_VERSION')
     }
