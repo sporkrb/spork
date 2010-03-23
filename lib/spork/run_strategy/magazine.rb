@@ -49,7 +49,7 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
 
   def start_slave(id)
     app_pwd = Dir.pwd  # path running app in
-    app = "ruby magazine_slave_provider.rb #{id} #{app_pwd} #{@test_framework.short_name}"
+    app = "ruby magazine_slave_provider.rb #{id} '#{app_pwd}' #{@test_framework.short_name}"
     @pids[id] = Process.create( :app_name => app, :cwd => @path ).process_id
   end
 
