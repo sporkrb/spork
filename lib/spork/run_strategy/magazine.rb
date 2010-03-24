@@ -3,7 +3,7 @@
 # as they come in
 require 'drb'
 require 'rinda/ring'
-require 'win32/process' if RUBY_PLATFORM =~ /mswin|mingw/
+require 'win32/process' if RUBY_PLATFORM =~ /mswin|mingw/  and RUBY_VERSION < '1.9.1'
 
 $:.unshift(File.dirname(__FILE__))
 require 'magazine/magazine_slave'
@@ -34,7 +34,7 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
 
   def start_Rinda_ringserver
     app_name = 'ruby ring_server.rb'
-    Process.create( :app_name => app_name, :cwd => @path ).process_id
+    spawn_process(app_name)    
   end
 
   def fill_slave_pool
@@ -50,9 +50,16 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
   def start_slave(id)
     app_pwd = Dir.pwd  # path running app in
     app = "ruby magazine_slave_provider.rb #{id} '#{app_pwd}' #{@test_framework.short_name}"
-    @pids[id] = Process.create( :app_name => app, :cwd => @path ).process_id
+    @pids[id] = spawn_process(app)
   end
 
+  def spawn_process(app)
+    if RUBY_VERSION < '1.9.1'
+      Process.create( :app_name => app, :cwd => @path ).process_id
+    else
+      Process.spawn( app, :chdir => @path )
+    end
+  end
 
   def self.available?
     true
@@ -81,13 +88,13 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
 
   def restart_slave(id)
     pid   = @pids[id]
-    Process.kill(4, pid)
+    Process.kill(9, pid)
     start_slave(id)
   end
 
   def kill_all_processes
 
-    @pids.each {|pid| Process.kill(4, pid)}
+    @pids.each {|pid| Process.kill(9, pid)}
     puts "\nKilling processes."; $stdout.flush
   end
 

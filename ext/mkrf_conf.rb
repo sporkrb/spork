@@ -9,7 +9,7 @@ end
 inst = Gem::DependencyInstaller.new
 begin
   inst.install "rake"
-  inst.install "win32-process", "~> 0.6.1" if RUBY_PLATFORM =~ /mswin|mingw/
+  inst.install "win32-process", "~> 0.6.1" if RUBY_PLATFORM =~ /mswin|mingw/ and RUBY_VERSION < '1.9.1'
 rescue
   exit(1)
 end 
