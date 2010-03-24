@@ -134,7 +134,7 @@ module Spork
       end
       
       def expanded_caller(caller_line)
-        file, line = caller_line.split(":")
+        file, line = caller_line.split(/:(\d+)/)
         line.gsub(/:.+/, '')
         File.expand_path(file, Dir.pwd) + ":" + line
       end
