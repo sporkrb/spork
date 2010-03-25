@@ -1,3 +1,7 @@
+== 0.8.2
+
+* Ruby 1.9.1 windows support (Donald Parish)
+
 == 0.8.1
 
 * bugfix: prevent double run functionality didn't work on Windows. (thanks cbaclig)
