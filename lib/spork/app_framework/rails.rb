@@ -1,5 +1,5 @@
 class Spork::AppFramework::Rails < Spork::AppFramework
-  
+
   # TODO - subclass this out to handle different versions of rails
   # Also... this is the nastiest duck punch ever.  Clean this up.
   module NinjaPatcher
@@ -9,7 +9,7 @@ class Spork::AppFramework::Rails < Spork::AppFramework
           alias :load_environment_without_spork :load_environment
           alias :load_environment :load_environment_with_spork
         end
-        
+
         def self.run_with_spork(*args, &block) # it's all fun and games until someone gets an eye poked out
           if ENV['RAILS_ENV']
             Object.send(:remove_const, :RAILS_ENV)
@@ -17,7 +17,7 @@ class Spork::AppFramework::Rails < Spork::AppFramework
           end
           run_without_spork(*args, &block)
         end
-        
+
         class << self
           unless method_defined?(:run_without_spork)
             alias :run_without_spork :run
@@ -26,13 +26,13 @@ class Spork::AppFramework::Rails < Spork::AppFramework
         end
       end
     end
-    
+
     def load_environment_with_spork
       result = load_environment_without_spork
       install_hooks
       result
     end
-    
+
     def install_hooks
       auto_reestablish_db_connection
       delay_observer_loading
@@ -41,13 +41,13 @@ class Spork::AppFramework::Rails < Spork::AppFramework
       delay_route_loading
       delay_eager_view_loading
     end
-    
+
     def reset_rails_env
       return unless ENV['RAILS_ENV']
       Object.send(:remove_const, :RAILS_ENV)
       Object.const_set(:RAILS_ENV, ENV['RAILS_ENV'].dup)
     end
-    
+
     def delay_observer_loading
       if ::Rails::Initializer.instance_methods.include?('load_observers')
         Spork.trap_method(::Rails::Initializer, :load_observers)
@@ -57,13 +57,13 @@ class Spork::AppFramework::Rails < Spork::AppFramework
         Spork.trap_class_method(::ActionController::Dispatcher, :define_dispatcher_callbacks) if ActionController::Dispatcher.respond_to?(:define_dispatcher_callbacks)
       end
     end
-    
+
     def delay_app_preload
-      if ::Rails::Initializer.instance_methods.include?('load_application_classes')
+      if ::Rails::Initializer.instance_methods.map(&:to_sym).include?(:load_application_classes)
         Spork.trap_method(::Rails::Initializer, :load_application_classes)
       end
     end
-    
+
     def delay_application_controller_loading
       if application_controller_source = ["#{Dir.pwd}/app/controllers/application.rb", "#{Dir.pwd}/app/controllers/application_controller.rb"].find { |f| File.exist?(f) }
         application_helper_source = "#{Dir.pwd}/app/helpers/application_helper.rb"
@@ -77,7 +77,7 @@ class Spork::AppFramework::Rails < Spork::AppFramework
         end
       end
     end
-    
+
     def auto_reestablish_db_connection
       if Object.const_defined?(:ActiveRecord)
         Spork.each_run do
@@ -87,20 +87,20 @@ class Spork::AppFramework::Rails < Spork::AppFramework
         end
       end
     end
-    
+
     def delay_route_loading
-      if ::Rails::Initializer.instance_methods.include?('initialize_routing')
+      if ::Rails::Initializer.instance_methods.map(&:to_sym).include?(:initialize_routing)
         Spork.trap_method(::Rails::Initializer, :initialize_routing)
       end
     end
-    
+
     def delay_eager_view_loading
-      # So, in testing mode it seems it would be optimal to not eager load 
+      # So, in testing mode it seems it would be optimal to not eager load
       # views (as your may only run a test that uses one or two views).
-      # However, I decided to delay eager loading rather than force it to 
-      # disable because you may wish to eager load your views (I.E. you're 
+      # However, I decided to delay eager loading rather than force it to
+      # disable because you may wish to eager load your views (I.E. you're
       # testing concurrency)
-      
+
       # Rails 2.3.x +
       if defined?(::ActionView::Template::EagerPath)
         Spork.trap_method(::ActionView::Template::EagerPath, :load!)
@@ -112,7 +112,7 @@ class Spork::AppFramework::Rails < Spork::AppFramework
       # Rails 2.0.5 - 2.1.x don't appear to eager cache views.
     end
   end
-  
+
   def preload(&block)
     STDERR.puts "Preloading Rails environment"
     STDERR.flush
@@ -120,25 +120,25 @@ class Spork::AppFramework::Rails < Spork::AppFramework
     preload_rails
     yield
   end
-  
+
   def entry_point
     @entry_point ||= File.expand_path("config/environment.rb", Dir.pwd)
   end
-  
+
   alias :environment_file :entry_point
-  
+
   def boot_file
     @boot_file ||= File.join(File.dirname(environment_file), 'boot')
   end
-  
+
   def environment_contents
     @environment_contents ||= File.read(environment_file)
   end
-  
+
   def vendor
     @vendor ||= File.expand_path("vendor/rails", Dir.pwd)
   end
-  
+
   def version
     @version ||= (
       if /^[^#]*RAILS_GEM_VERSION\s*=\s*["']([!~<>=]*\s*[\d.]+)["']/.match(environment_contents)
@@ -148,11 +148,11 @@ class Spork::AppFramework::Rails < Spork::AppFramework
       end
     )
   end
-  
+
   def preload_rails
     Object.const_set(:RAILS_GEM_VERSION, version) if version
     require boot_file
     ::Rails::Initializer.send(:include, Spork::AppFramework::Rails::NinjaPatcher)
   end
-  
+
 end
