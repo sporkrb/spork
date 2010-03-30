@@ -49,7 +49,7 @@ class Spork::AppFramework::Rails < Spork::AppFramework
     end
 
     def delay_observer_loading
-      if ::Rails::Initializer.instance_methods.include?('load_observers')
+      if ::Rails::Initializer.instance_methods.map(&:to_sym).include?(:load_observers)
         Spork.trap_method(::Rails::Initializer, :load_observers)
       end
       if Object.const_defined?(:ActionController)
