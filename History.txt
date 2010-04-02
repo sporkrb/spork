@@ -1,3 +1,7 @@
+== 0.8.3
+
+* addresses an issue where spork conditional dependency installation would unnecesarily fail
+
 == 0.8.2
 
 * Ruby 1.9.1 windows support (Donald Parish)
