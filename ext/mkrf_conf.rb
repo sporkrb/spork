@@ -15,7 +15,8 @@ if RUBY_PLATFORM =~ /mswin|mingw/ and RUBY_VERSION < '1.9.1'
   STDERR.puts "installing windows dependencies"
   begin
     inst.install "win32-process", "~> 0.6.1"
-  rescue
+  rescue => e
+    STDERR.puts "Failed to install necessary dependency gem win32-process: #{e}"
     exit(1)
   end
 end
