@@ -1,3 +1,9 @@
+== 0.8.4
+
+* Add adapter for Padrino (Elliot Winkler)
+* Fix the diagnoser so that when it overrides Kernel#require it doesn't step on Bundler's toes (Elliot Winkler)
+* show verbose error when failing to install win32-process gem (Tim Harper)
+
 == 0.8.3
 
 * addresses an issue where spork conditional dependency installation would unnecesarily fail
