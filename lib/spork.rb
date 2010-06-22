@@ -136,7 +136,11 @@ module Spork
       def expanded_caller(caller_line)
         file, line = caller_line.split(/:(\d+)/)
         line.gsub(/:.+/, '')
-        File.expand_path(file, Dir.pwd) + ":" + line
+        expanded = File.expand_path(file, Dir.pwd) + ":" + line
+        if ENV['OS'] == 'Windows_NT' # windows
+          expanded = expanded[2..-1]
+        end
+        expanded
       end
       
       def already_ran?(caller_script_and_line)
