@@ -55,7 +55,7 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
   def spawn_process(app)
 
     if IO.respond_to?(:popen4)
-      # jruby
+      # jruby 1.8 has no easy way to get a pid
       Dir.chdir(@path) do
         pid,r,w,e = IO.popen4
         [r,w,e].each{|stream|

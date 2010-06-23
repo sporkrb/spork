@@ -41,4 +41,4 @@ describe Spork::Forker do
       forker.running?.should == false
     end
   end
-end
+end unless windows?
