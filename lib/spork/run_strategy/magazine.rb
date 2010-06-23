@@ -8,7 +8,6 @@ require 'win32/process' if RUBY_PLATFORM =~ /mswin|mingw/  and RUBY_VERSION < '1
 $:.unshift(File.dirname(__FILE__))
 require 'magazine/magazine_slave'
 
-
 class Spork::RunStrategy::Magazine < Spork::RunStrategy
 
   Slave_Id_Range = 1..2 # Ringserver uses id: 0. Slave use: 1..MAX_SLAVES
@@ -34,7 +33,7 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
 
   def start_Rinda_ringserver
     app_name = 'ruby ring_server.rb'
-    spawn_process(app_name)    
+    spawn_process(app_name)
   end
 
   def fill_slave_pool
@@ -54,6 +53,18 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
   end
 
   def spawn_process(app)
+
+    if IO.respond_to?(:popen4)
+      # jruby
+      Dir.chdir(@path) do
+        pid,r,w,e = IO.popen4
+        [r,w,e].each{|stream|
+          Thread.new { puts stream.read }
+        }
+      end
+      return pid
+    end
+    
     if RUBY_VERSION < '1.9.1'
       Process.create( :app_name => app, :cwd => @path ).process_id
     else
@@ -92,9 +103,19 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
     start_slave(id)
   end
 
+  def windows?
+    ENV['OS'] == 'Windows_NT'
+  end
+  
   def kill_all_processes
 
-    @pids.each {|pid| Process.kill(9, pid)}
+    @pids.each {|pid| 
+      if windows?
+        system("taskkill /f /pid #{pid}")
+      else
+        Process.kill(9, pid)
+      end
+    }
     puts "\nKilling processes."; $stdout.flush
   end
 
