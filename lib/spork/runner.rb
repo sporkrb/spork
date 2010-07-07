@@ -1,4 +1,5 @@
 require 'optparse'
+require 'stringio'
 
 module Spork
   # This is used by bin/spork. It's wrapped in a class because it's easier to test that way.
