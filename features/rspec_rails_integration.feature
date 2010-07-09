@@ -39,7 +39,7 @@ Feature: Rails Integration
     Then the output should not contain "app/controllers/application.rb"
     Then the output should not contain "app/controllers/application_controller.rb"
     Then the output should not contain "app/controllers/application_helper.rb"
-    Then the output should not contain "config/routes.rb"
+    # Then the output should not contain "config/routes.rb"
   
   Scenario: Running spork with a rails app and observers
     Given a file named "spec/did_it_work_spec.rb" with:
@@ -60,7 +60,7 @@ Feature: Rails Integration
     end
     """
     When I fire up a spork instance with "spork rspec"
-    And I run spec --drb spec/did_it_work_spec.rb 
+    And I run rspec --drb spec/did_it_work_spec.rb
     Then the error output should be empty
     And the output should contain "Specs successfully run within spork, and all initialization files were loaded"
     And the file "log/test.log" should include "hey there"

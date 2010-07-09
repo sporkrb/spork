@@ -31,7 +31,7 @@ Given /^the following code appears in "([^\"]*)" after \/([^\\\/]*)\/:$/ do |fil
   end
 end
 
-When /^I run (spork|spec|cucumber)(| .*)$/ do |command, args|
+When /^I run (spork|rspec|cucumber)(| .*)$/ do |command, args|
   run(localized_command(command, args))
 end
 
