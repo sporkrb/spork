@@ -12,6 +12,14 @@ Spork is Tim Harper's implementation of test server (similar to the script/spec_
 
 Spork runs on POSIX systems using fork. It also runs on windows by pre-populating a pool of ready processes (referred to here as the "magazine" strategy).
 
+== RAILS 3
+
+Rails 3.0 support is in progress, but is not ready.  The master branch is stable and works with rails 2.3.x.
+
+Rspec 2.x support is not ready either.
+
+If you want to help, see the rails3 branch.
+
 == Supported Testing Frameworks
 
 * Rspec
