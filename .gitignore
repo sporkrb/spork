@@ -6,3 +6,4 @@ pkg
 tmp/
 *.project
 ext/Rakefile
+.bundle

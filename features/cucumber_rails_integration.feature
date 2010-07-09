@@ -45,13 +45,6 @@ Feature: Cucumber integration with rails
         Scenario: did it work again?
           Then it should work
       """
-    And a file named "features/cucumber_rails_fr.feature" with:
-      """
-      # language: fr
-      Fonction: French
-        Scénario: ca marche?
-          Alors ca marche
-      """
     And a file named "features/support/cucumber_rails_helper.rb" with:
       """
       $loaded_stuff << 'features/support/cucumber_rails_helper.rb'

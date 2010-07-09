@@ -88,6 +88,32 @@ Use this as a guideline when "Sporking" your features/support/env.rb file
 
   http://gist.github.com/123370
 
+== Running the Spork test suite
+
+If you wish to hack on spork, you will want to run the automated test suite to make sure your changes don't break anything.  Spork uses bundler to manage and install dependencies.  To start:
+
+  bundle install
+
+Then, to run the specs:
+
+  bundle exec spec spec/
+
+(or, alternatively...)
+
+  bundle exec rake
+
+=== running features ===
+
+Basically, like this:
+
+  bundle exec cucumber features
+
+If you wish to test with another Gemfile:
+
+  GEMFILE=rails2.3 bundle exec cucumber features
+
+Where rails2.3 is one of support/gemfiles/* (rails2.3 is the default)
+
 == Some potential issues and ways to overcome them:
 
 See http://wiki.github.com/timcharper/spork/troubleshooting

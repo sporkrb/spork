@@ -1,17 +1,20 @@
 require 'rubygems'
+require 'pathname'
 require 'fileutils'
 require 'forwardable'
 require 'tempfile'
 require 'spec/expectations'
 require 'timeout'
-require 'spork'
 
 require(File.dirname(__FILE__) + '/background_job.rb')
 
+SPORK_ROOT    = Pathname.new(File.expand_path('../../', File.dirname(__FILE__)))
 class SporkWorld
-  BINARY        = File.expand_path(File.dirname(__FILE__) + '/../../bin/spork')
   RUBY_BINARY   = File.join(Config::CONFIG['bindir'], Config::CONFIG['ruby_install_name'])
-  SANDBOX_DIR   = File.expand_path(File.join(File.dirname(__FILE__), '../../tmp/sandbox'))
+  BINARY        = SPORK_ROOT + 'bin/spork'
+  SANDBOX_DIR   = SPORK_ROOT + "tmp/sandbox"
+  GEMFILES_ROOT = SPORK_ROOT + "features/gemfiles"
+  SPORK_LIBDIR  = SPORK_ROOT + "lib"
   
   extend Forwardable
   def_delegators SporkWorld, :sandbox_dir, :spork_lib_dir
@@ -70,7 +73,7 @@ class SporkWorld
     stderr_file = Tempfile.new('spork')
     stderr_file.close
     in_current_dir do
-      @last_stdout = `#{command} 2> #{stderr_file.path}`
+      @last_stdout = `env RUBYOPT= bundle exec #{command} 2> #{stderr_file.path}`
       @last_exit_status = $?.exitstatus
     end
     @last_stderr = IO.read(stderr_file.path)
@@ -78,7 +81,7 @@ class SporkWorld
 
   def run_in_background(command)
     in_current_dir do
-      @background_job = BackgroundJob.run(command)
+      @background_job = BackgroundJob.run("env RUBYOPT= bundle exec " +  command)
     end
     @background_jobs << @background_job
     @background_job
@@ -93,8 +96,11 @@ class SporkWorld
     @background_jobs.clear
     @background_job = nil
   end
-
 end
+
+require(SPORK_ROOT + "features/support/bundler_helpers.rb")
+BundlerHelpers.set_gemfile(ENV["GEMFILE"])
+
 
 World do
   SporkWorld.new

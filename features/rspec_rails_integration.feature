@@ -4,7 +4,6 @@ Feature: Rails Integration
   Providing default hooks and behaviors
 
   Background: Rails App with RSpec and Spork
-
     Given I am in a fresh rails project named "test_rails_project"
     And a file named "spec/spec_helper.rb" with:
       """

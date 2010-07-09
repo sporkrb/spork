@@ -1,0 +1,95 @@
+---
+dependencies:
+  spork:
+    group:
+    - :default
+    version: ">= 0"
+  ruby-debug:
+    group:
+    - :default
+    version: ">= 0.10.3"
+  rails:
+    group:
+    - :default
+    version: = 2.3.8
+  sqlite3-ruby:
+    group:
+    - :default
+    version: = 1.2.5
+  rspec:
+    group:
+    - :default
+    version: = 1.3.0
+  rspec-rails:
+    group:
+    - :default
+    version: ">= 1.3.2"
+  cucumber-rails:
+    group:
+    - :default
+    version: ">= 0"
+  gherkin:
+    group:
+    - :default
+    version: = 1.0.27
+  cucumber:
+    group:
+    - :default
+    version: = 0.7.3
+specs:
+- rake:
+    version: 0.8.7
+- activesupport:
+    version: 2.3.8
+- rack:
+    version: 1.1.0
+- actionpack:
+    version: 2.3.8
+- actionmailer:
+    version: 2.3.8
+- activerecord:
+    version: 2.3.8
+- activeresource:
+    version: 2.3.8
+- builder:
+    version: 2.1.2
+- columnize:
+    version: 0.3.1
+- diff-lcs:
+    version: 1.1.2
+- trollop:
+    version: 1.16.2
+- gherkin:
+    version: 1.0.27
+- json_pure:
+    version: 1.4.3
+- term-ansicolor:
+    version: 1.0.5
+- cucumber:
+    version: 0.7.3
+- cucumber-rails:
+    version: 0.3.1
+- linecache:
+    version: "0.43"
+- rails:
+    version: 2.3.8
+- rspec:
+    version: 1.3.0
+- rspec-rails:
+    version: 1.3.2
+- ruby-debug-base:
+    version: 0.10.3
+- ruby-debug:
+    version: 0.10.3
+- spork:
+    version: 0.8.4
+    source: 0
+- sqlite3-ruby:
+    version: 1.2.5
+hash: 3f1d7d04cfed88de4d337e2b5fb51639bc0a05f2
+sources:
+- Path:
+    path: !ruby/object:Pathname
+      path: /Users/timcharper/projects/spork
+- Rubygems:
+    uri: http://gemcutter.org
