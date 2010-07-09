@@ -88,9 +88,9 @@ module Spork
       
       klass.class_eval <<-EOF, __FILE__, __LINE__ + 1
         alias :#{method_name_without_spork} :#{method_name} unless method_defined?(:#{method_name_without_spork}) 
-        def #{method_name}(*args)
+        def #{method_name}(*args, &block)
           Spork.each_run(false) do
-            #{method_name_without_spork}(*args)
+            #{method_name_without_spork}(*args, &block)
           end
         end
       EOF
