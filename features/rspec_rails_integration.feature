@@ -15,8 +15,8 @@ Feature: Rails Integration
         # if you change any configuration or code from libraries loaded here, you'll
         # need to restart spork for it take effect.
         require File.dirname(__FILE__) + '/../config/environment.rb'
-        require 'spec'
-        require 'spec/rails'
+        require 'rspec'
+        require 'rspec/rails'
         
         #### this is for this test only #######
         $loaded_stuff << 'prefork block' ######

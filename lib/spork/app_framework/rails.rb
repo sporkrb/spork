@@ -89,6 +89,8 @@ class Spork::AppFramework::Rails < Spork::AppFramework
     end
 
     def delay_route_loading
+      require 'ruby-debug'; require "/Users/timcharper/Library/Application Support/TextMate/Bundles/RubyAMP.tmbundle/Support/ext/debugger_extension.rb"; Debugger.start; Debugger.start_control; debugger
+
       if ::Rails::Initializer.instance_methods.map(&:to_sym).include?(:initialize_routing)
         Spork.trap_method(::Rails::Initializer, :initialize_routing)
       end
@@ -104,12 +106,9 @@ class Spork::AppFramework::Rails < Spork::AppFramework
       # Rails 2.3.x +
       if defined?(::ActionView::Template::EagerPath)
         Spork.trap_method(::ActionView::Template::EagerPath, :load!)
+      else
+        raise "NOCOMMIT"
       end
-      # Rails 2.2.x
-      if defined?(::ActionView::PathSet::Path)
-        Spork.trap_method(::ActionView::PathSet::Path, :load)
-      end
-      # Rails 2.0.5 - 2.1.x don't appear to eager cache views.
     end
   end
 
@@ -139,7 +138,7 @@ class Spork::AppFramework::Rails < Spork::AppFramework
     @vendor ||= File.expand_path("vendor/rails", Dir.pwd)
   end
 
-  def version
+  def deprecated_version
     @version ||= (
       if /^[^#]*RAILS_GEM_VERSION\s*=\s*["']([!~<>=]*\s*[\d.]+)["']/.match(environment_contents)
         $1
@@ -150,9 +149,12 @@ class Spork::AppFramework::Rails < Spork::AppFramework
   end
 
   def preload_rails
-    Object.const_set(:RAILS_GEM_VERSION, version) if version
+    if deprecated_version && (not deprecated_version.match?(/^3/))
+      puts "This version of spork only supports Rails 3.0. To use spork with rails 2.3.x, downgrade to spork 0.8.x."
+      exit 1
+    end
     require boot_file
-    ::Rails::Initializer.send(:include, Spork::AppFramework::Rails::NinjaPatcher)
+    # ::Rails::Initializer.send(:include, Spork::AppFramework::Rails::NinjaPatcher)
   end
 
 end
