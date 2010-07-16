@@ -4,6 +4,7 @@
 require 'drb'
 require 'rinda/ring'
 require 'win32/process' if RUBY_PLATFORM =~ /mswin|mingw/  and RUBY_VERSION < '1.9.1'
+require 'rubygems' # used for Gem.ruby
 
 $:.unshift(File.dirname(__FILE__))
 require 'magazine/magazine_slave'
@@ -32,7 +33,7 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
   end
 
   def start_Rinda_ringserver
-    app_name = 'ruby ring_server.rb'
+    app_name = "#{Gem.ruby} ring_server.rb"
     spawn_process(app_name)
   end
 
@@ -48,21 +49,19 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
 
   def start_slave(id)
     app_pwd = Dir.pwd  # path running app in
-    app = "ruby magazine_slave_provider.rb #{id} '#{app_pwd}' #{@test_framework.short_name}"
+    app = "#{Gem.ruby} magazine_slave_provider.rb #{id} '#{app_pwd}' #{@test_framework.short_name}"
     @pids[id] = spawn_process(app)
   end
 
   def spawn_process(app)
 
-    if IO.respond_to?(:popen4)
-      # jruby 1.8 has no easy way to get a pid
+    if RUBY_PLATFORM =~ /java/
+      # jruby 1.8 has no easy way to just spawn, so use a thread
       Dir.chdir(@path) do
-        pid,r,w,e = IO.popen4
-        [r,w,e].each{|stream|
-          Thread.new { puts stream.read }
-        }
+        io = IO.popen app
+        Thread.new { puts io.read }        
+        return io.pid
       end
-      return pid
     end
     
     if RUBY_VERSION < '1.9.1'
