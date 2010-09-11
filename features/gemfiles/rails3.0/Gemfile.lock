@@ -1,135 +1,116 @@
----
-dependencies:
-  spork:
-    group:
-    - :default
-    version: ">= 0"
-  ruby-debug:
-    group:
-    - :default
-    version: ">= 0.10.3"
-  rails:
-    group:
-    - :default
-    version: = 3.0.0.beta4
-  sqlite3-ruby:
-    group:
-    - :default
-    version: = 1.2.5
-  rspec:
-    group:
-    - :default
-    version: = 2.0.0.beta.16
-  rspec-rails:
-    group:
-    - :default
-    version: = 2.0.0.beta.16
-  cucumber-rails:
-    group:
-    - :default
-    version: = 0.3.1
-  gherkin:
-    group:
-    - :default
-    version: = 1.0.30
-  cucumber:
-    group:
-    - :default
-    version: = 0.7.3
-specs:
-- rake:
-    version: 0.8.7
-- abstract:
-    version: 1.0.0
-- activesupport:
-    version: 3.0.0.beta4
-- builder:
-    version: 2.1.2
-- i18n:
-    version: 0.4.1
-- activemodel:
-    version: 3.0.0.beta4
-- erubis:
-    version: 2.6.6
-- rack:
-    version: 1.1.0
-- rack-mount:
-    version: 0.6.6
-- rack-test:
-    version: 0.5.4
-- tzinfo:
-    version: 0.3.22
-- actionpack:
-    version: 3.0.0.beta4
-- mime-types:
-    version: "1.16"
-- polyglot:
-    version: 0.3.1
-- treetop:
-    version: 1.4.8
-- mail:
-    version: 2.2.5
-- actionmailer:
-    version: 3.0.0.beta4
-- arel:
-    version: 0.4.0
-- activerecord:
-    version: 3.0.0.beta4
-- activeresource:
-    version: 3.0.0.beta4
-- bundler:
-    version: 0.9.26
-- columnize:
-    version: 0.3.1
-- diff-lcs:
-    version: 1.1.2
-- trollop:
-    version: 1.16.2
-- gherkin:
-    version: 1.0.30
-- json_pure:
-    version: 1.4.3
-- term-ansicolor:
-    version: 1.0.5
-- cucumber:
-    version: 0.7.3
-- cucumber-rails:
-    version: 0.3.1
-- linecache:
-    version: "0.43"
-- nokogiri:
-    version: 1.4.2
-- thor:
-    version: 0.13.7
-- railties:
-    version: 3.0.0.beta4
-- rails:
-    version: 3.0.0.beta4
-- rspec-core:
-    version: 2.0.0.beta.16
-- rspec-expectations:
-    version: 2.0.0.beta.16
-- rspec-mocks:
-    version: 2.0.0.beta.16
-- rspec:
-    version: 2.0.0.beta.16
-- webrat:
-    version: 0.7.1
-- rspec-rails:
-    version: 2.0.0.beta.16
-- ruby-debug-base:
-    version: 0.10.3
-- ruby-debug:
-    version: 0.10.3
-- spork:
-    version: 0.8.4
-    source: 0
-- sqlite3-ruby:
-    version: 1.2.5
-hash: cdde3d053f230f995518b2e91e0ce1b2e9298e58
-sources:
-- Path:
-    path: !ruby/object:Pathname
-      path: /Users/timcharper/projects/spork
-- Rubygems:
-    uri: http://gemcutter.org
+PATH
+  remote: /Users/timcharper/projects/spork
+  specs:
+    spork (0.8.4)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    abstract (1.0.0)
+    actionmailer (3.0.0)
+      actionpack (= 3.0.0)
+      mail (~> 2.2.5)
+    actionpack (3.0.0)
+      activemodel (= 3.0.0)
+      activesupport (= 3.0.0)
+      builder (~> 2.1.2)
+      erubis (~> 2.6.6)
+      i18n (~> 0.4.1)
+      rack (~> 1.2.1)
+      rack-mount (~> 0.6.12)
+      rack-test (~> 0.5.4)
+      tzinfo (~> 0.3.23)
+    activemodel (3.0.0)
+      activesupport (= 3.0.0)
+      builder (~> 2.1.2)
+      i18n (~> 0.4.1)
+    activerecord (3.0.0)
+      activemodel (= 3.0.0)
+      activesupport (= 3.0.0)
+      arel (~> 1.0.0)
+      tzinfo (~> 0.3.23)
+    activeresource (3.0.0)
+      activemodel (= 3.0.0)
+      activesupport (= 3.0.0)
+    activesupport (3.0.0)
+    arel (1.0.1)
+      activesupport (~> 3.0.0)
+    builder (2.1.2)
+    columnize (0.3.1)
+    cucumber (0.7.3)
+      builder (>= 2.1.2)
+      diff-lcs (>= 1.1.2)
+      gherkin (>= 1.0.27)
+      json_pure (>= 1.2.4)
+      term-ansicolor (>= 1.0.4)
+    cucumber-rails (0.3.1)
+      cucumber (>= 0.7.2)
+    diff-lcs (1.1.2)
+    erubis (2.6.6)
+      abstract (>= 1.0.0)
+    gherkin (1.0.30)
+      trollop (>= 1.16.2)
+    i18n (0.4.1)
+    json_pure (1.4.6)
+    linecache (0.43)
+    mail (2.2.6)
+      activesupport (>= 2.3.6)
+      mime-types
+      treetop (>= 1.4.5)
+    mime-types (1.16)
+    polyglot (0.3.1)
+    rack (1.2.1)
+    rack-mount (0.6.13)
+      rack (>= 1.0.0)
+    rack-test (0.5.4)
+      rack (>= 1.0)
+    rails (3.0.0)
+      actionmailer (= 3.0.0)
+      actionpack (= 3.0.0)
+      activerecord (= 3.0.0)
+      activeresource (= 3.0.0)
+      activesupport (= 3.0.0)
+      bundler (~> 1.0.0)
+      railties (= 3.0.0)
+    railties (3.0.0)
+      actionpack (= 3.0.0)
+      activesupport (= 3.0.0)
+      rake (>= 0.8.4)
+      thor (~> 0.14.0)
+    rake (0.8.7)
+    rspec (2.0.0.beta.20)
+      rspec-core (= 2.0.0.beta.20)
+      rspec-expectations (= 2.0.0.beta.20)
+      rspec-mocks (= 2.0.0.beta.20)
+    rspec-core (2.0.0.beta.20)
+    rspec-expectations (2.0.0.beta.20)
+      diff-lcs (>= 1.1.2)
+    rspec-mocks (2.0.0.beta.20)
+    rspec-rails (2.0.0.beta.20)
+      rspec (= 2.0.0.beta.20)
+    ruby-debug (0.10.3)
+      columnize (>= 0.1)
+      ruby-debug-base (~> 0.10.3.0)
+    ruby-debug-base (0.10.3)
+      linecache (>= 0.3)
+    sqlite3-ruby (1.2.5)
+    term-ansicolor (1.0.5)
+    thor (0.14.0)
+    treetop (1.4.8)
+      polyglot (>= 0.3.1)
+    trollop (1.16.2)
+    tzinfo (0.3.23)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  cucumber (= 0.7.3)
+  cucumber-rails (= 0.3.1)
+  gherkin (= 1.0.30)
+  rails (= 3.0.0)
+  rspec (= 2.0.0.beta.20)
+  rspec-rails (= 2.0.0.beta.20)
+  ruby-debug (>= 0.10.3)
+  spork!
+  sqlite3-ruby (= 1.2.5)
