@@ -17,7 +17,7 @@ When /^the contents of "([^\"]*)" are changed to:$/ do |file_name, file_content|
 end
 
 # the following code appears in "config/environment.rb" after /Rails::Initializer.run/:
-Given /^the following code appears in "([^\"]*)" after \/([^\\\/]*)\/:$/ do |file_name, regex, content|
+Given /^the following code appears in "([^\"]*)" after \/([^\/]*)\/:$/ do |file_name, regex, content|
   regex = Regexp.new(regex)
   in_current_dir do
     content_lines = File.read(file_name).split("\n")
