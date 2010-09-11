@@ -18,6 +18,10 @@ end
 
 
 Given "the application has a model, observer, route, and application helper" do
+  Given 'the following code appears in "config/application.rb" after /^end/:',
+    """
+    ActiveRecord::Base.observers = [:user_observer]
+    """
   Given 'a file named "app/models/user.rb" with:',
     """
     class User < ActiveRecord::Base

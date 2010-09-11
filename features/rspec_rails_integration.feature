@@ -44,6 +44,7 @@ Feature: Rails Integration
   Scenario: Running spork with a rails app and observers
     Given a file named "spec/did_it_work_spec.rb" with:
     """
+    require 'spec_helper'
     describe "Did it work?" do
       it "checks to see if all worked" do
         Spork.state.should == :using_spork
@@ -67,7 +68,6 @@ Feature: Rails Integration
 
 
   Scenario: Running spork with a rails app and a non-standard port
-    Given this scenario is pending until rspec releases a version that supports --port
     Given a file named "spec/did_it_work_spec.rb" with:
     """
     describe "Did it work?" do
@@ -86,7 +86,7 @@ Feature: Rails Integration
     end
     """
     When I fire up a spork instance with "spork rspec --port 7000"
-    And I run spec --drb --port 7000 spec/did_it_work_spec.rb
+    And I run rspec --drb --drb-port 7000 spec/did_it_work_spec.rb
     Then the error output should be empty
     And the output should contain "Specs successfully run within spork, and all initialization files were loaded"
     And the file "log/test.log" should include "hey there"

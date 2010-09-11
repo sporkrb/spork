@@ -13,16 +13,22 @@ Feature: Rails Delayed Work arounds
 
       Spork.prefork do
         require File.dirname(__FILE__) + '/../config/environment.rb'
-        require 'spec'
-        require 'spec/rails'
+        require 'rspec'
+        require 'rspec/rails'
       end
 
       Spork.each_run do
       end
       """
     And the application has a model, observer, route, and application helper
+
+    Given the following code appears in "config/routes.rb" after /routes\.draw/:
+      """
+        resources :users
+      """
     Given a file named "app/helpers/application_helper.rb" with:
       """
+      require 'reverseatron'
       module ApplicationHelper
         include Reverseatron
       end
@@ -64,8 +70,9 @@ Feature: Rails Delayed Work arounds
   Scenario: within a view rendered by a controller, calling helper methods from an included module in ApplicationHelper
     Given a file named "spec/controllers/users_controller_spec.rb" with:
       """
+      require "spec_helper"
       describe UsersController do
-        integrate_views
+        render_views
         it "renders a page, using a method inherited from ApplicationController" do
           get :index
           response.body.should_not include('Original View')
@@ -81,17 +88,18 @@ Feature: Rails Delayed Work arounds
       """
     Given a file named "spec/views/index.html.erb_spec.rb" with:
       """
+      require "spec_helper"
       describe "/users/index.html.erb" do
 
         it "renders the view" do
           render
-          response.body.should_not include('Original View')
+          rendered.should_not include('Original View')
           puts "Views are not being cached when rendering directly"
 
-          response.body.should include('listing users')
+          rendered.should include('listing users')
           puts "Controller stack is functioning when rendering directly"
 
-          response.body.should include('hello miscellaneous')
+          rendered.should include('hello miscellaneous')
           puts "All helper modules were included when rendering directly"
         end
       end
@@ -104,12 +112,12 @@ Feature: Rails Delayed Work arounds
       <p>Here is a list of users</p>
       """
       
-    And I run spec --drb spec/controllers/users_controller_spec.rb
+    And I run rspec --drb spec/controllers/users_controller_spec.rb
     Then the output should contain "Controller stack is functioning when rendering from a controller"
     Then the output should contain "Views are not being cached when rendering from a controller"
     Then the output should contain "All helper modules were included when rendering from a controller"
 
-    And I run spec --drb spec/views/index.html.erb_spec.rb
+    And I run rspec --drb spec/views/index.html.erb_spec.rb
     Then the output should contain "Controller stack is functioning when rendering directly"
     Then the output should contain "Views are not being cached when rendering directly"
     Then the output should contain "All helper modules were included when rendering directly"
