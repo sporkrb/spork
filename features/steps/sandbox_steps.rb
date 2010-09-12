@@ -35,7 +35,7 @@ When /^I run (spork|rspec|cucumber)(| .*)$/ do |command, args|
   run(localized_command(command, args))
 end
 
-When /^I run this in the background: (spork|spec|cucumber)(| .*)$/ do |command, args|
+When /^I run this in the background: (spork|rspec|cucumber)(| .*)$/ do |command, args|
   @background_script = run_in_background(localized_command(command, args))
 end
 

@@ -1,7 +1,6 @@
 Feature: Rails Delayed Work arounds
   To allow a rails developer to update as many parts of his application as possible without needing to restart Spork
   Spork automatically tells rails to delay loading certain parts of the application until after the fork occurs
-  Providing work arounds
 
   Background: Rails App with RSpec and Spork
 
@@ -10,6 +9,7 @@ Feature: Rails Delayed Work arounds
       """
       require 'rubygems'
       require 'spork'
+      require 'spork/ext/ruby-debug'
 
       Spork.prefork do
         require File.dirname(__FILE__) + '/../config/environment.rb'
@@ -114,10 +114,37 @@ Feature: Rails Delayed Work arounds
       
     And I run rspec --drb spec/controllers/users_controller_spec.rb
     Then the output should contain "Controller stack is functioning when rendering from a controller"
-    Then the output should contain "Views are not being cached when rendering from a controller"
-    Then the output should contain "All helper modules were included when rendering from a controller"
+    And  the output should contain "Views are not being cached when rendering from a controller"
+    And  the output should contain "All helper modules were included when rendering from a controller"
 
-    And I run rspec --drb spec/views/index.html.erb_spec.rb
+    When I run rspec --drb spec/views/index.html.erb_spec.rb
     Then the output should contain "Controller stack is functioning when rendering directly"
-    Then the output should contain "Views are not being cached when rendering directly"
-    Then the output should contain "All helper modules were included when rendering directly"
+    And  the output should contain "Views are not being cached when rendering directly"
+    And  the output should contain "All helper modules were included when rendering directly"
+
+    Given the contents of "app/helpers/application_helper.rb" are changed to:
+      """
+      module ApplicationHelper
+        def make_it_loud(message)
+          message.upcase
+        end
+      end
+      """
+    And the contents of "app/views/users/index.html.erb" are changed to:
+      """
+      <%= make_it_loud('listing users') %>
+      """
+    And the contents of "spec/controllers/users_controller_spec.rb" are changed to:
+      """
+      require "spec_helper"
+      describe UsersController do
+        render_views
+        it "renders a page, using a method inherited from ApplicationController" do
+          get :index
+          response.body.should include('LISTING USERS')
+          puts "Helpers aren't being cached"
+        end
+      end
+      """
+    When I run rspec --drb spec/controllers/users_controller_spec.rb
+    Then the output should contain "Helpers aren't being cached"

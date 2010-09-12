@@ -7,7 +7,7 @@ Feature: At exit during each run
     Given a file named "spec/spec_helper.rb" with:
       """
       require 'rubygems'
-      require 'spec'
+      require 'rspec'
       Spork.prefork do
         puts "loading"
         at_exit { puts "prefork at_exit called" }
@@ -23,6 +23,7 @@ Feature: At exit during each run
 
     And a file named "spec/did_it_work_spec.rb" with:
       """
+      require 'spec_helper'
       describe "Did it work?" do
         it "checks to see if all worked" do
           puts "ran specs"
@@ -30,6 +31,6 @@ Feature: At exit during each run
       end
       """
     When I fire up a spork instance with "spork rspec"
-    And I run spec --drb spec/did_it_work_spec.rb
+    And I run rspec --drb spec/did_it_work_spec.rb
     Then the output should contain "second first"
     Then the output should not contain "prefork at_exit called"
