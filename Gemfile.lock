@@ -15,7 +15,14 @@ GEM
     json_pure (1.4.6)
     linecache (0.43)
     rake (0.8.7)
-    rspec (1.3.0)
+    rspec (2.0.0.beta.20)
+      rspec-core (= 2.0.0.beta.20)
+      rspec-expectations (= 2.0.0.beta.20)
+      rspec-mocks (= 2.0.0.beta.20)
+    rspec-core (2.0.0.beta.20)
+    rspec-expectations (2.0.0.beta.20)
+      diff-lcs (>= 1.1.2)
+    rspec-mocks (2.0.0.beta.20)
     ruby-debug (0.10.3)
       columnize (>= 0.1)
       ruby-debug-base (~> 0.10.3.0)
@@ -31,5 +38,5 @@ DEPENDENCIES
   cucumber (= 0.7.3)
   gherkin (= 1.0.27)
   rake
-  rspec (= 1.3.0)
+  rspec (= 2.0.0.beta.20)
   ruby-debug

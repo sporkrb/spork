@@ -47,7 +47,7 @@ Feature: Rails Integration
     require 'spec_helper'
     describe "Did it work?" do
       it "checks to see if all worked" do
-        Spork.state.should == :using_spork
+        Spork.using_spork?.should == true
         (Rails.respond_to?(:logger) ? Rails.logger : ActionController::Base.logger).info "hey there"
         $loaded_stuff.should include('ActiveRecord::Base.establish_connection')
         $loaded_stuff.should include('User')
@@ -72,7 +72,7 @@ Feature: Rails Integration
     """
     describe "Did it work?" do
       it "checks to see if all worked" do
-        Spork.state.should == :using_spork
+        Spork.using_spork?.should == true
         (Rails.respond_to?(:logger) ? Rails.logger : ActionController::Base.logger).info "hey there"
         $loaded_stuff.should include('ActiveRecord::Base.establish_connection')
         $loaded_stuff.should include('User')

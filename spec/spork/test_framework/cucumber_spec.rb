@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
-require File.dirname(__FILE__) + "/../test_framework_spec"
+require File.dirname(__FILE__) + "/../test_framework_shared_examples"
 
 describe Spork::TestFramework::Cucumber do
   before(:each) do

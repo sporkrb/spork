@@ -47,13 +47,8 @@ module Spork
       after_each_run_procs << block
     end
 
-    # Used by the server. Sets the state to activate spork. Otherwise, prefork and each_run are run in passive mode, allowing specs without a Spork server.
-    def using_spork!
-      @using_spork = true
-    end
-    
     def using_spork?
-      @using_spork
+      state != :not_using_spork
     end
 
     def state
@@ -62,7 +57,6 @@ module Spork
     
     # Used by the server.  Called when loading the prefork blocks of the code.
     def exec_prefork(&block)
-      using_spork!
       @state = :prefork
       yield
     end

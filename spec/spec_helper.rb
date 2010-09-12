@@ -8,8 +8,9 @@ unless $spec_helper_loaded
   require 'spork'
   require 'stringio'
   require 'fileutils'
+  require 'rspec'
 
-  Spec::Runner.configure do |config|
+  RSpec.configure do |config|
     config.before(:each) do
       $test_stdout = StringIO.new
       $test_stderr = StringIO.new
@@ -48,7 +49,7 @@ unless $spec_helper_loaded
   end
 
 
-  module Spec
+  module RSpec
     module Matchers
       class IncludeAStringLike
         def initialize(substring_or_regex)
