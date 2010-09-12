@@ -22,7 +22,7 @@ Feature: Cucumber integration with rails
 
         require 'cucumber'
         require 'cucumber/formatter/unicode' # Comment out this line if you don't want Cucumber Unicode support
-        require 'spec/rails'
+        require 'rspec/rails'
         require 'cucumber/rails/rspec'
         
         #### this is for this test only #######

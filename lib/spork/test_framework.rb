@@ -118,7 +118,7 @@ class Spork::TestFramework
 
   def preload
     Spork.exec_prefork do
-      unless bootstrapped?
+      if not bootstrapped?
         stderr.puts "#{helper_file} has not been bootstrapped.  Run spork --bootstrap to do so."
         stderr.flush
 

@@ -3,17 +3,19 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 Spork.class_eval do
   def self.reset!
     @state = nil
+    @using_spork = false
     @already_ran = nil
+    @each_run_procs = nil
   end
 end
 
 describe Spork do
   before(:each) do
     Spork.reset!
+    @ran = []
   end
   
   def spec_helper_simulator
-    @ran ||= []
     Spork.prefork do
       @ran << :prefork
     end
@@ -63,14 +65,14 @@ describe Spork do
   describe "#using_spork?" do
     it "returns true if Spork is being used" do
       Spork.using_spork?.should be_false
-      Spork.using_spork!
+      Spork.exec_prefork { }
       Spork.using_spork?.should be_true
     end
   end
 
   describe "#trap_method" do
     before(:each) do
-      Spork.using_spork!
+      Spork.exec_prefork { }
       
       Object.class_eval do
         class TrapTest
@@ -99,7 +101,7 @@ describe Spork do
     end
     
     it "delays execution of a method until after Spork.exec_each_run is called" do
-      Spork.using_spork!
+      Spork.exec_prefork { }
       Spork.trap_method(TrapTest, :hello)
       @trap_test.hello
       @trap_test.goodbye
@@ -140,7 +142,7 @@ describe Spork do
     end
     
     it "delays execution of a method until after Spork.exec_each_run is called" do
-      Spork.using_spork!
+      Spork.exec_prefork { }
       Spork.trap_class_method(TrapTest, :hello)
       TrapTest.hello
       TrapTest.goodbye

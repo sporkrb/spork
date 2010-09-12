@@ -30,7 +30,7 @@ module Spork
     # * +prevent_double_run+ - Pass false to disable double run prevention
     def each_run(prevent_double_run = true, &block)
       return if prevent_double_run && already_ran?(caller.first)
-      if @state == :using_spork
+      if state == :prefork
         each_run_procs << block
       else
         yield
@@ -47,28 +47,23 @@ module Spork
       after_each_run_procs << block
     end
 
-    # Used by the server. Sets the state to activate spork. Otherwise, prefork and each_run are run in passive mode, allowing specs without a Spork server.
-    def using_spork!
-      @state = :using_spork
-    end
-    
     def using_spork?
-      @state == :using_spork
+      state != :not_using_spork
     end
 
-    # Used by the server.  Returns the current state of Spork.
     def state
       @state ||= :not_using_spork
     end
     
     # Used by the server.  Called when loading the prefork blocks of the code.
     def exec_prefork(&block)
-      using_spork!
+      @state = :prefork
       yield
     end
     
     # Used by the server.  Called to run all of the prefork blocks.
     def exec_each_run(&block)
+      @state = :run
       activate_after_each_run_at_exit_hook
       each_run_procs.each { |p| p.call }
       each_run_procs.clear

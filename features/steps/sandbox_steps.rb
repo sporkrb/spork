@@ -17,7 +17,7 @@ When /^the contents of "([^\"]*)" are changed to:$/ do |file_name, file_content|
 end
 
 # the following code appears in "config/environment.rb" after /Rails::Initializer.run/:
-Given /^the following code appears in "([^\"]*)" after \/([^\\\/]*)\/:$/ do |file_name, regex, content|
+Given /^the following code appears in "([^\"]*)" after \/([^\/]*)\/:$/ do |file_name, regex, content|
   regex = Regexp.new(regex)
   in_current_dir do
     content_lines = File.read(file_name).split("\n")
@@ -31,11 +31,11 @@ Given /^the following code appears in "([^\"]*)" after \/([^\\\/]*)\/:$/ do |fil
   end
 end
 
-When /^I run (spork|spec|cucumber)(| .*)$/ do |command, args|
+When /^I run (spork|rspec|cucumber)(| .*)$/ do |command, args|
   run(localized_command(command, args))
 end
 
-When /^I run this in the background: (spork|spec|cucumber)(| .*)$/ do |command, args|
+When /^I run this in the background: (spork|rspec|cucumber)(| .*)$/ do |command, args|
   @background_script = run_in_background(localized_command(command, args))
 end
 

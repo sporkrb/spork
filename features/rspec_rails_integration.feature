@@ -15,8 +15,8 @@ Feature: Rails Integration
         # if you change any configuration or code from libraries loaded here, you'll
         # need to restart spork for it take effect.
         require File.dirname(__FILE__) + '/../config/environment.rb'
-        require 'spec'
-        require 'spec/rails'
+        require 'rspec'
+        require 'rspec/rails'
         
         #### this is for this test only #######
         $loaded_stuff << 'prefork block' ######
@@ -39,14 +39,15 @@ Feature: Rails Integration
     Then the output should not contain "app/controllers/application.rb"
     Then the output should not contain "app/controllers/application_controller.rb"
     Then the output should not contain "app/controllers/application_helper.rb"
-    Then the output should not contain "config/routes.rb"
+    # Then the output should not contain "config/routes.rb"
   
   Scenario: Running spork with a rails app and observers
     Given a file named "spec/did_it_work_spec.rb" with:
     """
+    require 'spec_helper'
     describe "Did it work?" do
       it "checks to see if all worked" do
-        Spork.state.should == :using_spork
+        Spork.using_spork?.should == true
         (Rails.respond_to?(:logger) ? Rails.logger : ActionController::Base.logger).info "hey there"
         $loaded_stuff.should include('ActiveRecord::Base.establish_connection')
         $loaded_stuff.should include('User')
@@ -60,19 +61,18 @@ Feature: Rails Integration
     end
     """
     When I fire up a spork instance with "spork rspec"
-    And I run spec --drb spec/did_it_work_spec.rb 
+    And I run rspec --drb spec/did_it_work_spec.rb
     Then the error output should be empty
     And the output should contain "Specs successfully run within spork, and all initialization files were loaded"
     And the file "log/test.log" should include "hey there"
 
 
   Scenario: Running spork with a rails app and a non-standard port
-    Given this scenario is pending until rspec releases a version that supports --port
     Given a file named "spec/did_it_work_spec.rb" with:
     """
     describe "Did it work?" do
       it "checks to see if all worked" do
-        Spork.state.should == :using_spork
+        Spork.using_spork?.should == true
         (Rails.respond_to?(:logger) ? Rails.logger : ActionController::Base.logger).info "hey there"
         $loaded_stuff.should include('ActiveRecord::Base.establish_connection')
         $loaded_stuff.should include('User')
@@ -86,7 +86,7 @@ Feature: Rails Integration
     end
     """
     When I fire up a spork instance with "spork rspec --port 7000"
-    And I run spec --drb --port 7000 spec/did_it_work_spec.rb
+    And I run rspec --drb --drb-port 7000 spec/did_it_work_spec.rb
     Then the error output should be empty
     And the output should contain "Specs successfully run within spork, and all initialization files were loaded"
     And the file "log/test.log" should include "hey there"

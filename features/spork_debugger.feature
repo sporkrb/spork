@@ -10,12 +10,12 @@ Feature: Spork Debugger integration
       require 'spork'
       require 'spork/ext/ruby-debug'
 
-      Spork.prefork { require 'spec' }
+      Spork.prefork { require 'rspec' }
       Spork.each_run { }
       """
     And a file named "spec/debugger_spec.rb" with:
       """
-      require File.dirname(__FILE__) + '/spec_helper.rb'
+      require 'spec_helper.rb'
 
       describe "Debugger" do
         it "should debug" do
@@ -30,7 +30,7 @@ Feature: Spork Debugger integration
       """
 
     When I fire up a spork instance with "spork rspec"
-    And I run this in the background: spec --drb spec/debugger_spec.rb
+    And I run this in the background: rspec --drb spec/debugger_spec.rb
 
     Then the spork window should output a line containing "Debug Session Started"
 
@@ -57,7 +57,7 @@ Feature: Spork Debugger integration
 
       require 'spork/ext/ruby-debug'
 
-      Spork.prefork { require 'spec' }
+      Spork.prefork { require 'rspec' }
       Spork.each_run { }
       """
 
@@ -75,7 +75,7 @@ Feature: Spork Debugger integration
       """
 
     When I fire up a spork instance with "spork rspec"
-    And I run this in the background: spec --drb spec/debugger_spec.rb
+    And I run this in the background: rspec --drb spec/debugger_spec.rb
 
     Then the spork window should output a line containing "Debug Session Started"
 
@@ -97,7 +97,7 @@ Feature: Spork Debugger integration
       STDERR.puts("Spork is ready and listening") # trick out the start spork step to believe spork is ready... naughty, but effective.
       @message = "it worked"
       debugger
-      Spork.prefork { require 'spec' }
+      Spork.prefork { require 'rspec' }
       Spork.each_run { }
       """
 

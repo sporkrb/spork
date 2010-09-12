@@ -3,7 +3,7 @@ require 'pathname'
 require 'fileutils'
 require 'forwardable'
 require 'tempfile'
-require 'spec/expectations'
+require 'rspec/expectations'
 require 'timeout'
 
 require(File.dirname(__FILE__) + '/background_job.rb')

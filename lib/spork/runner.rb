@@ -70,7 +70,6 @@ module Spork
         Spork::Diagnoser.output_results(@output)
         return true
       else
-        Spork.using_spork!
         run_strategy = Spork::RunStrategy.factory(test_framework)
         return(false) unless run_strategy.preload
         Spork::Server.run(:port => @options[:port] || test_framework.default_port, :run_strategy => run_strategy)

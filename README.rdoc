@@ -30,22 +30,22 @@ And more to come!  Vote for your favorite at http://github.com/timcharper/spork/
 
 == Supported Application Frameworks
 
-Actually, Spork ~can~ work with any application framework.  But, it ships with hooks and helpers to help make the experience much more "out of the box"
+Actually, Spork ~can~ work with any application framework.  But, it ships with hooks and helpers to make an "out of the box" experience.
 
-* Rails
-
-More can be added!  Vote for your favorite at http://github.com/timcharper/spork/issues
+* Rails 3.0 (for Rails 2.{1,2,3}.x, please try spork 0.8.x)
+* Padrino
 
 == INSTALL:
 
+=== rubygems:
+
   [sudo] gem install spork
 
-alternatively:
+=== bundler:
 
-  git clone git://github.com/timcharper/spork.git
-  cd spork
-  gem build spork.gemspec
-  sudo gem install spork.gemspec
+Add to your Gemfile:
+
+  gem "spork"
 
 == Usage
 
@@ -80,7 +80,7 @@ To get the TextMate RSpec bundle to use spork, go to config->advanced->shell var
 
 To run from the command line, use:
 
-  spec --drb spec/lib/my_spec.rb
+  rspec --drb spec/lib/my_spec.rb
 
 Or, you could add the following flag to your +spec.opts+ file.
 
@@ -104,7 +104,7 @@ If you wish to hack on spork, you will want to run the automated test suite to m
 
 Then, to run the specs:
 
-  bundle exec spec spec/
+  bundle exec rspec spec/
 
 (or, alternatively...)
 
@@ -112,15 +112,9 @@ Then, to run the specs:
 
 === running features ===
 
-Basically, like this:
+Essentially:
 
   bundle exec cucumber features
-
-If you wish to test with another Gemfile:
-
-  GEMFILE=rails2.3 bundle exec cucumber features
-
-Where rails2.3 is one of support/gemfiles/* (rails2.3 is the default)
 
 == Some potential issues and ways to overcome them:
 
@@ -130,6 +124,6 @@ See http://wiki.github.com/timcharper/spork/troubleshooting
 
 * Ben Mabey - help with documentation, testing, suggestions, patches, and bringing Cucumber support.
 * David Chelimsky - for the fine RSpec testing framework, and the original rspec-rails spec_server implementation, which Spork has built upon.
-* Lead Media Partners - just for being an awesome place to work.
+* LeadTune - just for being an awesome place to work.
 
-Spork (c) 2009 Tim Harper, released under the MIT license
+Spork (c) 2010 Tim Harper, released under the MIT license
