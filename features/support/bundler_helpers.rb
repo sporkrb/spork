@@ -4,7 +4,6 @@ module BundlerHelpers
   def install_bundle(dir)
     Dir.chdir(dir) do
       command = "env RUBYOPT= BUNDLE_GEMFILE=Gemfile bundle install"
-      command << " --relock" unless File.exist?("Gemfile.lock")
       system(command)
       $?.exitstatus
     end
