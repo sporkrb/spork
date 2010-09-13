@@ -10,6 +10,8 @@ Feature: Cucumber integration with rails
       """
       require 'rubygems'
       require 'spork'
+      ENV["RAILS_ENV"] ||= "test"
+
 
       Spork.prefork do
         # Loading more in this block will cause your tests to run faster. However, 
@@ -17,7 +19,6 @@ Feature: Cucumber integration with rails
         # need to restart spork for it take effect.
         
         # Sets up the Rails environment for Cucumber
-        ENV['RAILS_ENV'] = "features"
         require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
 
         require 'cucumber'
@@ -49,15 +50,11 @@ Feature: Cucumber integration with rails
       """
       $loaded_stuff << 'features/support/cucumber_rails_helper.rb'
       """
-    And a file named "config/environments/features.rb" with:
-      """
-      # your cucumber env here
-      """
     And a file named "config/database.yml" with:
       """
-      features:
+      test:
         adapter: sqlite3
-        database: db/features.sqlite3
+        database: db/test.sqlite3
         timeout: 5000
       """
     And a file named "features/step_definitions/cucumber_rails_steps.rb" with:
@@ -85,7 +82,6 @@ Feature: Cucumber integration with rails
       Then the output should not contain "app/controllers/application.rb"
       Then the output should not contain "app/controllers/application_controller.rb"
       Then the output should not contain "app/controllers/application_helper.rb"
-      Then the output should not contain "config/routes.rb"
       Then the output should not contain "features/step_definitions/cucumber_rails_steps.rb"
       Then the output should not contain "features/support/cucumber_rails_helper.rb"
       
@@ -101,11 +97,11 @@ Feature: Cucumber integration with rails
       And I run cucumber --drb features
       Then the error output should be empty
       And the output should contain "It worked!"
-      And the file "log/features.log" should include "hey there"
+      And the file "log/test.log" should include "hey there"
       
     Scenario: Running spork with a rails app and a non-standard port
       When I fire up a spork instance with "spork cucumber -p 9000"
       And I run cucumber --drb --port 9000 features
       Then the error output should be empty
       And the output should contain "It worked!"
-      And the file "log/features.log" should include "hey there"
+      And the file "log/test.log" should include "hey there"

@@ -57,8 +57,8 @@ Given "the application has a model, observer, route, and application helper" do
     class ActiveRecord::Base
       class << self
         def establish_connection_with_load_logging(*args)
-          establish_connection_without_load_logging(*args)
           $loaded_stuff << 'ActiveRecord::Base.establish_connection'
+          establish_connection_without_load_logging(*args)
         end
         alias_method_chain :establish_connection, :load_logging
       end

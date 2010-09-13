@@ -57,18 +57,6 @@ class SporkWorld
     Dir.chdir(@current_dir, &block)
   end
 
-  def localized_command(command, args)
-    case command
-    when 'spork'
-      command = SporkWorld::BINARY
-    when 'cucumber'
-      command = Cucumber::BINARY
-    else
-      command = %x{which #{command}}.chomp
-    end
-    "#{SporkWorld::RUBY_BINARY} -I #{Cucumber::LIBDIR} #{command} #{args}"
-  end
-
   def run(command)
     stderr_file = Tempfile.new('spork')
     stderr_file.close

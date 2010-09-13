@@ -32,11 +32,11 @@ Given /^the following code appears in "([^\"]*)" after \/([^\/]*)\/:$/ do |file_
 end
 
 When /^I run (spork|rspec|cucumber)(| .*)$/ do |command, args|
-  run(localized_command(command, args))
+  run("#{command} #{args}")
 end
 
 When /^I run this in the background: (spork|rspec|cucumber)(| .*)$/ do |command, args|
-  @background_script = run_in_background(localized_command(command, args))
+  @background_script = run_in_background("#{command} #{args}")
 end
 
 When /^I fire up a spork instance with "spork(.*)"$/ do |spork_opts|
