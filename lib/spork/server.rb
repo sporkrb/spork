@@ -44,7 +44,9 @@ class Spork::Server
   #
   # When implementing a test server, don't override this method: override run_tests instead.
   def run(argv, stderr, stdout)
+    puts "Running tests with args #{argv.inspect}..."
     run_strategy.run(argv, stderr, stdout)
+    puts "Done.\n\n"
   end
   
   def abort
