@@ -28,7 +28,7 @@ class Spork::RunStrategy
 
   protected
     def self.factory(test_framework)
-      if RUBY_PLATFORM =~ /mswin|mingw/
+      if RUBY_PLATFORM =~ /mswin|mingw|java/
         Spork::RunStrategy::Magazine.new(test_framework)
       else
         Spork::RunStrategy::Forking.new(test_framework)

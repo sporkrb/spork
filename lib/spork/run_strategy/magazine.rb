@@ -4,10 +4,10 @@
 require 'drb'
 require 'rinda/ring'
 require 'win32/process' if RUBY_PLATFORM =~ /mswin|mingw/  and RUBY_VERSION < '1.9.1'
+require 'rubygems' # used for Gem.ruby
 
 $:.unshift(File.dirname(__FILE__))
 require 'magazine/magazine_slave'
-
 
 class Spork::RunStrategy::Magazine < Spork::RunStrategy
 
@@ -33,8 +33,8 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
   end
 
   def start_Rinda_ringserver
-    app_name = 'ruby ring_server.rb'
-    spawn_process(app_name)    
+    app_name = "#{Gem.ruby} ring_server.rb"
+    spawn_process(app_name)
   end
 
   def fill_slave_pool
@@ -49,11 +49,21 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
 
   def start_slave(id)
     app_pwd = Dir.pwd  # path running app in
-    app = "ruby magazine_slave_provider.rb #{id} '#{app_pwd}' #{@test_framework.short_name}"
+    app = "#{Gem.ruby} magazine_slave_provider.rb #{id} '#{app_pwd}' #{@test_framework.short_name}"
     @pids[id] = spawn_process(app)
   end
 
   def spawn_process(app)
+
+    if RUBY_PLATFORM =~ /java/
+      # jruby 1.8 has no easy way to just spawn, so use a thread
+      Dir.chdir(@path) do
+        io = IO.popen app
+        Thread.new { puts io.read }        
+        return io.pid
+      end
+    end
+    
     if RUBY_VERSION < '1.9.1'
       Process.create( :app_name => app, :cwd => @path ).process_id
     else
@@ -92,9 +102,19 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
     start_slave(id)
   end
 
+  def windows?
+    ENV['OS'] == 'Windows_NT'
+  end
+  
   def kill_all_processes
 
-    @pids.each {|pid| Process.kill(9, pid)}
+    @pids.each {|pid| 
+      if windows?
+        system("taskkill /f /pid #{pid}")
+      else
+        Process.kill(9, pid)
+      end
+    }
     puts "\nKilling processes."; $stdout.flush
   end
 

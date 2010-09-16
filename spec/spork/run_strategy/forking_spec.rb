@@ -35,4 +35,4 @@ describe Spork::RunStrategy::Forking do
 
     (Time.now - started_at).should < @fake_framework.wait_time
   end
-end
+end unless windows?

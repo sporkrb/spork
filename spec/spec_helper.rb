@@ -46,6 +46,10 @@ unless $spec_helper_loaded
     def change_current_dir(sub_path)
       @current_dir = File.expand_path(sub_path, SPEC_TMP_DIR)
     end
+    
+    def windows?
+      ENV['OS'] == 'Windows_NT'
+    end
   end
 
 
