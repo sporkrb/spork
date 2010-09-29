@@ -9,7 +9,7 @@ class Spork::TestFramework
 
   class NoFrameworksAvailable < FactoryException
     def message
-      "I can't find any testing frameworks to use.  Are you running me from a project directory?"
+      "I can\'t find any testing frameworks to use.  Are you running me from a project directory?"
     end
   end
 
@@ -19,7 +19,7 @@ class Spork::TestFramework
     end
 
     def message
-      "I can't find the file #{@framework.helper_file} for the #{@framework.short_name} testing framework.\nAre you running me from the project directory?"
+      "I can\'t find the file #{@framework.helper_file} for the #{@framework.short_name} testing framework.\nAre you running me from the project directory?"
     end
   end
 
@@ -29,7 +29,7 @@ class Spork::TestFramework
     end
 
     def message
-      "Couldn't find a supported test framework that begins with '#{@beginning_with}'"
+      "Couldn\'t find a supported test framework that begins with '#{@beginning_with}'"
     end
   end
 
