@@ -123,7 +123,7 @@ class Spork::TestFramework
         stderr.flush
 
         if framework.bootstrap_required?
-          stderr.puts "I can't do anything for you by default for the framework your using: #{framework.short_name}.\nYou must bootstrap #{helper_file} to continue."
+          stderr.puts "I can't do anything for you by default for the framework you're using: #{framework.short_name}.\nYou must bootstrap #{helper_file} to continue."
           stderr.flush
           return false
         else
