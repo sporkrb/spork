@@ -149,6 +149,7 @@ module Spork
       end
 
       def after_each_run_procs
+        spookie
         @after_each_run_procs ||= []
       end
   end

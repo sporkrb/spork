@@ -1,3 +1,4 @@
+require 'date'
 Gem::Specification.new do |s|
   s.name = %q{spork}
   s.version = "0.9.0.rc2"
