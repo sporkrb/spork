@@ -8,17 +8,9 @@
 
 == SYNOPSIS:
 
-Spork is Tim Harper's implementation of test server (similar to the script/spec_server provided by rspec-rails), except rather than using the Rails constant unloading to reload your files, it forks a copy of the server each time you run your tests.  The result?  Spork runs more solid: it doesn't get corrupted over time, and it properly handles modules and any voo-doo meta programming you may have put in your app.
+Spork is Tim Harper's implementation of test server (similar to the script/spec_server that used to be provided by rspec-rails), except rather than using the Rails constant unloading to reload your files, it forks a copy of the server each time you run your tests.  The result?  Spork runs more solid: it doesn't get corrupted over time, and it properly handles modules and any voodoo meta programming you may have put in your app.
 
 Spork runs on POSIX systems using fork. It also runs on windows by pre-populating a pool of ready processes (referred to here as the "magazine" strategy).
-
-== RAILS 3
-
-Rails 3.0 support is in progress, but is not ready.  The master branch is stable and works with rails 2.3.x.
-
-Rspec 2.x support is not ready either.
-
-If you want to help, see the rails3 branch.
 
 == Supported Testing Frameworks
 
