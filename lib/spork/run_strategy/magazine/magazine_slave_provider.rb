@@ -2,7 +2,7 @@
 require 'drb'
 require 'rinda/ring'
 require 'rinda/tuplespace'
-require 'magazine_slave'
+require './magazine_slave'
 
 
 
