@@ -8,7 +8,7 @@
 
 == SYNOPSIS:
 
-Spork is Tim Harper's implementation of test server (similar to the script/spec_server that used to be provided by rspec-rails), except rather than using the Rails constant unloading to reload your files, it forks a copy of the server each time you run your tests.  The result?  Spork runs more solid: it doesn't get corrupted over time, and it properly handles modules and any voodoo meta programming you may have put in your app.
+Spork is Tim Harper's implementation of test server (similar to the script/spec_server that used to be provided by rspec-rails), except rather than using the Rails constant unloading to reload your files, it forks a copy of the server each time you run your tests.  The result?  Spork runs more solid: it doesn't get corrupted over time, it can work with any ruby framework, and it properly handles modules and any voodoo meta programming you may have put in your app.
 
 Spork runs on POSIX systems using fork. It also runs on windows by pre-populating a pool of ready processes (referred to here as the "magazine" strategy).
 
@@ -17,8 +17,6 @@ Spork runs on POSIX systems using fork. It also runs on windows by pre-populatin
 * Rspec
 * Cucumber
 * Test::Unit (via 'gem install spork-testunit')
-
-And more to come!  Vote for your favorite at http://github.com/timcharper/spork/issues
 
 == Supported Application Frameworks
 
@@ -57,10 +55,12 @@ Finally, run spork.  A spec DRb server will be running!
 
 Initially, you may find that a few files don't reload automatically.  This is because they are being loaded during Spork startup.  To identify which project files are being pre-loaded, and why, run:
 
-  spork --diagnose
+  spork --diagnose | less
   (or spork -d, for short)
 
 It will output a lot of stuff.  At the top you'll find a summary of all project files loaded.  Down below, the stack trace for each file (how it got loaded).  Spork hooks into Rails and does some magic (TM) to prevent ApplicationController observers, etc from pre-loading.  Similar hooks for other ruby frameworks may come as support demands.
+
+You may find this wiki page useful for common ways to battle a variety of common pre-loading issues: http://github.com/timcharper/spork/wiki/Spork.trap_method-Jujutsu
 
 == Running specs over Spork
 
@@ -82,7 +82,7 @@ Or, you could add the following flag to your +spec.opts+ file.
 
 Cucumber has DRb support (see http://wiki.github.com/aslakhellesoy/cucumber/spork-and-drb )
 
-  cucumber --drb
+  cucumber --drb features/my.feature
 
 Use this as a guideline when "Sporking" your features/support/env.rb file
 
@@ -117,5 +117,8 @@ See http://wiki.github.com/timcharper/spork/troubleshooting
 * Ben Mabey - help with documentation, testing, suggestions, patches, and bringing Cucumber support.
 * David Chelimsky - for the fine RSpec testing framework, and the original rspec-rails spec_server implementation, which Spork has built upon.
 * LeadTune - just for being an awesome place to work.
+* Alan Aslak - for the fine Cucumber testing framework, and for much collaboration getting cucumber working with spork.
+* Roger Pack - JRuby support / Windows
+* Donald Parish - Windows support (Magazine strategy)
 
-Spork (c) 2010 Tim Harper, released under the MIT license
+Spork (c) 2011 Tim Harper, released under the MIT license
