@@ -29,13 +29,21 @@ Actually, Spork ~can~ work with any application framework.  But, it ships with h
 
 === rubygems:
 
-  [sudo] gem install spork
+  [sudo] gem install spork --prerelease
+
+(Rails 2.x)
+
+  [sudo] gem install spork --version 0.8.4
 
 === bundler:
 
 Add to your Gemfile:
 
-  gem "spork"
+  gem 'spork', '~> 0.9.0.rc'
+
+(Rails 2.x, use this)
+
+  gem 'spork', '~> 0.8'
 
 == Usage
 
