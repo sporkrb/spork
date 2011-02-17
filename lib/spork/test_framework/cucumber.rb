@@ -9,16 +9,30 @@ class Spork::TestFramework::Cucumber < Spork::TestFramework
 
   def preload
     require 'cucumber'
+    if ::Cucumber::VERSION >= '0.9.0'
+      # nothing to do nowadays
+    else
+      preload_legacy_cucumbers
+    end
+    super
+  end
+
+  def run_tests(argv, stderr, stdout)
+    if ::Cucumber::VERSION >= '0.9.0'
+      ::Cucumber::Cli::Main.new(argv, stdout, stderr).execute!
+    else
+      ::Cucumber::Cli::Main.new(argv, stdout, stderr).execute!(@step_mother)
+    end
+  end
+
+  private
+  
+  def preload_legacy_cucumbers
     begin
       @step_mother = ::Cucumber::StepMother.new
       @step_mother.load_programming_language('rb')
     rescue NoMethodError => pre_cucumber_0_4 # REMOVE WHEN SUPPORT FOR PRE-0.4 IS DROPPED
       @step_mother = Spork::Server::Cucumber.mother_object
     end
-    super
-  end
-
-  def run_tests(argv, stderr, stdout)
-    ::Cucumber::Cli::Main.new(argv, stdout, stderr).execute!(@step_mother)
   end
 end
