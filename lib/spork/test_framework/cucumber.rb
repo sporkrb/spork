@@ -29,7 +29,7 @@ class Spork::TestFramework::Cucumber < Spork::TestFramework
   
   def preload_legacy_cucumbers
     begin
-      @step_mother = ::Cucumber::StepMother.new
+      @step_mother = ::Cucumber::Runtime.new
       @step_mother.load_programming_language('rb')
     rescue NoMethodError => pre_cucumber_0_4 # REMOVE WHEN SUPPORT FOR PRE-0.4 IS DROPPED
       @step_mother = Spork::Server::Cucumber.mother_object
