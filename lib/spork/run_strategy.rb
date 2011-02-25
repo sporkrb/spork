@@ -22,6 +22,10 @@ class Spork::RunStrategy
     raise NotImplementedError
   end
 
+  def assert_ready!
+    raise NotImplementedError
+  end
+
   def abort
     raise NotImplementedError
   end

@@ -29,4 +29,7 @@ class Spork::RunStrategy::Forking < Spork::RunStrategy
     @child && @child.running?
   end
 
+  def assert_ready!
+    raise RuntimeError, "This process hasn't loaded the environment yet by loading the prefork block" unless Spork.using_spork?
+  end
 end

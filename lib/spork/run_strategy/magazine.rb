@@ -138,4 +138,6 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
     @running
   end
 
+  def assert_ready!
+  end
 end
