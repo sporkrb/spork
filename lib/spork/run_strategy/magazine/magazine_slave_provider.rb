@@ -19,7 +19,10 @@ DRb.start_service
 Dir.chdir app_pwd
 puts "   -- build slave #{id}..."; $stdout.flush
 magazine_slave = MagazineSlave.new(id, test_framework_short_name )
-Rinda::RingProvider.new(:MagazineSlave, magazine_slave, id).provide
+
+# never expire, the renewer returns nil, which means expiration of *nix clock
+renewer = Rinda::SimpleRenewer.new(nil)
+Rinda::RingProvider.new(:MagazineSlave, magazine_slave, id, renewer).provide
 
 puts "  --> DRb magazine_slave_service: #{id} provided..."; $stdout.flush
 
