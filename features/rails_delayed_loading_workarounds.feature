@@ -67,6 +67,33 @@ Feature: Rails Delayed Work arounds
       """
         Original View
       """
+  Scenario: respecting custom autoload paths
+    Given the following code appears in "config/application.rb" after /class Application < Rails::Application/:
+      """
+        config.autoload_paths << 'app/models/non_standard'
+      """
+
+    And a file named "app/models/non_standard/boogie.rb" with:
+      """
+        class Boogie
+          def boogie
+            'Boogie Robots!'
+          end
+        end
+      """
+    And a file named "spec/models/non_standard/boogie_spec.rb" with:
+      """
+        describe Boogie do
+          it 'knows how to boogie' do
+            Boogie.new.boogie.should include('Boogie')
+            puts 'BOOGIE!!!'
+          end
+        end
+      """
+    When I fire up a spork instance with "spork rspec"
+    And I run rspec --drb spec/models/non_standard/boogie_spec.rb
+    Then the output should contain "BOOGIE!!!"
+
   Scenario: within a view rendered by a controller, calling helper methods from an included module in ApplicationHelper
     Given a file named "spec/controllers/users_controller_spec.rb" with:
       """
