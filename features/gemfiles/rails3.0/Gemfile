@@ -1,11 +1,11 @@
 source :gemcutter
 gem 'sqlite3-ruby', '1.2.5'
-gem 'cucumber', '0.8.5'
-gem 'cucumber-rails', '0.3.2'
-gem "gherkin", "2.1.4"
-gem "rspec", "2.0.0.beta.20"
-gem 'rspec-rails', "2.0.0.beta.20"
+gem 'cucumber', '0.10.2'
+gem 'cucumber-rails', '0.4.1'
+gem "rspec", "2.5.0"
+gem 'rspec-rails', "2.5.0"
 gem 'rails', '3.0.7'
+
 if RUBY_VERSION =~ /^1\.9/
   gem 'ruby-debug19'
 else
