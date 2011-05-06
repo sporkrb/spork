@@ -17,10 +17,11 @@ module Spork::GemHelpers
   end
 
   def latest_load_paths
-    if defined?(Bundler)
+    case
+    when defined?(Bundler)
       $LOAD_PATH.uniq
-    else
-      Dir["{#{Gem.paths.path.join(',')}}" + "/gems/*"].inject({}) do |h,f|
+    when Gem.respond_to?(:path)
+      Dir["{#{Gem.path.join(',')}}" + "/gems/*"].inject({}) do |h,f|
         gem_path = GemPath.new(f)
         if h[gem_path.name]
           h[gem_path.name] = gem_path if gem_path > h[gem_path.name]
@@ -28,7 +29,10 @@ module Spork::GemHelpers
           h[gem_path.name] = gem_path
         end
         h
-      end
+      end.values.map(&:path)
+    else
+      STDERR.puts "No mechanism available to scan for other gems implementing spork hooks. "
+      []
     end
   end
 end
