@@ -48,7 +48,7 @@ class Spork::Diagnoser
     
     # Uninstall the hook. Generally useful only for testing the Diagnoser.
     def remove_hook!
-      return unless Kernel.private_instance_methods.include?('require_without_diagnoser')
+      return unless Kernel.private_instance_methods.map(&:to_sym).include?(:require_without_diagnoser)
       Kernel.class_eval do
         alias :require :require_without_diagnoser
         alias :load :load_without_diagnoser
