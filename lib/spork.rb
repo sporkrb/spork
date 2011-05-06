@@ -102,12 +102,11 @@ module Spork
       end
     end
 
+    # This method is used to auto-discover peer plugins such as spork-testunit.
     def other_spork_gem_load_paths
-      @other_spork_gem_load_paths ||= (
-        Gem.latest_load_paths.grep(/spork/).select do |g|
-          not g.match(%r{/spork-[0-9\-.]+/lib}) # don't include other versions of spork
-        end
-      )
+      @other_spork_gem_load_paths ||= $LOAD_PATH.uniq.grep(/spork/).select do |g|
+        not g.match(%r{/spork-[0-9\-.]+/lib}) # don't include other versions of spork
+      end
     end
 
     private
