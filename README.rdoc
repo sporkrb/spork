@@ -84,7 +84,7 @@ To run from the command line, use:
 
   rspec --drb spec/lib/my_spec.rb
 
-Or, you could add the following flag to your +spec.opts+ file.
+Or, you could add the following flag to your +spec.opts+ (or +.rspec+ depending on your version of rspec) file.
 
   --drb
 
