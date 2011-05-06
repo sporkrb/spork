@@ -36,6 +36,6 @@ module BundlerHelpers
   def set_gemfile(gemfile)
     gemfile = expand_gemfile(gemfile || "rails3.0")
     ensure_installed(File.dirname(gemfile))
-    ENV["BUNDLE_GEMFILE"] = gemfile
+    ENV["BUNDLE_GEMFILE"] = gemfile.to_s
   end
 end
