@@ -6,7 +6,15 @@ $LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib') unless $LOAD_PATH.include
 require 'spork'
 require 'spork/runner'
 
+
+trap('HUP') do
+  STDOUT.puts("HUP received, reloading...")
+  exec("#{$0} #{ARGV.map(&:shellescape).join(' ')}")
+end
+
+
 begin
+  STDOUT.puts("Starting spork, PID: #{$$}")
   success = Spork::Runner.run(ARGV, STDOUT, STDERR)
   Kernel.exit(success ? 0 : 1)
 rescue SystemExit => e
