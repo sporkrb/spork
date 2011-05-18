@@ -90,7 +90,7 @@ Or, you could add the following flag to your +spec.opts+ (or +.rspec+ depending 
 
 === Cucumber
 
-Cucumber has DRb support (see http://wiki.github.com/aslakhellesoy/cucumber/spork-and---drb)
+Cucumber has DRb support (see http://wiki.github.com/cucumber/cucumber/spork-and---drb)
 
   cucumber --drb features/my.feature
 
