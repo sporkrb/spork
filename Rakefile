@@ -46,6 +46,13 @@ task :install_bundles do
   end
 end
 
+desc "build gems for deployment to rubygems.org"
+task :gems do
+  sh "gem build spork.gemspec"
+  sh "PLATFORM=x86-mingw32 gem build spork.gemspec"
+  sh "PLATFORM=x86-mswin32 gem build spork.gemspec"
+end
+
 # PENDING: Get this to work with gem bundler
 # desc "Test all supported versions of rails"
 # task :test_rails do
