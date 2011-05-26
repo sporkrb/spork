@@ -22,6 +22,15 @@ Gem::Specification.new do |s|
   s.summary = %q{spork}
   s.test_files = Dir["features/**/*"] + Dir["spec/**/*"]
 
+  case ENV['PLATFORM']
+  when NilClass
+  when "x86-mingw32", "x86-mswin32"
+    s.platform = ENV['PLATFORM']
+    s.add_dependency('win32-process')
+  else
+    STDERR.puts "Warning: no customization for #{ENV['PLATFORM']}"
+  end
+
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
