@@ -13,8 +13,7 @@ Gem::Specification.new do |s|
     "MIT-LICENSE",
      "README.rdoc"
   ]
-  s.extensions = 'ext/mkrf_conf.rb'
-  s.files = ["geminstaller.yml", "README.rdoc", "MIT-LICENSE"] + Dir["lib/**/*"] + Dir["assets/**/*"]
+  s.files = ["README.rdoc", "MIT-LICENSE"] + Dir["lib/**/*"] + Dir["assets/**/*"]
   s.homepage = %q{http://github.com/timcharper/spork}
   s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]

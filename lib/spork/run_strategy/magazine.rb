@@ -3,7 +3,15 @@
 # as they come in
 require 'drb'
 require 'rinda/ring'
-require 'win32/process' if RUBY_PLATFORM =~ /mswin|mingw/  and RUBY_VERSION < '1.9.1'
+if RUBY_PLATFORM =~ /mswin|mingw/  and RUBY_VERSION < '1.9.1'
+  begin
+    require 'win32/process'
+  rescue LoadError
+    puts "The 'win32-process' gem is required for windows Spork support with ruby 1.9.1 and lower. Install it, or if using bundler, add it to your Gemfile."
+  end
+end
+
+require 'rubygems' # used for Gem.ruby
 
 $:.unshift(File.dirname(__FILE__))
 require 'magazine/magazine_slave'
