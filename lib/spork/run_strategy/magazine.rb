@@ -8,6 +8,7 @@ if RUBY_PLATFORM =~ /mswin|mingw/  and RUBY_VERSION < '1.9.1'
     require 'win32/process'
   rescue LoadError
     puts "The 'win32-process' gem is required for windows Spork support with ruby 1.9.1 and lower. Install it, or if using bundler, add it to your Gemfile."
+    exit 1
   end
 end
 
