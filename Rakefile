@@ -1,10 +1,10 @@
 require 'rubygems'
 require 'bundler'
 Bundler.setup
-require 'rake'
 
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:spec)
+
 begin
   require 'cucumber/rake/task'
   Cucumber::Rake::Task.new(:features)
