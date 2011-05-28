@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 describe Spork::Forker do
   describe ".new" do
@@ -37,7 +37,7 @@ describe Spork::Forker do
       sleep 0.5
       forker.abort
       sleep 0.1
-      (ended_at - started_at).should be_close(0.5, 0.1)
+      (ended_at - started_at).should be_within(0.1).of(0.5)
       forker.running?.should == false
     end
   end
