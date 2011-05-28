@@ -1,6 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    archive-tar-minitar (0.5.2)
     builder (3.0.0)
     columnize (0.3.2)
     cucumber (0.10.2)
@@ -13,21 +14,27 @@ GEM
     gherkin (2.3.7)
       json (>= 1.4.6)
     json (1.5.1)
-    linecache (0.43)
+    linecache19 (0.5.12)
+      ruby_core_source (>= 0.1.4)
     rake (0.8.7)
-    rspec (2.5.0)
-      rspec-core (~> 2.5.0)
-      rspec-expectations (~> 2.5.0)
-      rspec-mocks (~> 2.5.0)
-    rspec-core (2.5.1)
-    rspec-expectations (2.5.0)
+    rspec (2.6.0)
+      rspec-core (~> 2.6.0)
+      rspec-expectations (~> 2.6.0)
+      rspec-mocks (~> 2.6.0)
+    rspec-core (2.6.3)
+    rspec-expectations (2.6.0)
       diff-lcs (~> 1.1.2)
-    rspec-mocks (2.5.0)
-    ruby-debug (0.10.4)
-      columnize (>= 0.1)
-      ruby-debug-base (~> 0.10.4.0)
-    ruby-debug-base (0.10.4)
-      linecache (>= 0.3)
+    rspec-mocks (2.6.0)
+    ruby-debug-base19 (0.11.25)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby_core_source (>= 0.1.4)
+    ruby-debug19 (0.11.6)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby-debug-base19 (>= 0.11.19)
+    ruby_core_source (0.1.5)
+      archive-tar-minitar (>= 0.5.2)
     term-ansicolor (1.0.5)
 
 PLATFORMS
@@ -36,5 +43,5 @@ PLATFORMS
 DEPENDENCIES
   cucumber (= 0.10.2)
   rake
-  rspec (= 2.5.0)
-  ruby-debug
+  rspec (~> 2.6)
+  ruby-debug19

@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 describe Spork::Runner do
   def use_test_server(klass = Spork::TestFramework::RSpec)
