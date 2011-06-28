@@ -86,7 +86,7 @@ class SporkWorld
   end
 end
 
-require(SPORK_ROOT + "features/support/bundler_helpers.rb")
+require((SPORK_ROOT + "features/support/bundler_helpers.rb").to_s)
 BundlerHelpers.set_gemfile(ENV["GEMFILE"])
 
 
