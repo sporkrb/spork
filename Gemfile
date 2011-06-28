@@ -1,5 +1,5 @@
 source :gemcutter
-gem 'cucumber', '0.10.2'
+gem 'cucumber', '~> 1.0.0'
 gem 'rspec', '~> 2.6'
 gem 'rake'
 
