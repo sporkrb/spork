@@ -9,7 +9,7 @@ class Spork::TestFramework::Cucumber < Spork::TestFramework
 
   def preload
     require 'cucumber'
-    if ::Cucumber::VERSION >= '0.9.0'
+    if ::Cucumber::VERSION >= '0.9.0' && ::Cucumber::VERSION < '1.0.0'
       # nothing to do nowadays
     else
       preload_legacy_cucumbers
@@ -18,7 +18,7 @@ class Spork::TestFramework::Cucumber < Spork::TestFramework
   end
 
   def run_tests(argv, stderr, stdout)
-    if ::Cucumber::VERSION >= '0.9.0'
+    if ::Cucumber::VERSION >= '0.9.0'  && ::Cucumber::VERSION < '1.0.0'
       ::Cucumber::Cli::Main.new(argv, stdout, stderr).execute!
     else
       ::Cucumber::Cli::Main.new(argv, stdout, stderr).execute!(@step_mother)
