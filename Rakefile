@@ -43,7 +43,7 @@ task :install_bundles do
 end
 
 namespace :gem do
-  desc "build gems for deployment to rubygems.org"
+  desc "Build gems"
   task :build do
     sh "rm -f spork-*.gem"
     sh "gem build spork.gemspec"
@@ -51,11 +51,14 @@ namespace :gem do
     sh "env PLATFORM=x86-mswin32 gem build spork.gemspec"
   end
 
-  task :push do
+  desc "Build and deploy gems to rubygems.org"
+  task :deploy => :build do
     Dir["spork-*.gem"].each do |g|
       sh "gem push #{g}"
     end
   end
+
+  task :default => :build
 end
 
 # PENDING: Get this to work with gem bundler
