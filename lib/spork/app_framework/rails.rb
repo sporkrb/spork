@@ -56,7 +56,10 @@ class Spork::AppFramework::Rails < Spork::AppFramework
     Spork.trap_method(::ActiveModel::Observing::ClassMethods, :instantiate_observers)
     Spork.each_run { ActiveRecord::Base.establish_connection rescue nil } if Object.const_defined?(:ActiveRecord)
 
-
+# Monkey patching the #helper method causing some hooks not to load. This error is seen in Spreecommerce.
+# Unfortunately, I don't enough about rails internals to fix the problem, aside from defaulting to the normal
+# behavior, and restarting spork when helper files change.
+=begin
     AbstractController::Helpers::ClassMethods.module_eval do
       def helper(*args, &block)
         ([args].flatten - [:all]).each do |arg|
@@ -78,5 +81,6 @@ class Spork::AppFramework::Rails < Spork::AppFramework
       end
     end
   end
+=end
 
 end
