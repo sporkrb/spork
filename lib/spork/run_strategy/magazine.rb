@@ -106,22 +106,26 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
 
   def restart_slave(id)
     pid   = @pids[id]
-    Process.kill(9, pid)
+    kill_slave(pid)
     start_slave(id)
   end
 
   def windows?
     ENV['OS'] == 'Windows_NT'
   end
+
+  def kill_slave(pid)
+    if windows?
+      system("taskkill /f /t /pid #{pid} > nul")
+    else
+      Process.kill(9, pid)
+    end
+  end
   
   def kill_all_processes
 
     @pids.each {|pid| 
-      if windows?
-        system("taskkill /f /pid #{pid}")
-      else
-        Process.kill(9, pid)
-      end
+      kill_slave(pid)
     }
     puts "\nKilling processes."; $stdout.flush
   end
