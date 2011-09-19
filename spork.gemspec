@@ -1,7 +1,12 @@
+lib = File.expand_path('../lib/', __FILE__)
+$:.unshift lib unless $:.include?(lib)
+
 require 'date'
+require 'spork/version'
+
 Gem::Specification.new do |s|
   s.name = %q{spork}
-  s.version = "0.9.0.rc9"
+  s.version = Spork::VERSION
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tim Harper", "Donald Parish"]
