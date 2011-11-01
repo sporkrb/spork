@@ -1,10 +1,10 @@
 = Spork
 
-* Repository: http://github.com/timcharper/spork
-* Issues: http://github.com/timcharper/spork/issues
-* Changes: http://github.com/timcharper/spork/blob/master/History.txt
+* Repository: http://github.com/sporkrb/spork
+* Issues: http://github.com/sporkrb/spork/issues
+* Changes: http://github.com/sporkrb/spork/blob/master/History.txt
 * Mailing list: http://groups.google.com/group/sporkgem
-* Wiki: http://wiki.github.com/timcharper/spork
+* Wiki: http://wiki.github.com/sporkrb/spork
 
 == SYNOPSIS:
 
@@ -70,7 +70,7 @@ It will output a lot of stuff.  At the top you'll find a summary of all project 
 
 Some project changes will require a spork restart, and you shouldn't expect them to not (IE: modifying your project gem dependencies or core application config).  Any file that is loaded during Spork start-up will be cached until Spork is restarted.  You can restart spork by sending a USR2 signal to the server process.  This could be automated with a gem such as Kicker (https://github.com/alloy/kicker).  Since a native hook is required for each operating system to efficiently watch for filesystem changes, automatic restarting has not been built into Spork.
 
-You may find this wiki page useful for common ways to battle a variety of common pre-loading issues: http://github.com/timcharper/spork/wiki/Spork.trap_method-Jujutsu
+You may find this wiki page useful for common ways to battle a variety of common pre-loading issues: http://github.com/sporkrb/spork/wiki/Spork.trap_method-Jujutsu
 
 == Running specs over Spork
 
@@ -120,7 +120,7 @@ Essentially:
 
 == Some potential issues and ways to overcome them:
 
-See http://wiki.github.com/timcharper/spork/troubleshooting
+See http://wiki.github.com/sporkrb/spork/troubleshooting
 
 == Kudos to
 
