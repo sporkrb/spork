@@ -122,16 +122,16 @@ class Spork::TestFramework
         stderr.puts "#{helper_file} has not been bootstrapped.  Run spork --bootstrap to do so."
         stderr.flush
 
-        if framework.bootstrap_required?
-          stderr.puts "I can't do anything for you by default for the framework you're using: #{framework.short_name}.\nYou must bootstrap #{helper_file} to continue."
+        if app_framework.bootstrap_required?
+          stderr.puts "I can't do anything for you by default for the app framework you're using: #{app_framework.short_name}.\nYou must bootstrap #{helper_file} to continue."
           stderr.flush
           return false
         else
-          load(framework.entry_point)
+          load(app_framework.entry_point)
         end
       end
 
-      framework.preload do
+      app_framework.preload do
         if bootstrapped?
           stderr.puts "Loading Spork.prefork block..."
           stderr.flush
@@ -147,20 +147,20 @@ class Spork::TestFramework
   end
 
   def entry_point
-    bootstrapped? ? helper_file : framework.entry_point
+    bootstrapped? ? helper_file : app_framework.entry_point
   end
 
   def default_port
     self.class.default_port
   end
 
+  def app_framework
+    @app_framework ||= Spork::AppFramework.detect_framework
+  end
+
   protected
     def self.inherited(subclass)
       @@supported_test_frameworks << subclass
-    end
-
-    def framework
-      @framework ||= Spork::AppFramework.detect_framework
     end
 end
 

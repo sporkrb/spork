@@ -56,7 +56,7 @@ module Spork
     def run
       return false unless test_framework = find_test_framework
       ENV["DRB"] = 'true'
-      @error.puts "Using #{test_framework.short_name}"
+      @error.puts "Using #{test_framework.short_name}, #{test_framework.app_framework.short_name}"
       @error.flush
 
       case

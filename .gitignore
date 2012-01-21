@@ -8,3 +8,4 @@ tmp/
 ext/Rakefile
 .bundle
 TAGS
+*.gem

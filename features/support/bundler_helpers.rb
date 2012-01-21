@@ -1,4 +1,3 @@
-require 'bundler'
 module BundlerHelpers
   extend self
   def install_bundle(dir)
@@ -19,7 +18,7 @@ module BundlerHelpers
       FileUtils.rm(gemfile_lock)
       FileUtils.rm_rf(dir + "/.bundle")
     when ! File.exist?(bundle_environment)
-      puts "Bundle #{gemfile} not installed.  Installing..."
+      puts "Installing bundle #{gemfile}..."
     when File.mtime(bundle_environment) < File.mtime(gemfile_lock)
       puts "#{gemfile_lock} is newer than #{bundle_environment}.  Reinstalling"
     else
@@ -28,13 +27,8 @@ module BundlerHelpers
     install_bundle(dir)
   end
 
-  def expand_gemfile(gemfile)
-    possibilities = [File.expand_path(gemfile, Dir.pwd), SporkWorld::GEMFILES_ROOT + gemfile + "Gemfile"]
-    possibilities.detect {|f| File.exist?(f)} || raise(RuntimeError, %(Gemfile not found:\n #{possibilities * "\n"}))
-  end
-
   def set_gemfile(gemfile)
-    gemfile = expand_gemfile(gemfile || "rails3.0")
+    gemfile = File.expand_path(gemfile)
     ensure_installed(File.dirname(gemfile))
     ENV["BUNDLE_GEMFILE"] = gemfile.to_s
   end

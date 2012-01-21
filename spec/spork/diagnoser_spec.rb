@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-
 describe Spork::Diagnoser do
   after(:each) do
     Spork::Diagnoser.remove_hook!

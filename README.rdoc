@@ -20,40 +20,42 @@ Spork runs on POSIX systems using fork. It also runs on windows by pre-populatin
 
 == Supported Application Frameworks
 
-Actually, Spork ~can~ work with any application framework.  But, it ships with hooks and helpers to make an "out of the box" experience.
+Spork can work with any application framework, but needs work to prevent application files from being eager loaded.
 
-* Rails 3.0 (for Rails 2.{1,2,3}.x, please try spork 0.8.x)
-* Padrino
+See https://github.com/sporkrb/spork/wiki/Supported-Application-Frameworks for a list of supported frameworks and their gems.
 
 == INSTALL:
 
 === rubygems:
 
-  [sudo] gem install spork --prerelease
-
-(Rails 2.x)
-
-  [sudo] gem install spork --version 0.8.4
+  [sudo] gem install spork
 
 === bundler:
 
 Add to your Gemfile:
 
-  gem 'spork', '~> 0.9.0.rc'
-
-(Rails 2.x, use this)
-
-  gem 'spork', '~> 0.8'
+  gem 'spork', '~> 0.9.0'
 
 == Usage
 
 From a terminal, change to your project directory.
 
-Then, bootstrap your spec/spec_helper.rb file.
+Then, bootstrap your test helper file. If running rspec,
 
-  spork --bootstrap
+  spork rspec --bootstrap
 
-Next, edit spec/spec_helper.rb and follow the instructions that were put at the top.
+Cucumber:
+
+  spork cucumber --bootstrap
+
+TestUnit:
+
+  (Install the spork-testunit gem)
+  spork test_unit --bootstrap
+
+If you don't specifiy a test framework, spork will find one and pick it.
+
+Follow the instructions.
 
 Finally, run spork.  A spec DRb server will be running!
 
@@ -131,4 +133,4 @@ See http://wiki.github.com/sporkrb/spork/troubleshooting
 * Roger Pack - JRuby support / Windows
 * Donald Parish - Windows support (Magazine strategy)
 
-Spork (c) 2011 Tim Harper, released under the MIT license
+Spork (c) 2012 Tim Harper, released under the MIT license

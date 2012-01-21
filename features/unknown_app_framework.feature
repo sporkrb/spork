@@ -7,7 +7,7 @@ Feature: Unknown app frameworks
     Given a file named "spec/spec_helper.rb" with:
       """
       require 'rubygems'
-      require 'spec'
+      require 'rspec'
       """
     When I run spork
     Then the error output should contain "Using RSpec"
@@ -16,11 +16,10 @@ Feature: Unknown app frameworks
   Scenario: Sporked spec_helper
     Given a file named "spec/spec_helper.rb" with:
       """
-      require 'rubygems'
       require 'spork'
       
       Spork.prefork do
-        require 'spec'
+        require 'rspec'
       end
       
       Spork.each_run do
@@ -31,12 +30,11 @@ Feature: Unknown app frameworks
       """
       describe "Did it work?" do
         it "checks to see if all worked" do
-          Spork.state.should == :using_spork
-          puts "Specs successfully run within spork"
+          Spork.using_spork?.should == true
+          puts 'Specs successfully run within spork'
         end
       end
       """
     When I fire up a spork instance with "spork rspec"
-    And I run spec --drb spec/did_it_work_spec.rb 
+    And I run rspec --drb spec/did_it_work_spec.rb
     Then the output should contain "Specs successfully run within spork"
-  

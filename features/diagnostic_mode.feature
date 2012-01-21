@@ -11,7 +11,7 @@ Feature: Diagnostic Mode
       require 'spork'
 
       Spork.prefork do
-        require 'lib/awesome.rb'
+        require './lib/awesome.rb'
         require '../external_dependency/super_duper.rb'
       end
 
@@ -38,4 +38,3 @@ Feature: Diagnostic Mode
     And the output should contain "spec/spec_helper.rb:5"
     And the output should not contain "super_duper.rb"
     And the output should not contain "diagnose.rb"
-     

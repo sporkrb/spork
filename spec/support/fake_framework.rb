@@ -1,5 +1,7 @@
+require "#{File.dirname(__FILE__)}/test_io_streams.rb"
+
 class FakeFramework < Spork::TestFramework
-  include Spork::TestIOStreams
+  include TestIOStreams
 
   attr_accessor :wait_time
   DEFAULT_PORT = 1000

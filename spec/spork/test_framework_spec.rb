@@ -66,9 +66,9 @@ describe Spork::TestFramework do
       create_helper_file
       @fake.bootstrap
 
-      $test_stderr.string.should include("Bootstrapping")
-      $test_stderr.string.should include("Edit")
-      $test_stderr.string.should include("favorite text editor")
+      TestIOStreams.stderr.string.should include("Bootstrapping")
+      TestIOStreams.stderr.string.should include("Edit")
+      TestIOStreams.stderr.string.should include("favorite text editor")
 
       File.read(@fake.helper_file).should include(File.read(FakeFramework::BOOTSTRAP_FILE))
     end

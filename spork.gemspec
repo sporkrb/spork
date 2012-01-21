@@ -13,8 +13,8 @@ Gem::Specification.new do |s|
     "MIT-LICENSE",
      "README.rdoc"
   ]
-  s.files = ["Gemfile", "README.rdoc", "MIT-LICENSE"] + Dir["lib/**/*"] + Dir["assets/**/*"]
-  s.homepage = %q{http://github.com/timcharper/spork}
+  s.files = ["Gemfile", "README.rdoc", "MIT-LICENSE"] + Dir["lib/**/*"] + Dir["spec/**/*"] + Dir["features/**/*"]
+  s.homepage = %q{http://github.com/sporkrb/spork}
   s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{spork}
