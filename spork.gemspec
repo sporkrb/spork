@@ -1,7 +1,7 @@
 require 'date'
 Gem::Specification.new do |s|
   s.name = %q{spork}
-  s.version = "0.9.0"
+  s.version = "1.0.0rc0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tim Harper", "Donald Parish"]
@@ -17,8 +17,6 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/sporkrb/spork}
   s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
-  s.rubyforge_project = %q{spork}
-  s.rubygems_version = %q{1.3.5}
   s.summary = %q{spork}
   s.test_files = Dir["features/**/*"] + Dir["spec/**/*"]
 
