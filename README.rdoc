@@ -26,15 +26,13 @@ See https://github.com/sporkrb/spork/wiki/Supported-Application-Frameworks for a
 
 == INSTALL:
 
-=== rubygems:
+NOTICE: If using spork with rails, use the spork-rails gem. Omit the version and Bundler should pick the latest compatible version for you.
 
-  [sudo] gem install spork
-
-=== bundler:
+=== Bundler:
 
 Add to your Gemfile:
 
-  gem 'spork', '~> 0.9.0'
+  gem 'spork', '~> 1.0'
 
 == Usage
 
@@ -53,7 +51,7 @@ TestUnit:
   (Install the spork-testunit gem)
   spork test_unit --bootstrap
 
-If you don't specifiy a test framework, spork will find one and pick it.
+(If you don't specifiy a test framework, spork will find one and pick it.)
 
 Follow the instructions.
 
