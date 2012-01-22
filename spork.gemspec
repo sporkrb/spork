@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
      "README.rdoc"
   ]
   s.files = ["Gemfile", "README.rdoc", "MIT-LICENSE"] + Dir["lib/**/*"] + Dir["assets/**/*"]
-  s.homepage = %q{http://github.com/timcharper/spork}
+  s.homepage = %q{https://github.com/sporkrb/spork}
   s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{spork}
