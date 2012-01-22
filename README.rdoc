@@ -29,7 +29,7 @@ Actually, Spork ~can~ work with any application framework.  But, it ships with h
 
 === rubygems:
 
-  [sudo] gem install spork --prerelease
+  [sudo] gem install spork --version 0.9.0
 
 (Rails 2.x)
 
@@ -39,7 +39,7 @@ Actually, Spork ~can~ work with any application framework.  But, it ships with h
 
 Add to your Gemfile:
 
-  gem 'spork', '~> 0.9.0.rc'
+  gem 'spork', '~> 0.9.0'
 
 (Rails 2.x, use this)
 
