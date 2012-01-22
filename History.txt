@@ -1,3 +1,10 @@
+== 1.0.0rc0 ==
+
+* Split out application framework support to separate gems.
+    This will allow more precise dependency constraints between known working versions of application frameworks (Rails) and the plugin to add support for the framework, hopefully reducing confusion and increasing reliability.
+
+* All tests pass in ruby 1.9.2
+
 == 0.9.0 ==
 
 * Cucumber-rails 1.0.0 is supported (Stephen Bannasch)
