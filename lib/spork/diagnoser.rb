@@ -32,7 +32,7 @@ class Spork::Diagnoser
         end
         private :require
         
-        def load(string)
+        def load(string, wrap = false)
           ::Spork::Diagnoser.add_included_file(string, caller)
           load_without_diagnoser(string)
         end
