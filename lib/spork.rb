@@ -13,16 +13,19 @@ module Spork
   autoload :Diagnoser,     (LIBDIR + 'spork/diagnoser').to_s
   autoload :GemHelpers,    (LIBDIR + 'spork/gem_helpers').to_s
 
-  @process_counter_semaphore = Mutex.new
+  @run_count_semaphore = Mutex.new
 
   class << self
 
-    def process_counter
-      @process_counter || 0
+    def run_count
+      @run_count || 0
     end
 
-    def process_counter=(counter)
-      @process_counter = counter
+    def increase_run_count
+      @run_count_semaphore.synchronize do
+        @run_count = 0 unless @run_count
+        @run_count += 1
+      end
     end
 
     # Run a block, during prefork mode.  By default, if prefork is called twice in the same file and line number, the supplied block will only be ran once.
@@ -46,12 +49,6 @@ module Spork
         each_run_procs << block
       else
         yield
-      end
-    end
-
-    def increase_process_counter
-      @process_counter_semaphore.synchronize do
-        self.process_counter += 1
       end
     end
 

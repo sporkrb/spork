@@ -4,7 +4,7 @@ class Spork::RunStrategy::Forking < Spork::RunStrategy
   end
 
   def run(argv, stderr, stdout)
-    Spork.increase_process_counter
+    Spork.increase_run_count
 
     child = ::Spork::Forker.new do
       $stdout, $stderr = stdout, stderr
