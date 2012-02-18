@@ -4,11 +4,9 @@ class Spork::RunStrategy::Forking < Spork::RunStrategy
   end
 
   def run(argv, stderr, stdout)
-    abort if running?
-
     Spork.increase_process_counter
 
-    @child = ::Spork::Forker.new do
+    child = ::Spork::Forker.new do
       $stdout, $stderr = stdout, stderr
       load test_framework.helper_file
       Spork.exec_each_run
@@ -16,19 +14,11 @@ class Spork::RunStrategy::Forking < Spork::RunStrategy
       Spork.exec_after_each_run
       result
     end
-    @child.result
-  end
-
-  def abort
-    @child && @child.abort
+    child.result
   end
 
   def preload
     test_framework.preload
-  end
-
-  def running?
-    @child && @child.running?
   end
 
   def assert_ready!
