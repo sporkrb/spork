@@ -3,10 +3,14 @@ class Spork::RunStrategy::Forking < Spork::RunStrategy
     Kernel.respond_to?(:fork)
   end
 
+  def children
+    @children ||= []
+  end
+
   def run(argv, stderr, stdout)
     Spork.increase_run_count
 
-    child = ::Spork::Forker.new do
+    children << child = ::Spork::Forker.new do
       $stdout, $stderr = stdout, stderr
       load test_framework.helper_file
       Spork.exec_each_run
@@ -15,6 +19,15 @@ class Spork::RunStrategy::Forking < Spork::RunStrategy
       result
     end
     child.result
+  end
+
+  def abort
+    children.each { |child| child.abort if child.running? }
+    nil
+  end
+
+  def running?
+    children.any? { |child| child.running? }
   end
 
   def preload

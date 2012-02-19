@@ -13,17 +13,6 @@ describe Spork::RunStrategy::Forking do
     @run_strategy.run("test", STDOUT, STDIN).should == "tests were ran"
   end
 
-  it "aborts the current running thread when another run is started" do
-    create_helper_file
-    @fake_framework.wait_time = 0.25
-    first_run = Thread.new { @run_strategy.run("test", STDOUT, STDIN).should == nil }
-    sleep(0.05)
-    @run_strategy.run("test", STDOUT, STDIN).should == true
-
-    # wait for the first to finish
-    first_run.join
-  end
-
   it "can abort the current run" do
     create_helper_file
     @fake_framework.wait_time = 5
