@@ -37,17 +37,18 @@ class Spork::Forker
   #
   # If the fork was aborted, then result returns nil.
   def result
-    return unless running?
+    return @result if defined?(@result) || ! running?
     result_thread = Thread.new do
       begin
         @result = Marshal.load(@server_io)
         Marshal.dump('ACK', @server_io)
-      rescue ForkDiedException, EOFError
+      rescue EOFError
         @result = nil
+      rescue ForkDiedException
       end
     end
     Process.wait(@child_pid)
-    result_thread.raise(ForkDiedException) if @result.nil?
+    result_thread.raise(ForkDiedException) if result_thread.status == "sleep"
     @child_pid = nil
     @result
   end

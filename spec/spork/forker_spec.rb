@@ -29,7 +29,12 @@ describe Spork::Forker do
     it "aborts a fork and returns nil for the result" do
       started_at = Time.now
       ended_at = nil
-      forker = Spork::Forker.new { sleep 5 }
+      forker = Spork::Forker.new do
+        begin
+          sleep 5
+        rescue SignalException
+        end
+      end
       Thread.new do
         forker.result.should == nil
         ended_at = Time.now
