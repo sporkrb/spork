@@ -1,3 +1,7 @@
+== 1.0.0rc3 ==
+
+* Forward-port fixes from 0.9.1
+
 == 1.0.0rc0 ==
 
 * Split out application framework support to separate gems.
