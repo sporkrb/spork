@@ -14,6 +14,7 @@ class Spork::Server
   def initialize(options = {})
     @run_strategy = options[:run_strategy]
     @port = options[:port]
+    @quiet = options[:quiet]
   end
   
   def self.run(options = {})
@@ -44,9 +45,9 @@ class Spork::Server
   #
   # When implementing a test server, don't override this method: override run_tests instead.
   def run(argv, stderr, stdout)
-    puts "Running tests with args #{argv.inspect}..."
+    puts "Running tests with args #{argv.inspect}..." unless @quiet
     result = run_strategy.run(argv, stderr, stdout)
-    puts "Done.\n\n"
+    puts "Done.\n\n" unless @quiet
     result
   end
   
