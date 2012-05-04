@@ -5,6 +5,10 @@
 
 * All tests pass in ruby 1.9.2
 
+== 0.9.1 ==
+
+* Fixes issue introduced by diagnoser. (Alex Southgate)
+
 == 0.9.0 ==
 
 * Cucumber-rails 1.0.0 is supported (Stephen Bannasch)
