@@ -22,6 +22,7 @@ module Spork
       opt.on("-b", "--bootstrap")  {|ignore| @options[:bootstrap] = true }
       opt.on("-d", "--diagnose")  {|ignore| @options[:diagnose] = true }
       opt.on("-h", "--help")  {|ignore| @options[:help] = true }
+      opt.on("-q", "--quiet")  {|ignore| @options[:quiet] = true }
       opt.on("-p", "--port [PORT]") {|port| @options[:port] = port }
       non_option_args = args.select { |arg| ! args[0].match(/^-/) }
       @options[:server_matcher] = non_option_args[0]
@@ -72,7 +73,7 @@ module Spork
       else
         run_strategy = Spork::RunStrategy.factory(test_framework)
         return(false) unless run_strategy.preload
-        Spork::Server.run(:port => @options[:port] || test_framework.default_port, :run_strategy => run_strategy)
+        Spork::Server.run(:port => @options[:port] || test_framework.default_port, :run_strategy => run_strategy, :quiet => @options[:quiet])
         return true
       end
     end
