@@ -44,16 +44,16 @@ From a terminal, change to your project directory.
 
 Then, bootstrap your test helper file. If running rspec,
 
-  spork rspec --bootstrap
+  spork RSpec --bootstrap
 
 Cucumber:
 
-  spork cucumber --bootstrap
+  spork Cucumber --bootstrap
 
 TestUnit:
 
   (Install the spork-testunit gem)
-  spork test_unit --bootstrap
+  spork TestUnit --bootstrap
 
 (If you don't specifiy a test framework, spork will find one and pick it.)
 
