@@ -4,7 +4,6 @@ describe Spork::RunStrategy::Forking do
   before(:each) do
     @fake_framework = FakeFramework.new
     @run_strategy = Spork::RunStrategy::Forking.new(@fake_framework)
-
   end
 
   it "returns the result of the run_tests method from the forked child" do
