@@ -16,6 +16,7 @@ require 'rubygems' # used for Gem.ruby
 
 $:.unshift(File.dirname(__FILE__))
 require 'magazine/magazine_slave'
+require 'magazine/rinda_ring_finger_patch' if RUBY_VERSION > '1.9.1'
 
 class Spork::RunStrategy::Magazine < Spork::RunStrategy
 
