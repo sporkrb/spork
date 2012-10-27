@@ -2,6 +2,7 @@
 # to boldly just run test after test
 # as they come in
 require 'drb'
+require 'timeout'
 require 'rinda/ring'
 if RUBY_PLATFORM =~ /mswin|mingw/  and RUBY_VERSION < '1.9.1'
   begin
@@ -84,24 +85,21 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
   end
 
   def run(argv, stderr, stdout)
-        DRb.start_service
-        ts = Rinda::RingFinger.primary
-        if ts.read_all([:name, :MagazineSlave, nil, nil]).size > 0
-          print '  <-- take tuple'; stdout.flush
-          tuple = ts.take([:name, :MagazineSlave, nil, nil])
-          slave = tuple[2]
-          id = tuple[3]
+    DRb.start_service
+    ts = Rinda::RingFinger.primary
+    Timeout.timeout(60) {sleep 0.1 until ts.read_all([:name, :MagazineSlave, nil, nil]).size > 0}
+    print '  <-- take tuple'; stdout.flush
+    tuple = ts.take([:name, :MagazineSlave, nil, nil])
+    slave = tuple[2]
+    id = tuple[3]
 
-          puts "(#{slave.id_num}); slave.run..."; $stdout.flush
-          begin
-            slave.run(argv,stderr,stdout)
-            puts "   -- (#{slave.id_num});run done"; $stdout.flush
-          ensure
-            restart_slave(id)
-          end
-        else
-          puts '- NO tuple'; $stdout.flush
-        end
+    puts "(#{slave.id_num}); slave.run..."; $stdout.flush
+    begin
+      slave.run(argv,stderr,stdout)
+      puts "   -- (#{slave.id_num});run done"; $stdout.flush
+    ensure
+      restart_slave(id)
+    end
   end
 
   def restart_slave(id)
