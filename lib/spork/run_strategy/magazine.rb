@@ -96,8 +96,9 @@ class Spork::RunStrategy::Magazine < Spork::RunStrategy
 
     puts "(#{slave.id_num}); slave.run..."; $stdout.flush
     begin
-      slave.run(argv,stderr,stdout)
+      result = slave.run(argv,stderr,stdout)
       puts "   -- (#{slave.id_num});run done"; $stdout.flush
+      result
     ensure
       restart_slave(id)
     end
