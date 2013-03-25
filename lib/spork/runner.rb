@@ -34,6 +34,22 @@ module Spork
         @output.puts supported_test_frameworks_text
         exit(0)
       end
+
+      # If server is rspec and port isn't passed in, attempt to get it from .rspec
+      if !@options[:port] && [nil, 'rspec'].include?(@options[:server_matcher])
+        retrieve_port_from_dot_rspec
+      end
+    end
+
+    def retrieve_port_from_dot_rspec
+      File.open("./.rspec", "r") do |file|
+        file.each_line do |line|
+          next unless line =~ %r{drb-port\s*(\d+)}
+          @options[:port] = $1
+        end
+      end
+    rescue Errno::ENOENT
+      # Safely return. File not found.
     end
 
     def supported_test_frameworks_text

@@ -14,6 +14,22 @@ describe Spork::Runner do
     Spork::Runner.new(["rs"], @out, @err).find_test_framework.class.should == Spork::TestFramework::RSpec
   end
 
+  it "attempts to get port number from .rspec if rspec is the desired framework" do
+    Spork::Runner.any_instance.should_receive(:retrieve_port_from_dot_rspec)
+    Spork::Runner.new(['rspec'], @out, @err)
+  end
+
+  it "gets the port number from .rspec if rspec and file present" do
+    File.should_receive(:open).and_yield(StringIO.new("--drb-port 1234"))
+    subject = Spork::Runner.new(['rspec'], @out, @err)
+    subject.instance_variable_get(:"@options")[:port] == "1234"
+  end
+
+  it "no error is raised if .rspec isn't present" do
+    File.should_receive(:open).and_raise(Errno::ENOENT)
+    expect{ subject = Spork::Runner.new(['rspec'], @out, @err) }.to_not raise_error
+  end
+
   it "shows an error message if no matching server was found" do
     Spork::Runner.new(["argle_bargle"], @out, @err).run.should == false
     @err.string.should include(%(Couldn't find a supported test framework that begins with 'argle_bargle'))
