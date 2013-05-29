@@ -24,7 +24,9 @@ class Spork::Forker
       rescue EOFError
         nil
       rescue Exception => e
-        puts "Exception encountered: #{e.inspect}\nbacktrace:\n#{e.backtrace * %(\n)}"
+        unless e.class == SystemExit
+          puts "Exception encountered: #{e.inspect}\nbacktrace:\n#{e.backtrace * %(\n)}"
+        end
       end
       
       # terminate, skipping any at_exit blocks.
