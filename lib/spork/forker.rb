@@ -23,10 +23,16 @@ class Spork::Forker
         master_response = Marshal.load(@child_io)
       rescue EOFError
         nil
+      rescue SystemExit => e
+        if e.status == 0 || e.status == true
+          nil
+        else
+          puts "Exit with non-zero status: #{e.status}"
+        end
       rescue Exception => e
         puts "Exception encountered: #{e.inspect}\nbacktrace:\n#{e.backtrace * %(\n)}"
       end
-      
+
       # terminate, skipping any at_exit blocks.
       exit!(0)
     end

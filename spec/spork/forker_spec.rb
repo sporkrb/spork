@@ -7,6 +7,28 @@ describe Spork::Forker do
       Spork::Forker.new { $var = "booyah" }.result
       $var.should == "hello world"
     end
+
+    context 'mocking fork' do
+      before(:each) do
+        Kernel.should_receive(:fork) { |&block| block.call }
+        Spork::Forker.any_instance.should_receive(:exit!).with(0)
+      end
+
+      it 'prints exception backtrace' do
+        Spork::Forker.any_instance.should_receive(:puts).with(/Exception encountered/)
+        Spork::Forker.new { raise RuntimeError.new('exception in child') }
+      end
+
+      it 'does not print successful exit' do
+        Spork::Forker.any_instance.should_not_receive(:puts)
+        Spork::Forker.new { exit(0) }
+      end
+
+      it 'prints exist status' do
+        Spork::Forker.any_instance.should_receive(:puts).with('Exit with non-zero status: 1')
+        Spork::Forker.new { exit(1) }
+      end
+    end
   end
   
   describe "#result" do

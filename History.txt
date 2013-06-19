@@ -1,3 +1,7 @@
+== 0.9.2 ==
+
+* Fixes permission issues in gem.
+
 == 0.9.1 ==
 
 * Fixes issue introduced by diagnoser. (Alex Southgate)
