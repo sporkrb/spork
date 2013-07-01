@@ -2,8 +2,10 @@ module BundlerHelpers
   extend self
   def install_bundle(dir)
     Dir.chdir(dir) do
-      command = "env RUBYOPT= BUNDLE_GEMFILE=Gemfile bundle install"
-      system(command)
+      command = "bundle install --gemfile=#{Dir.pwd}/Gemfile --path=#{Dir.pwd}/.bundle"
+      Bundler.with_clean_env do
+        system(command)
+      end
       $?.exitstatus
     end
   end
