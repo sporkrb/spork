@@ -1,5 +1,4 @@
 {<img src="https://travis-ci.org/sporkrb/spork.png" alt="Build Status" />}[https://travis-ci.org/sporkrb/spork]
-
 = Spork
 
 * Repository: http://github.com/sporkrb/spork
