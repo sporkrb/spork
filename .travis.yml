@@ -1,0 +1,10 @@
+language: ruby
+bundler_args: --without debug
+before_script: "gem install bundler"
+script: ./bin/ci/ci.sh
+rvm:
+  - 1.9.3
+  - 2.0.0
+branches:
+  only:
+    - modernize-wip
