@@ -53,10 +53,14 @@ class SporkWorld
     stderr_file = Tempfile.new('spork')
     stderr_file.close
     in_current_dir do
-      gemfile = ENV['BUNDLE_GEMFILE']
-      Bundler.with_clean_env do
-        ENV['BUNDLE_GEMFILE'] = gemfile
+      if command.start_with?("rails new")
         @last_stdout = `bundle exec #{command} 2> #{stderr_file.path}`
+      else
+        gemfile = ENV['BUNDLE_GEMFILE']
+        Bundler.with_clean_env do
+          ENV['BUNDLE_GEMFILE'] = gemfile
+          @last_stdout = `bundle exec #{command} 2> #{stderr_file.path}`
+        end
       end
       @last_exit_status = $?.exitstatus
     end
