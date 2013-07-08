@@ -131,7 +131,7 @@ See http://wiki.github.com/sporkrb/spork/troubleshooting
 * Ben Mabey - help with documentation, testing, suggestions, patches, and bringing Cucumber support.
 * David Chelimsky - for the fine RSpec testing framework, and the original rspec-rails spec_server implementation, which Spork has built upon.
 * LeadTune - just for being an awesome place to work.
-* Alan Aslak - for the fine Cucumber testing framework, and for much collaboration getting cucumber working with spork.
+* Aslak Hellesøy - for the fine Cucumber testing framework, and for much collaboration getting cucumber working with spork.
 * Roger Pack - JRuby support / Windows
 * Donald Parish - Windows support (Magazine strategy)
 
