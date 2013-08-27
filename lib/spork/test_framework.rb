@@ -50,7 +50,7 @@ class Spork::TestFramework
   end
 
   def self.helper_file
-    self::HELPER_FILE
+    ENV["#{short_name.upcase}_HELPER_FILE"] || self::HELPER_FILE
   end
 
   def self.default_port
