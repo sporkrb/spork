@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    spork (1.0.0rc3)
+    spork (1.0.0rc4)
 
 GEM
   remote: https://rubygems.org/
