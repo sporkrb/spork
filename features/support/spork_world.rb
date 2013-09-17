@@ -53,7 +53,15 @@ class SporkWorld
     stderr_file = Tempfile.new('spork')
     stderr_file.close
     in_current_dir do
-      @last_stdout = `env RUBYOPT= bundle exec #{command} 2> #{stderr_file.path}`
+      if command.start_with?("rails new")
+        @last_stdout = `bundle exec #{command} 2> #{stderr_file.path}`
+      else
+        gemfile = ENV['BUNDLE_GEMFILE']
+        Bundler.with_clean_env do
+          ENV['BUNDLE_GEMFILE'] = gemfile
+          @last_stdout = `bundle exec #{command} 2> #{stderr_file.path}`
+        end
+      end
       @last_exit_status = $?.exitstatus
     end
     @last_stderr = IO.read(stderr_file.path)
@@ -61,7 +69,11 @@ class SporkWorld
 
   def run_in_background(command)
     in_current_dir do
-      @background_job = BackgroundJob.run("env RUBYOPT= bundle exec " +  command)
+      gemfile = ENV['BUNDLE_GEMFILE']
+      Bundler.with_clean_env do
+        ENV['BUNDLE_GEMFILE'] = gemfile
+        @background_job = BackgroundJob.run("bundle exec " +  command)
+      end
     end
     @background_jobs << @background_job
     @background_job

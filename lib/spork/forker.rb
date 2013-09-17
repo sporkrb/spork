@@ -6,10 +6,10 @@
 #     sleep 3
 #     "success"
 #   end
-#   
+#
 #   forker.result # => "success"
 class Spork::Forker
-  
+
   # Raised if the fork died (was killed) before it sent it's response back.
   class ForkDiedException < Exception; end
   def initialize(&block)
@@ -23,16 +23,18 @@ class Spork::Forker
         master_response = Marshal.load(@child_io)
       rescue EOFError
         nil
+      rescue SystemExit => e
+        puts "Error: exit code #{e.status}" unless e.status == 0
       rescue Exception => e
         puts "Exception encountered: #{e.inspect}\nbacktrace:\n#{e.backtrace * %(\n)}"
       end
-      
+
       # terminate, skipping any at_exit blocks.
       exit!(0)
     end
     @child_io.close
   end
-  
+
   # Wait for the fork to finish running, and then return its return value.
   #
   # If the fork was aborted, then result returns nil.
@@ -52,7 +54,7 @@ class Spork::Forker
     @child_pid = nil
     @result
   end
-  
+
   # abort the current running fork
   def abort
     if running?
@@ -61,7 +63,7 @@ class Spork::Forker
       true
     end
   end
-  
+
   def running?
     return false unless @child_pid
     Process.getpgid(@child_pid)

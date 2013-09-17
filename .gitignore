@@ -9,3 +9,5 @@ ext/Rakefile
 .bundle
 TAGS
 *.gem
+tags
+.ruby-version
