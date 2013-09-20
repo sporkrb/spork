@@ -14,4 +14,9 @@ class FakeFramework < Spork::TestFramework
     sleep(@wait_time || 0.5)
     true
   end
+
+  def preload
+    true
+  end
+
 end
