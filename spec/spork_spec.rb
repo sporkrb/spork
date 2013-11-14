@@ -28,19 +28,19 @@ describe Spork do
   
   it "only runs the preload block when preforking" do
     Spork.exec_prefork { spec_helper_simulator }
-    @ran.should == [:prefork]
+    expect(@ran).to eq [:prefork]
   end
   
   it "only runs the each_run block when running" do
     Spork.exec_prefork { spec_helper_simulator }
-    @ran.should == [:prefork]
+    expect(@ran).to eq [:prefork]
     
     Spork.exec_each_run
-    @ran.should == [:prefork, :each_run]
+    expect(@ran).to eq [:prefork, :each_run]
   end
   
   it "runs both blocks when Spork not activated" do
-    spec_helper_simulator.should == [:prefork, :each_run]
+    expect(spec_helper_simulator).to eq [:prefork, :each_run]
   end
   
   it "prevents blocks from being ran twice" do
@@ -49,24 +49,24 @@ describe Spork do
     @ran.clear
     Spork.exec_prefork { spec_helper_simulator }
     Spork.exec_each_run
-    @ran.should == []
+    expect(@ran).to eq []
   end
   
   it "runs multiple prefork and each_run blocks at different locations" do
     Spork.prefork { }
     Spork.each_run { }
-    spec_helper_simulator.should == [:prefork, :each_run]
+    expect(spec_helper_simulator).to eq [:prefork, :each_run]
   end
   
   it "expands a caller line, preserving the line number" do
-    Spork.send(:expanded_caller, "/boo/../yah.rb:31").should == "/yah.rb:31"
+    expect(Spork.send(:expanded_caller, "/boo/../yah.rb:31")).to eq "/yah.rb:31"
   end
   
   describe "#using_spork?" do
     it "returns true if Spork is being used" do
-      Spork.using_spork?.should be_false
+      expect(Spork.using_spork?).to be_false
       Spork.exec_prefork { }
-      Spork.using_spork?.should be_true
+      expect(Spork.using_spork?).to be_true
     end
   end
 
@@ -106,15 +106,15 @@ describe Spork do
       @trap_test.hello
       @trap_test.goodbye
       Spork.exec_each_run
-      TrapTest.output.should == ['goodbye', 'hello']
+      expect(TrapTest.output).to eq ['goodbye', 'hello']
     end
     
     it "works with methods that have punctuation" do
       Spork.trap_method(TrapTest, :say_something!)
       @trap_test.say_something!
-      TrapTest.output.should == []
+      expect(TrapTest.output).to eq []
       Spork.exec_each_run
-      TrapTest.output.should == ['something']
+      expect(TrapTest.output).to eq ['something']
     end
   end
   
@@ -147,7 +147,7 @@ describe Spork do
       TrapTest.hello
       TrapTest.goodbye
       Spork.exec_each_run
-      TrapTest.output.should == ['goodbye', 'hello']
+      expect(TrapTest.output).to eq ['goodbye', 'hello']
     end
   end
 end

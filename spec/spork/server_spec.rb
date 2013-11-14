@@ -9,7 +9,7 @@ describe Spork::Server do
     
     it "accepts a port" do
       @server.port = 12345
-      @server.port.should == 12345
+      expect(@server.port).to eq 12345
     end
   end
 end
