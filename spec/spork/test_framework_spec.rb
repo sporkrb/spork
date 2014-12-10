@@ -12,42 +12,42 @@ describe Spork::TestFramework do
     end
 
     it "returns a list of all available servers" do
-      Spork::TestFramework.available_test_frameworks.should == []
+      expect(Spork::TestFramework.available_test_frameworks).to eq []
       Spork::TestFramework::RSpec.stub!(:available?).and_return(true)
-      Spork::TestFramework.available_test_frameworks.should == [Spork::TestFramework::RSpec]
+      expect(Spork::TestFramework.available_test_frameworks).to eq [Spork::TestFramework::RSpec]
     end
 
     it "returns rspec before cucumber when both are available" do
       Spork::TestFramework::RSpec.stub!(:available?).and_return(true)
       Spork::TestFramework::Cucumber.stub!(:available?).and_return(true)
-      Spork::TestFramework.available_test_frameworks.should == [Spork::TestFramework::RSpec, Spork::TestFramework::Cucumber]
+      expect(Spork::TestFramework.available_test_frameworks).to eq [Spork::TestFramework::RSpec, Spork::TestFramework::Cucumber]
     end
   end
 
   describe ".supported_test_frameworks" do
     it "returns all defined servers" do
-      Spork::TestFramework.supported_test_frameworks.should include(Spork::TestFramework::RSpec)
-      Spork::TestFramework.supported_test_frameworks.should include(Spork::TestFramework::Cucumber)
+      expect(Spork::TestFramework.supported_test_frameworks).to include(Spork::TestFramework::RSpec)
+      expect(Spork::TestFramework.supported_test_frameworks).to include(Spork::TestFramework::Cucumber)
     end
 
     it "returns a list of servers matching a case-insensitive prefix" do
-      Spork::TestFramework.supported_test_frameworks("rspec").should == [Spork::TestFramework::RSpec]
-      Spork::TestFramework.supported_test_frameworks("rs").should == [Spork::TestFramework::RSpec]
-      Spork::TestFramework.supported_test_frameworks("cuc").should == [Spork::TestFramework::Cucumber]
+      expect(Spork::TestFramework.supported_test_frameworks("rspec")).to eq [Spork::TestFramework::RSpec]
+      expect(Spork::TestFramework.supported_test_frameworks("rs")).to eq [Spork::TestFramework::RSpec]
+      expect(Spork::TestFramework.supported_test_frameworks("cuc")).to eq [Spork::TestFramework::Cucumber]
     end
   end
 
   describe ".short_name" do
     it "returns the name of the framework, without the namespace prefix" do
-      Spork::TestFramework::Cucumber.short_name.should == "Cucumber"
+      expect(Spork::TestFramework::Cucumber.short_name).to eq "Cucumber"
     end
   end
 
   describe ".available?" do
     it "returns true when the helper_file exists" do
-      FakeFramework.available?.should == false
+      expect(FakeFramework.available?).to eq false
       create_helper_file(FakeFramework)
-      FakeFramework.available?.should == true
+      expect(FakeFramework.available?).to eq true
     end
   end
 
@@ -55,9 +55,9 @@ describe Spork::TestFramework do
     it "recognizes if the helper_file has been bootstrapped" do
       bootstrap_contents = File.read(FakeFramework::BOOTSTRAP_FILE)
       File.stub!(:read).with(@fake.helper_file).and_return("")
-      @fake.bootstrapped?.should == false
+      expect(@fake.bootstrapped?).to eq false
       File.stub!(:read).with(@fake.helper_file).and_return(bootstrap_contents)
-      @fake.bootstrapped?.should == true
+      expect(@fake.bootstrapped?).to eq true
     end
   end
 
@@ -66,11 +66,11 @@ describe Spork::TestFramework do
       create_helper_file
       @fake.bootstrap
 
-      TestIOStreams.stderr.string.should include("Bootstrapping")
-      TestIOStreams.stderr.string.should include("Edit")
-      TestIOStreams.stderr.string.should include("favorite text editor")
+      expect(TestIOStreams.stderr.string).to include("Bootstrapping")
+      expect(TestIOStreams.stderr.string).to include("Edit")
+      expect(TestIOStreams.stderr.string).to include("favorite text editor")
 
-      File.read(@fake.helper_file).should include(File.read(FakeFramework::BOOTSTRAP_FILE))
+      expect(File.read(@fake.helper_file)).to include(File.read(FakeFramework::BOOTSTRAP_FILE))
     end
   end
 
@@ -78,13 +78,13 @@ describe Spork::TestFramework do
     it "defaults to use rspec over cucumber" do
       Spork::TestFramework::RSpec.stub!(:available?).and_return(true)
       Spork::TestFramework::Cucumber.stub!(:available?).and_return(true)
-      Spork::TestFramework.factory(STDOUT, STDERR).class.should == Spork::TestFramework::RSpec
+      expect(Spork::TestFramework.factory(STDOUT, STDERR).class).to eq Spork::TestFramework::RSpec
     end
 
     it "defaults to use cucumber when rspec not available" do
       Spork::TestFramework::RSpec.stub!(:available?).and_return(false)
       Spork::TestFramework::Cucumber.stub!(:available?).and_return(true)
-      Spork::TestFramework.factory(STDOUT, STDERR).class.should == Spork::TestFramework::Cucumber
+      expect(Spork::TestFramework.factory(STDOUT, STDERR).class).to eq Spork::TestFramework::Cucumber
     end
   end
 end
