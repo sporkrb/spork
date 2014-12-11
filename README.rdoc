@@ -116,7 +116,7 @@ Then, to run the specs:
 
   bundle exec rake
 
-=== running features ===
+=== Running features
 
 Essentially:
 
