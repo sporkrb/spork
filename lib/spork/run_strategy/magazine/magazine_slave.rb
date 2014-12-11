@@ -19,7 +19,11 @@ class MagazineSlave
     $stdout, $stderr = stdout, stderr
     Spork.exec_each_run
     load @test_framework.helper_file
-    @test_framework.run_tests(argv, stderr, stdout)
+    begin
+      @test_framework.run_tests(argv, stderr, stdout)
+    rescue SystemExit => e
+      puts "Error: exit code #{e.status}" unless e.status == 0
+    end
     puts "  <-- Slave(#{@id_num}) run done!"; stdout.flush
   end
 
