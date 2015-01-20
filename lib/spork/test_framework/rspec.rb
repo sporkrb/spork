@@ -1,6 +1,13 @@
+require 'rspec/core/version'
+
 class Spork::TestFramework::RSpec < Spork::TestFramework
   DEFAULT_PORT = 8989
-  HELPER_FILE = File.join(Dir.pwd, "spec/spec_helper.rb")
+  if rspec1?
+    HELPER_FILE = File.join(Dir.pwd, "spec/spec_helper.rb")
+  elsif rspec3?
+    HELPER_FILE = File.join(Dir.pwd, "spec/rails_helper.rb")
+  end
+
 
   def run_tests(argv, stderr, stdout)
     if rspec1?
