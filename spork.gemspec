@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   ]
   s.files = ["Gemfile", "README.rdoc", "MIT-LICENSE"] + Dir["lib/**/*"] + Dir["spec/**/*"] + Dir["assets/**/*"] + Dir["features/**/*"]
   s.homepage = %q{http://github.com/sporkrb/spork}
+  s.license = "MIT"
   s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.summary = %q{spork}
