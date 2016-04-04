@@ -1,6 +1,5 @@
 # ring_server.rb
 require 'rinda/ring'
-require './rinda_ring_finger_patch' if RUBY_VERSION > '1.9.1'
 require 'rinda/tuplespace'
 
 DRb.start_service
