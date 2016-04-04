@@ -7,7 +7,7 @@ class Spork::TestFramework::RSpec < Spork::TestFramework
       ::Spec::Runner::CommandLine.run(
         ::Spec::Runner::OptionParser.parse(argv, stderr, stdout)
       )
-    elsif rspec3?
+    elsif rspec3? || rspec2_99?
       options = ::RSpec::Core::ConfigurationOptions.new(argv)
       ::RSpec::Core::Runner.new(options).run(stderr, stdout)
     else
@@ -18,6 +18,11 @@ class Spork::TestFramework::RSpec < Spork::TestFramework
   def rspec3?
     return false if !defined?(::RSpec::Core::Version::STRING)
     ::RSpec::Core::Version::STRING =~ /^3\./
+  end
+
+  def rspec2_99?
+    return false if !defined?(::RSpec::Core::Version::STRING)
+    ::RSpec::Core::Version::STRING =~ /^2\.99\./
   end
 
   def rspec1?
