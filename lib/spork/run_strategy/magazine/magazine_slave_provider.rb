@@ -1,7 +1,6 @@
 # magazine_slave_provider.rb
 require 'drb'
 require 'rinda/ring'
-require './rinda_ring_finger_patch' if RUBY_VERSION > '1.9.1' && RUBY_VERSION < '2.0.0'
 require 'rinda/tuplespace'
 require './magazine_slave'
 
