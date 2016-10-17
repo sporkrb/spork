@@ -21,7 +21,7 @@ require 'magazine/rinda_ring_finger_patch' if RUBY_VERSION > '1.9.1'
 
 class Spork::RunStrategy::Magazine < Spork::RunStrategy
 
-  Slave_Id_Range = 1..2 # Ringserver uses id: 0. Slave use: 1..MAX_SLAVES
+  Slave_Id_Range = 1..(ENV["SPORK_SLAVES_COUNT"] && ENV["SPORK_SLAVES_COUNT"].to_i || 2) # Ringserver uses id: 0. Slave use: 1..MAX_SLAVES
 
   def slave_max
     Slave_Id_Range.to_a.size
