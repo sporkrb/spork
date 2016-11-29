@@ -26,7 +26,9 @@ class Spork::Forker
       rescue SystemExit => e
         puts "Error: exit code #{e.status}" unless e.status == 0
       rescue Exception => e
-        puts "Exception encountered: #{e.inspect}\nbacktrace:\n#{e.backtrace * %(\n)}"
+        unless e.class == SystemExit
+          puts "Exception encountered: #{e.inspect}\nbacktrace:\n#{e.backtrace * %(\n)}"
+        end
       end
 
       # terminate, skipping any at_exit blocks.
