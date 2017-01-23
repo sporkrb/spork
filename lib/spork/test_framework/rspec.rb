@@ -21,6 +21,6 @@ class Spork::TestFramework::RSpec < Spork::TestFramework
   end
 
   def rspec1?
-    defined?(Spec) && !defined?(RSpec)
+    defined?(::Spec) && !defined?(::RSpec)
   end
 end
