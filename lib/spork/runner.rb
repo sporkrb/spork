@@ -5,11 +5,11 @@ module Spork
   # This is used by bin/spork. It's wrapped in a class because it's easier to test that way.
   class Runner
     attr_reader :test_framework
-    
+
     def self.run(args, output, error)
       self.new(args, output, error).run
     end
-    
+
     def initialize(args, output, error)
       raise ArgumentError, "expected array of args" unless args.is_a?(Array)
       @output = output
@@ -17,7 +17,7 @@ module Spork
       @options = {}
       opt = OptionParser.new
       opt.banner = "Usage: spork [test framework name] [options]\n\n"
-      
+
       opt.separator "Options:"
       opt.on("-b", "--bootstrap")  {|ignore| @options[:bootstrap] = true }
       opt.on("-d", "--diagnose")  {|ignore| @options[:diagnose] = true }
@@ -27,24 +27,40 @@ module Spork
       non_option_args = args.select { |arg| ! args[0].match(/^-/) }
       @options[:server_matcher] = non_option_args[0]
       opt.parse!(args)
-      
+
       if @options[:help]
         @output.puts opt
         @output.puts
         @output.puts supported_test_frameworks_text
         exit(0)
       end
+
+      # If server is rspec and port isn't passed in, attempt to get it from .rspec
+      if !@options[:port] && [nil, 'rspec'].include?(@options[:server_matcher])
+        retrieve_port_from_dot_rspec
+      end
     end
-    
+
+    def retrieve_port_from_dot_rspec
+      File.open("./.rspec", "r") do |file|
+        file.each_line do |line|
+          next unless line =~ %r{drb-port\s*(\d+)}
+          @options[:port] = $1
+        end
+      end
+    rescue Errno::ENOENT
+      # Safely return. File not found.
+    end
+
     def supported_test_frameworks_text
       text = StringIO.new
-      
+
       text.puts "Supported test frameworks:"
       text.puts Spork::TestFramework.supported_test_frameworks.sort { |a,b| a.short_name <=> b.short_name }.map { |s| (s.available? ? '(*) ' : '( ) ') + s.short_name }
       text.puts "\nLegend: ( ) - not detected in project   (*) - detected\n"
       text.string
     end
-    
+
     # Returns a server for the specified (or the detected default) testing framework.  Returns nil if none detected, or if the specified is not supported or available.
     def find_test_framework
       Spork::TestFramework.factory(@output, @error, options[:server_matcher])
@@ -53,7 +69,7 @@ module Spork
     rescue Spork::TestFramework::FactoryException => e
       @error.puts "#{e.message}\n\n#{supported_test_frameworks_text}"
     end
-    
+
     def run
       return false unless test_framework = find_test_framework
       ENV["DRB"] = 'true'
@@ -65,7 +81,7 @@ module Spork
         test_framework.bootstrap
       when options[:diagnose]
         require 'spork/diagnoser'
-        
+
         Spork::Diagnoser.install_hook!(test_framework.entry_point)
         test_framework.preload
         Spork::Diagnoser.output_results(@output)
@@ -77,9 +93,9 @@ module Spork
         return true
       end
     end
-    
+
     private
-    attr_reader :options 
+    attr_reader :options
 
   end
 end
