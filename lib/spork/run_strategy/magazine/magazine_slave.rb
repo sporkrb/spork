@@ -19,8 +19,9 @@ class MagazineSlave
     $stdout, $stderr = stdout, stderr
     Spork.exec_each_run
     load @test_framework.helper_file
-    @test_framework.run_tests(argv, stderr, stdout)
+    result = @test_framework.run_tests(argv, stderr, stdout)
     puts "  <-- Slave(#{@id_num}) run done!"; stdout.flush
+    result
   end
 
   def preload
