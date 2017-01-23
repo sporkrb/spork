@@ -30,7 +30,7 @@ NOTICE:
 
 * Rails support (and other app frameworks) have been extracted. If using spork with rails, you'll want to use spork-rails gem, https://github.com/sporkrb/spork-rails.
 
-* If you wish to use the stable verson of spork 0.9, refer to https://github.com/sporkrb/spork/tree/v0.9.x
+* If you wish to use the stable version of spork 0.9, refer to https://github.com/sporkrb/spork/tree/v0.9.x
 
 === Bundler:
 
