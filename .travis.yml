@@ -1,11 +1,17 @@
 language: ruby
+
 before_install:
   - gem install bundler
+  - bundle install --path vendor/bundle
+  - bundle exec rspec --version
+
 script: ./bin/ci/ci.sh
+
 rvm:
-  - 1.9.2
-  - 1.9.3
-  - 2.0.0
-branches:
-  only:
-    - master
+  - 2.2
+  - 2.3
+  - 2.4
+  - ruby-head
+
+notifications:
+  email: false

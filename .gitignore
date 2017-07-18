@@ -11,3 +11,5 @@ TAGS
 *.gem
 tags
 .ruby-version
+
+vendor/

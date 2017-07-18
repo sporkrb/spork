@@ -8,18 +8,18 @@ describe Spork::TestFramework do
 
   describe ".available_test_frameworks" do
     before(:each) do
-      Spork::TestFramework.supported_test_frameworks.each { |s| s.stub!(:available?).and_return(false) }
+      Spork::TestFramework.supported_test_frameworks.each { |s| allow(s).to receive(:available?).and_return(false) }
     end
 
     it "returns a list of all available servers" do
       Spork::TestFramework.available_test_frameworks.should == []
-      Spork::TestFramework::RSpec.stub!(:available?).and_return(true)
+      allow(Spork::TestFramework::RSpec).to receive(:available?).and_return(true)
       Spork::TestFramework.available_test_frameworks.should == [Spork::TestFramework::RSpec]
     end
 
     it "returns rspec before cucumber when both are available" do
-      Spork::TestFramework::RSpec.stub!(:available?).and_return(true)
-      Spork::TestFramework::Cucumber.stub!(:available?).and_return(true)
+      allow(Spork::TestFramework::RSpec).to receive(:available?).and_return(true)
+      allow(Spork::TestFramework::Cucumber).to receive(:available?).and_return(true)
       Spork::TestFramework.available_test_frameworks.should == [Spork::TestFramework::RSpec, Spork::TestFramework::Cucumber]
     end
   end
@@ -54,9 +54,9 @@ describe Spork::TestFramework do
   describe ".bootstrapped?" do
     it "recognizes if the helper_file has been bootstrapped" do
       bootstrap_contents = File.read(FakeFramework::BOOTSTRAP_FILE)
-      File.stub!(:read).with(@fake.helper_file).and_return("")
+      allow(File).to receive(:read).with(@fake.helper_file).and_return("")
       @fake.bootstrapped?.should == false
-      File.stub!(:read).with(@fake.helper_file).and_return(bootstrap_contents)
+      allow(File).to receive(:read).with(@fake.helper_file).and_return(bootstrap_contents)
       @fake.bootstrapped?.should == true
     end
   end
@@ -76,14 +76,14 @@ describe Spork::TestFramework do
 
   describe ".factory" do
     it "defaults to use rspec over cucumber" do
-      Spork::TestFramework::RSpec.stub!(:available?).and_return(true)
-      Spork::TestFramework::Cucumber.stub!(:available?).and_return(true)
+      allow(Spork::TestFramework::RSpec).to receive(:available?).and_return(true)
+      allow(Spork::TestFramework::Cucumber).to receive(:available?).and_return(true)
       Spork::TestFramework.factory(STDOUT, STDERR).class.should == Spork::TestFramework::RSpec
     end
 
     it "defaults to use cucumber when rspec not available" do
-      Spork::TestFramework::RSpec.stub!(:available?).and_return(false)
-      Spork::TestFramework::Cucumber.stub!(:available?).and_return(true)
+      allow(Spork::TestFramework::RSpec).to receive(:available?).and_return(false)
+      allow(Spork::TestFramework::Cucumber).to receive(:available?).and_return(true)
       Spork::TestFramework.factory(STDOUT, STDERR).class.should == Spork::TestFramework::Cucumber
     end
   end

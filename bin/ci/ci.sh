@@ -1,4 +1,4 @@
 #!/bin/sh
 set -e
 bundle exec rspec spec
-bundle exec cucumber features
+# bundle exec cucumber features
