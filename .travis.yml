@@ -1,11 +1,17 @@
 language: ruby
+
 before_install:
   - gem install bundler
+
 script: ./bin/ci/ci.sh
+
 rvm:
-  - 1.9.2
-  - 1.9.3
-  - 2.0.0
+  - 2.2
+  - 2.3
+  - 2.4
+  - ruby-head
+  - nightly
+
 branches:
   only:
-    - master
+    - development
