@@ -23,9 +23,15 @@ describe Spork::TestFramework::RSpec do
     end
   end
 
-  it "supports rspec >= 2.0" do
-    RSpec::Core::CommandLine.any_instance.should_receive(:run)
+  # it "supports rspec >= 2.0" do
+  #   RSpec::Core::CommandLine.any_instance.should_receive(:run)
+  #   framework = Spork::TestFramework::RSpec.new
+  #   framework.run_tests([],StringIO.new,StringIO.new)
+  # end
+
+  it "supports rspec >= 3.0" do
+    RSpec::Core::Runner.any_instance.should_receive(:run)
     framework = Spork::TestFramework::RSpec.new
-    framework.run_tests([],StringIO.new,StringIO.new)
+    framework.run_tests([], StringIO.new, StringIO.new)
   end
 end
