@@ -9,7 +9,7 @@ describe Spork::RunStrategy::Forking do
 
   it "returns the result of the run_tests method from the forked child" do
     create_helper_file
-    @fake_framework.stub!(:run_tests).and_return("tests were ran")
+    allow(@fake_framework).to receive(:run_tests).and_return("tests were ran")
     @run_strategy.run("test", STDOUT, STDIN).should == "tests were ran"
   end
 

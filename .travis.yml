@@ -2,6 +2,8 @@ language: ruby
 
 before_install:
   - gem install bundler
+  - bundle install --path vendor/bundle
+  - bundle exec rspec --version
 
 script: ./bin/ci/ci.sh
 
@@ -11,6 +13,5 @@ rvm:
   - 2.4
   - ruby-head
 
-branches:
-  only:
-    - development
+notifications:
+  email: false
