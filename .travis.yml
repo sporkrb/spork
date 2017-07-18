@@ -10,7 +10,6 @@ rvm:
   - 2.3
   - 2.4
   - ruby-head
-  - nightly
 
 branches:
   only:
